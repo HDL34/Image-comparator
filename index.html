@@ -2,13 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>HDL comparateur d'image v13</title>
+    <title>HDL comparateur d'image v14 - Ultra HD</title>
     <style>
         :root { --bg: #f4f7f6; --accent: #3498db; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
         .main-title { color: #2c3e50; margin-bottom: 20px; font-size: 28px; font-weight: bold; }
         
-        /* Panel admin masqué sur GitHub */
         #admin-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; }
         input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
         .btn-group { display: flex; gap: 10px; }
@@ -16,7 +15,6 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
-        /* Correction du décalage : Conteneur de visualisation */
         #viewport { 
             position: relative; width: 100%; max-width: 1200px; 
             background: #000; overflow: hidden; border-radius: 4px; 
@@ -26,28 +24,19 @@
 
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
 
-        /* Correction Alignement : Les deux images doivent avoir exactement la même taille et position */
+        /* MODIFICATION : Optimisation maximale de l'image */
         .img-layer { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             object-fit: contain; pointer-events: none;
-            image-rendering: -webkit-optimize-contrast; /* Améliore la netteté */
+            /* Force le rendu haute qualité sur tous les navigateurs */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated; /* Pour garder la netteté des détails lunaires au zoom */
         }
 
-        #before-mask { 
-            position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
-            overflow: hidden; z-index: 2; border-right: 2px solid white; 
-        }
-
-        #handle { 
-            position: absolute; top: 0; left: 50%; width: 4px; height: 100%; 
-            z-index: 10; cursor: ew-resize; transform: translateX(-50%); 
-        }
-        #handle-circle { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; width: 36px; height: 36px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px;
-        }
+        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; }
+        #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); }
+        #handle-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.7); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
@@ -59,7 +48,7 @@
     <div class="main-title">HDL comparateur d'image</div>
 
     <div id="admin-panel">
-        <input type="text" id="t-in" placeholder="Titre (ex: Moon Crater)">
+        <input type="text" id="t-in" placeholder="Titre">
         <input type="text" id="b-in" placeholder="Lien Google Drive - AVANT">
         <input type="text" id="a-in" placeholder="Lien Google Drive - APRÈS">
         <div class="btn-group">
@@ -98,8 +87,9 @@
         function init() {
             const clean = (u) => {
                 const m = u.match(/\/d\/(.+?)(?:\/|$)/);
-                // Augmentation de la résolution à 16000 pour éviter la pixellisation
-                return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w16000` : u;
+                // MODIFICATION : On utilise 'w16000' ET on ajoute un paramètre de temps 
+                // pour forcer Google à renvoyer une image fraîche/non compressée
+                return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w16000&nocache=${Date.now()}` : u;
             };
             imgB.src = clean(document.getElementById('b-in').value);
             imgA.src = clean(document.getElementById('a-in').value);
@@ -108,7 +98,6 @@
             imgA.onload = () => { 
                 view.style.display = 'block'; 
                 view.style.aspectRatio = `${imgA.naturalWidth}/${imgA.naturalHeight}`;
-                // Mise à jour de la taille de l'image de masque pour correspondre parfaitement
                 setTimeout(render, 100); 
             };
         }
@@ -116,7 +105,6 @@
         function render() {
             zoomer.style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.z})`;
             mask.style.width = `${s.pos}%`;
-            // Correction technique : On fixe la largeur de l'image interne pour éviter le décalage au zoom
             imgB.style.width = zoomer.offsetWidth + "px";
             imgB.style.height = zoomer.offsetHeight + "px";
             handle.style.left = `${s.pos}%`;
@@ -138,9 +126,7 @@
             if(s.slide) { 
                 const r = view.getBoundingClientRect(); 
                 s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); 
-            } else if(s.drag) { 
-                s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; 
-            }
+            } else if(s.drag) { s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; }
             render();
         };
         window.onmouseup = () => { s.drag = s.slide = false; };
@@ -152,7 +138,7 @@
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
             navigator.clipboard.writeText(u.href);
-            alert("Lien optimisé copié !");
+            alert("Lien Ultra-HD copié !");
         }
 
         window.onload = () => {
