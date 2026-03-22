@@ -2,21 +2,19 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>HDL comparateur d'image</title>
-	<link rel="icon" type="image/png" href="favicon.png?v=1.1">
+    <title>Simple comparateur d'image</title>
+    <link rel="icon" type="image/png" href="favicon.png?v=1.1">
     <style>
-        /* Variables de Thèmes */
         :root { 
-            --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525; --handle-bg: #eee;
+            --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525;
         }
         .light-theme { 
-            --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff; --handle-bg: #333;
+            --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff;
         }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; transition: background 0.3s, color 0.3s; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; }
         .main-title { margin-bottom: 20px; font-size: 28px; font-weight: bold; }
         
-        /* Bouton Thème */
         #theme-toggle { position: absolute; top: 20px; right: 20px; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
 
         #admin-panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); }
@@ -27,7 +25,6 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
-        /* Viewport : la couleur de fond suit le thème pour camoufler les bords */
         #viewport { 
             position: relative; width: 100%; max-width: 1200px; 
             background: var(--bg); overflow: hidden; border-radius: 4px; 
@@ -36,32 +33,25 @@
         }
 
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
-
-        .img-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: contain; pointer-events: none;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-        }
-
+        .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; }
         #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); }
-        #handle-circle { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            background: white; color: #121212; width: 36px; height: 36px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; 
-        }
+        #handle-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: #121212; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
         #comp-title-display { margin: 15px 0; font-size: 22px; }
+
+        /* Nouveaux éléments de pied de page */
+        footer { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 20px; box-sizing: border-box; font-size: 13px; opacity: 0.7; }
+        #lang-selector { position: absolute; left: 20px; padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
+        .credits { font-style: italic; }
     </style>
 </head>
 <body>
 
     <button id="theme-toggle" onclick="toggleTheme()">Mode Clair</button>
-    <div class="main-title">HDL comparateur d'image</div>
+    <div class="main-title" id="main-title-text">Simple comparateur d'image</div>
 
     <div id="admin-panel">
         <input type="text" id="t-in" placeholder="Titre">
@@ -83,11 +73,43 @@
             </div>
         </div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
-        <div class="label l-before">Avant</div>
-        <div class="label l-after">Après</div>
+        <div class="label l-before" id="label-before">Avant</div>
+        <div class="label l-after" id="label-after">Après</div>
     </div>
 
+    <footer>
+        <select id="lang-selector" onchange="changeLang()">
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="es">Español</option>
+        </select>
+        <div class="credits">Créé par Harald de Luca</div>
+    </footer>
+
     <script>
+        const translations = {
+            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", placeholderT: "Titre" },
+            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", placeholderT: "Title" },
+            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", placeholderT: "Titel" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", placeholderT: "Titolo" },
+            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", placeholderT: "Título" }
+        };
+
+        function changeLang() {
+            const l = document.getElementById('lang-selector').value;
+            const t = translations[l];
+            document.getElementById('main-title-text').innerText = t.title;
+            document.title = t.title;
+            document.getElementById('label-before').innerText = t.before;
+            document.getElementById('label-after').innerText = t.after;
+            document.getElementById('theme-toggle').innerText = document.body.classList.contains('light-theme') ? (l === 'fr' ? "Mode Sombre" : "Dark Mode") : t.btnTheme;
+            document.getElementById('gen-btn').innerText = t.btnGen;
+            document.getElementById('share-btn').innerText = t.btnShare;
+            document.getElementById('t-in').placeholder = t.placeholderT;
+        }
+
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false };
         const view = document.getElementById('viewport');
         const zoomer = document.getElementById('zoom-container');
@@ -102,8 +124,10 @@
 
         function toggleTheme() {
             document.body.classList.toggle('light-theme');
+            const l = document.getElementById('lang-selector').value;
             const btn = document.getElementById('theme-toggle');
-            btn.innerText = document.body.classList.contains('light-theme') ? "Mode Sombre" : "Mode Clair";
+            const isLight = document.body.classList.contains('light-theme');
+            btn.innerText = isLight ? (l === 'fr' ? "Mode Sombre" : "Dark Mode") : translations[l].btnTheme;
         }
 
         function init() {
@@ -153,12 +177,12 @@
         window.onmouseup = () => { s.drag = s.slide = false; };
 
         function copyURL() {
-            const u = new URL("https://hdl34.github.io/Image-comparator/");
+            const u = new URL(window.location.href.split('?')[0]);
             u.searchParams.set('title', document.getElementById('t-in').value);
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
             navigator.clipboard.writeText(u.href);
-            alert("Lien avec thèmes copié !");
+            alert("Lien copié !");
         }
 
         window.onload = () => {
