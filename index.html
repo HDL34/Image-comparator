@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>HDL comparateur d'image v14 - Ultra HD</title>
+    <title>HDL comparateur d'image v15 - Fix Bandes Noires</title>
     <style>
         :root { --bg: #f4f7f6; --accent: #3498db; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
@@ -15,6 +15,7 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
+        /* Viewport fixe pour éviter les débordements */
         #viewport { 
             position: relative; width: 100%; max-width: 1200px; 
             background: #000; overflow: hidden; border-radius: 4px; 
@@ -24,17 +25,19 @@
 
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
 
-        /* MODIFICATION : Optimisation maximale de l'image */
+        /* FIX : Remplacement de contain par cover pour éliminer les bandes noires si nécessaire */
         .img-layer { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: contain; pointer-events: none;
-            /* Force le rendu haute qualité sur tous les navigateurs */
+            object-fit: cover; pointer-events: none;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
-            image-rendering: pixelated; /* Pour garder la netteté des détails lunaires au zoom */
         }
 
-        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; }
+        #before-mask { 
+            position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
+            overflow: hidden; z-index: 2; border-right: 2px solid white; 
+        }
+
         #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); }
         #handle-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; }
 
@@ -87,8 +90,6 @@
         function init() {
             const clean = (u) => {
                 const m = u.match(/\/d\/(.+?)(?:\/|$)/);
-                // MODIFICATION : On utilise 'w16000' ET on ajoute un paramètre de temps 
-                // pour forcer Google à renvoyer une image fraîche/non compressée
                 return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w16000&nocache=${Date.now()}` : u;
             };
             imgB.src = clean(document.getElementById('b-in').value);
@@ -97,7 +98,9 @@
             
             imgA.onload = () => { 
                 view.style.display = 'block'; 
-                view.style.aspectRatio = `${imgA.naturalWidth}/${imgA.naturalHeight}`;
+                // Calcul du ratio pour que le viewport s'adapte à l'image
+                const ratio = imgA.naturalHeight / imgA.naturalWidth;
+                view.style.height = (view.offsetWidth * ratio) + "px";
                 setTimeout(render, 100); 
             };
         }
@@ -105,11 +108,13 @@
         function render() {
             zoomer.style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.z})`;
             mask.style.width = `${s.pos}%`;
-            imgB.style.width = zoomer.offsetWidth + "px";
-            imgB.style.height = zoomer.offsetHeight + "px";
+            // FIX TECHNIQUE : On force la taille de l'image de masque à être identique au parent
+            imgB.style.width = zoomer.clientWidth + "px";
+            imgB.style.height = zoomer.clientHeight + "px";
             handle.style.left = `${s.pos}%`;
         }
 
+        // Gestion du zoom
         view.onwheel = (e) => {
             e.preventDefault();
             const r = view.getBoundingClientRect();
@@ -121,6 +126,7 @@
             render();
         };
 
+        // Drag & Slide
         view.onmousedown = (e) => { if(e.target.closest('#handle')) s.slide = true; else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; } };
         window.onmousemove = (e) => {
             if(s.slide) { 
@@ -132,13 +138,12 @@
         window.onmouseup = () => { s.drag = s.slide = false; };
 
         function copyURL() {
-            let baseURL = "https://hdl34.github.io/Image-comparator/";
-            const u = new URL(baseURL);
+            const u = new URL("https://hdl34.github.io/Image-comparator/");
             u.searchParams.set('title', document.getElementById('t-in').value);
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
             navigator.clipboard.writeText(u.href);
-            alert("Lien Ultra-HD copié !");
+            alert("Lien v15 copié !");
         }
 
         window.onload = () => {
