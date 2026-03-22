@@ -2,31 +2,36 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>HDL comparateur d'image v16 - Dark Edition</title>
+    <title>HDL comparateur d'image v17</title>
     <style>
-        /* Thème sombre global */
-        :root { --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; }
+        /* Variables de Thèmes */
+        :root { 
+            --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525; --handle-bg: #eee;
+        }
+        .light-theme { 
+            --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff; --handle-bg: #333;
+        }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .main-title { color: white; margin-bottom: 20px; font-size: 28px; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; transition: background 0.3s, color 0.3s; }
+        .main-title { margin-bottom: 20px; font-size: 28px; font-weight: bold; }
         
-        /* Panel admin stylisé sombre */
-        #admin-panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid #333; }
-        input { padding: 12px; border: 1px solid #444; border-radius: 4px; background: #252525; color: white; }
-        input::placeholder { color: #888; }
+        /* Bouton Thème */
+        #theme-toggle { position: absolute; top: 20px; right: 20px; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
+
+        #admin-panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); }
+        input { padding: 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 4px; background: var(--input-bg); color: var(--text); }
         
         .btn-group { display: flex; gap: 10px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; opacity: 0.9; }
-        button:hover { opacity: 1; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
-        /* Viewport sombre : se fond avec le fond de page */
+        /* Viewport : la couleur de fond suit le thème pour camoufler les bords */
         #viewport { 
             position: relative; width: 100%; max-width: 1200px; 
-            background: #121212; overflow: hidden; border-radius: 4px; 
+            background: var(--bg); overflow: hidden; border-radius: 4px; 
             display: none; cursor: grab; user-select: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
@@ -38,26 +43,23 @@
             image-rendering: crisp-edges;
         }
 
-        #before-mask { 
-            position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
-            overflow: hidden; z-index: 2; border-right: 1px solid rgba(255,255,255,0.4); 
-        }
-
+        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; }
         #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); }
         #handle-circle { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            background: #eee; color: #121212; width: 36px; height: 36px; border-radius: 50%; 
+            background: white; color: #121212; width: 36px; height: 36px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.8); font-weight: bold; font-size: 10px; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; 
         }
 
-        .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; border: 1px solid #333; }
+        .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
-        #comp-title-display { margin: 15px 0; color: white; font-size: 22px; }
+        #comp-title-display { margin: 15px 0; font-size: 22px; }
     </style>
 </head>
 <body>
 
+    <button id="theme-toggle" onclick="toggleTheme()">Mode Clair</button>
     <div class="main-title">HDL comparateur d'image</div>
 
     <div id="admin-panel">
@@ -95,6 +97,12 @@
 
         if (window.location.protocol === 'file:') {
             document.getElementById('admin-panel').style.display = 'flex';
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const btn = document.getElementById('theme-toggle');
+            btn.innerText = document.body.classList.contains('light-theme') ? "Mode Sombre" : "Mode Clair";
         }
 
         function init() {
@@ -149,7 +157,7 @@
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
             navigator.clipboard.writeText(u.href);
-            alert("Lien Dark Mode copié !");
+            alert("Lien avec thèmes copié !");
         }
 
         window.onload = () => {
