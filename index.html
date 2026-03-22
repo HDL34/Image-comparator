@@ -34,36 +34,9 @@
 
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-        
-        /* Modifié pour que la ligne soit plus visible et centrée */
-        #before-mask { 
-            position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
-            overflow: hidden; z-index: 2; 
-            border-right: 2px solid white; /* La ligne de séparation */
-            box-sizing: border-box; /* Assure que la bordure est à l'intérieur de la largeur */
-        }
-        
-        /* CORRECTION DU BOUTON : Centrage précis sur la ligne */
-        #handle { 
-            position: absolute; top: 0; left: 50%; width: 4px; height: 100%; 
-            z-index: 10; cursor: ew-resize; 
-            transform: translateX(-50%); /* Décale le handle de 2px à gauche pour qu'il soit centré sur la ligne de 4px */
-            background-color: transparent; /* Masquer le conteneur, on ne veut voir que le cercle */
-            display: flex; align-items: center; justify-content: center;
-        }
-        
-        #handle-circle { 
-            /* Modifié pour qu'il soit un cercle blanc simple, collé à la ligne */
-            background: white; 
-            color: #121212; 
-            width: 30px; /* Légèrement plus petit pour un look plus fin */
-            height: 30px; 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); 
-            font-weight: bold; font-size: 10px; 
-            pointer-events: none; /* Le cercle ne bloque pas le clic pour le drag */
-        }
+        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; }
+        #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); }
+        #handle-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; color: #121212; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
@@ -197,7 +170,6 @@
         window.onmousemove = (e) => {
             if(s.slide) { 
                 const r = view.getBoundingClientRect(); 
-                // Correction technique : le calcul de la position tient compte du centrage du handle
                 s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); 
             } else if(s.drag) { s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; }
             render();
