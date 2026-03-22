@@ -42,7 +42,6 @@
         .l-before { left: 15px; } .l-after { right: 15px; }
         #comp-title-display { margin: 15px 0; font-size: 22px; }
 
-        /* Nouveaux éléments de pied de page */
         footer { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 20px; box-sizing: border-box; font-size: 13px; opacity: 0.7; }
         #lang-selector { position: absolute; left: 20px; padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
         .credits { font-style: italic; }
@@ -85,16 +84,16 @@
             <option value="it">Italiano</option>
             <option value="es">Español</option>
         </select>
-        <div class="credits">Créé par Harald de Luca</div>
+        <div class="credits"><span id="credit-text">Créé par</span> Harald de Luca</div>
     </footer>
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", placeholderT: "Titre" },
-            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", placeholderT: "Title" },
-            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", placeholderT: "Titel" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", placeholderT: "Titolo" },
-            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", placeholderT: "Título" }
+            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", placeholderT: "Titre", createdBy: "Créé par" },
+            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", placeholderT: "Title", createdBy: "Created by" },
+            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", placeholderT: "Titel", createdBy: "Erstellt von" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", placeholderT: "Titolo", createdBy: "Creato da" },
+            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", placeholderT: "Título", createdBy: "Creado por" }
         };
 
         function changeLang() {
@@ -108,6 +107,7 @@
             document.getElementById('gen-btn').innerText = t.btnGen;
             document.getElementById('share-btn').innerText = t.btnShare;
             document.getElementById('t-in').placeholder = t.placeholderT;
+            document.getElementById('credit-text').innerText = t.createdBy;
         }
 
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false };
