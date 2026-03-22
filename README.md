@@ -1,0 +1,181 @@
+[index.html](https://github.com/user-attachments/files/26166363/index.html)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>HDL comparateur d'image v11</title>
+    <style>
+        :root { --bg: #f4f7f6; --accent: #3498db; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        
+        /* Titre du programme */
+        .main-title { color: #2c3e50; margin-bottom: 20px; font-size: 28px; font-weight: bold; }
+
+        /* Zone Admin - Masquée par défaut pour les liens de partage */
+        #admin-panel { 
+            background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; 
+        }
+        
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; }
+        .btn-group { display: flex; gap: 10px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
+        #gen-btn { background: var(--accent); }
+        #share-btn { background: #27ae60; }
+        
+        #viewport {
+            position: relative; width: 100%; max-width: 1200px; aspect-ratio: 16/9;
+            background: #000; overflow: hidden; border-radius: 4px; display: none; cursor: grab;
+            user-select: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        #zoom-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transform-origin: 0 0; will-change: transform;
+        }
+
+        .img-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: contain; pointer-events: none;
+            image-rendering: high-quality;
+        }
+
+        #before-mask {
+            position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+            overflow: hidden; z-index: 2; border-right: 2px solid white;
+        }
+
+        #handle {
+            position: absolute; top: 0; left: 50%; width: 40px; height: 100%;
+            z-index: 10; cursor: ew-resize; transform: translateX(-50%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        #handle-circle {
+            background: white; width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 10px; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold;
+        }
+
+        .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.7); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; letter-spacing: 1px; }
+        .l-before { left: 15px; } .l-after { right: 15px; }
+        #comp-title-display { margin: 15px 0; color: #34495e; font-size: 22px; }
+    </style>
+</head>
+<body>
+
+    <div class="main-title">HDL comparateur d'image</div>
+
+    <div id="admin-panel">
+        <input type="text" id="t-in" placeholder="Titre de la comparaison (ex: Crescent moon)">
+        <input type="text" id="b-in" placeholder="Lien Google Drive - AVANT">
+        <input type="text" id="a-in" placeholder="Lien Google Drive - APRÈS">
+        <div class="btn-group">
+            <button id="gen-btn" onclick="init()">Générer la vue</button>
+            <button id="share-btn" onclick="copyURL()">Copier le lien sécurisé</button>
+        </div>
+    </div>
+
+    <h2 id="comp-title-display"></h2>
+
+    <div id="viewport">
+        <div id="zoom-container">
+            <img id="img-after" class="img-layer">
+            <div id="before-mask">
+                <img id="img-before" class="img-layer">
+            </div>
+        </div>
+        <div id="handle">
+            <div id="handle-circle">◀▶</div>
+        </div>
+        <div class="label l-before">Avant</div>
+        <div class="label l-after">Après</div>
+    </div>
+
+    <script>
+        let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false };
+        const view = document.getElementById('viewport');
+        const zoomer = document.getElementById('zoom-container');
+        const mask = document.getElementById('before-mask');
+        const imgB = document.getElementById('img-before');
+        const imgA = document.getElementById('img-after');
+        const handle = document.getElementById('handle');
+
+        // Sécurité : Affiche l'admin seulement si ouvert en local (file://)
+        if (window.location.protocol === 'file:') {
+            document.getElementById('admin-panel').style.display = 'flex';
+        }
+
+        function init() {
+            const clean = (u) => {
+                const m = u.match(/\/d\/(.+?)(?:\/|$)/);
+                return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w4000` : u;
+            };
+            imgB.src = clean(document.getElementById('b-in').value);
+            imgA.src = clean(document.getElementById('a-in').value);
+            document.getElementById('comp-title-display').innerText = document.getElementById('t-in').value;
+
+            imgA.onload = () => {
+                view.style.display = 'block';
+                view.style.aspectRatio = `${imgA.naturalWidth}/${imgA.naturalHeight}`;
+                reset();
+            };
+        }
+
+        function render() {
+            zoomer.style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.z})`;
+            mask.style.width = `${s.pos}%`;
+            imgB.style.width = zoomer.offsetWidth + "px";
+            handle.style.left = `${s.pos}%`;
+        }
+
+        view.onwheel = (e) => {
+            e.preventDefault();
+            const r = view.getBoundingClientRect();
+            const mX = (e.clientX - r.left - s.x) / s.z;
+            const mY = (e.clientY - r.top - s.y) / s.z;
+            s.z = Math.min(Math.max(1, s.z - e.deltaY * 0.0012), 15);
+            s.x = e.clientX - r.left - mX * s.z;
+            s.y = e.clientY - r.top - mY * s.z;
+            render();
+        };
+
+        view.onmousedown = (e) => {
+            if(e.target.closest('#handle')) s.slide = true;
+            else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; }
+        };
+
+        window.onmousemove = (e) => {
+            if(s.slide) {
+                const r = view.getBoundingClientRect();
+                s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+            } else if(s.drag) {
+                s.x = e.clientX - s.sx;
+                s.y = e.clientY - s.sy;
+            }
+            render();
+        };
+
+        window.onmouseup = () => { s.drag = s.slide = false; };
+        function reset() { s.z = 1; s.x = 0; s.y = 0; s.pos = 50; render(); }
+
+        function copyURL() {
+            const u = new URL(window.location.href.split('?')[0]);
+            u.searchParams.set('title', document.getElementById('t-in').value);
+            u.searchParams.set('before', document.getElementById('b-in').value);
+            u.searchParams.set('after', document.getElementById('a-in').value);
+            navigator.clipboard.writeText(u.href);
+            alert("Lien de partage copié ! Seule la comparaison sera visible.");
+        }
+
+        window.onload = () => {
+            const p = new URLSearchParams(window.location.search);
+            if(p.has('before')) {
+                document.getElementById('t-in').value = p.get('title');
+                document.getElementById('b-in').value = p.get('before');
+                document.getElementById('a-in').value = p.get('after');
+                init();
+            }
+        };
+    </script>
+</body>
+</html>
