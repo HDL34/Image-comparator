@@ -12,7 +12,6 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; touch-action: none; }
         .main-title { margin-top: 10px; margin-bottom: 15px; font-size: 24px; font-weight: bold; text-align: center; width: 80%; }
         
-        /* Bouton thème : évite le chevauchement sur mobile */
         #theme-toggle { position: absolute; top: 15px; right: 15px; padding: 8px 12px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 11px; z-index: 100; }
         @media (max-width: 600px) { #theme-toggle { top: 15px; right: 15px; transform: none; } .main-title { margin-top: 50px; margin-bottom: 20px; } }
 
@@ -28,6 +27,7 @@
         #share-btn { background: #27ae60; }
 
         #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); touch-action: none; width: 95vw; }
+        #viewport:fullscreen { width: 100vw !important; height: 100vh !important; border-radius: 0; }
 
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; will-change: transform; backface-visibility: hidden; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
@@ -39,6 +39,9 @@
 
         .floating-controls { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
         .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+
+        /* Nouveau bouton plein écran en bas à droite */
+        .fullscreen-btn { position: absolute; bottom: 15px; right: 15px; z-index: 20; }
 
         #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
         .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 18px; min-width: 44px; }
@@ -86,6 +89,9 @@
             </div>
             <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser</button>
         </div>
+        
+        <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn-text">Plein écran</button>
+
         <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
         <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
@@ -106,11 +112,11 @@
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image" },
-            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison" },
-            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto images" },
-            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes" }
+            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image", fullscreen: "Plein écran", exitFullscreen: "Quitter" },
+            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison", fullscreen: "Fullscreen", exitFullscreen: "Exit" },
+            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich", fullscreen: "Vollbild", exitFullscreen: "Beenden" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto images", fullscreen: "Schermo intero", exitFullscreen: "Esci" },
+            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes", fullscreen: "Pantalla completa", exitFullscreen: "Salir" }
         };
 
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false, lastDist: 0 };
@@ -131,11 +137,32 @@
             document.getElementById('label-after').innerText = t.after;
             document.getElementById('credit-text').innerText = t.createdBy;
             document.getElementById('reset-btn').innerText = t.btnReset;
+            document.getElementById('fs-btn-text').innerText = document.fullscreenElement ? t.exitFullscreen : t.fullscreen;
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
 
         function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                view.requestFullscreen().catch(err => console.log(err));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            updateViewportSize();
+            changeLang();
+        });
+
+        // Gestion de la touche Echap (Esc)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        });
 
         function init() {
             const clean = (u) => {
@@ -149,14 +176,20 @@
 
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
-            const maxWidth = Math.min(window.innerWidth - 20, 1200); 
-            // On réduit la hauteur disponible si on est en paysage sur mobile pour éviter que ça sorte de l'écran
-            const offsetHeight = window.innerHeight < 500 ? 120 : 250;
-            const maxHeight = window.innerHeight - offsetHeight; 
+            const isFS = !!document.fullscreenElement;
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
-            let finalWidth = maxWidth, finalHeight = finalWidth / ratio;
-            if (finalHeight > maxHeight) { finalHeight = maxHeight; finalWidth = finalHeight * ratio; }
-            view.style.width = finalWidth + "px"; view.style.height = finalHeight + "px";
+            
+            if (isFS) {
+                view.style.width = "100vw";
+                view.style.height = "100vh";
+            } else {
+                const maxWidth = Math.min(window.innerWidth - 20, 1200); 
+                const offsetHeight = window.innerHeight < 500 ? 120 : 250;
+                const maxHeight = window.innerHeight - offsetHeight; 
+                let finalWidth = maxWidth, finalHeight = finalWidth / ratio;
+                if (finalHeight > maxHeight) { finalHeight = maxHeight; finalWidth = finalHeight * ratio; }
+                view.style.width = finalWidth + "px"; view.style.height = finalHeight + "px";
+            }
             render();
         }
 
@@ -193,13 +226,13 @@
         };
 
         view.onmousedown = (e) => { 
-            if(e.target.closest('.floating-controls')) return;
+            if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
             if(e.target.closest('#handle')) s.slide = true; 
             else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; view.style.cursor = 'grabbing'; } 
         };
 
         view.ontouchstart = (e) => {
-            if(e.target.closest('.floating-controls')) return;
+            if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
             e.preventDefault();
             if(e.touches.length === 1) {
                 const t = e.touches[0];
@@ -214,7 +247,7 @@
         window.onmousemove = (e) => handleMove(e.clientX, e.clientY);
         
         window.ontouchmove = (e) => {
-            e.preventDefault();
+            if (s.drag || s.slide || e.touches.length > 1) e.preventDefault();
             if(e.touches.length === 1) {
                 handleMove(e.touches[0].clientX, e.touches[0].clientY);
             } else if(e.touches.length === 2) {
@@ -268,7 +301,6 @@
                 init();
             }
         };
-        // Recalcule la taille lors du changement d'orientation
         window.addEventListener('resize', updateViewportSize);
     </script>
 </body>
