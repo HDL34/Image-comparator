@@ -5,12 +5,8 @@
     <title>Simple comparateur d'image</title>
     <link rel="icon" type="image/png" href="favicon.png?v=1.1">
     <style>
-        :root { 
-            --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525;
-        }
-        .light-theme { 
-            --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff;
-        }
+        :root { --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525; }
+        .light-theme { --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff; }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; }
         .main-title { margin-bottom: 20px; font-size: 28px; font-weight: bold; }
@@ -18,6 +14,7 @@
         #theme-toggle { position: absolute; top: 20px; right: 20px; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
 
         #admin-panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); }
+        .title-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         input { padding: 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 4px; background: var(--input-bg); color: var(--text); }
         
         .btn-group { display: flex; gap: 10px; }
@@ -25,11 +22,7 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
-        #viewport { 
-            position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; 
-            display: none; cursor: grab; user-select: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
+        #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
 
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
@@ -39,19 +32,8 @@
         #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; }
         #handle-circle { background: white; color: #121212; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; pointer-events: none; }
 
-        /* Conteneur des contrôles flottants */
-        .floating-controls {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; z-index: 20;
-        }
-
-        .float-btn {
-            background: rgba(0, 0, 0, 0.7); color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4); 
-            border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer;
-            backdrop-filter: blur(4px); transition: 0.2s;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .floating-controls { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
+        .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .float-btn:hover { background: rgba(0, 0, 0, 0.9); border-color: white; }
 
         #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
@@ -59,11 +41,11 @@
         .zoom-btn:hover { background: rgba(255, 255, 255, 0.1); }
         .zoom-btn:first-child { border-right: 1px solid rgba(255, 255, 255, 0.2); }
 
-        #reset-btn { padding: 8px 16px; display: none; }
+        #reset-btn { padding: 8px 16px; display: none; white-space: nowrap; }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
-        #comp-title-display { margin: 15px 0; font-size: 22px; }
+        #comp-title-display { margin: 15px 0; font-size: 22px; min-height: 30px; }
 
         footer { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 20px; box-sizing: border-box; font-size: 13px; opacity: 0.7; }
         #lang-selector { position: absolute; left: 20px; padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
@@ -76,7 +58,14 @@
     <div class="main-title" id="main-title-text">Simple comparateur d'image</div>
 
     <div id="admin-panel">
-        <input type="text" id="t-in" placeholder="Titre">
+        <div class="title-grid">
+            <input type="text" id="t-fr" placeholder="Titre (Français)">
+            <input type="text" id="t-en" placeholder="Title (English)">
+            <input type="text" id="t-de" placeholder="Titel (Deutsch)">
+            <input type="text" id="t-it" placeholder="Titolo (Italiano)">
+            <input type="text" id="t-es" placeholder="Título (Español)">
+        </div>
+        <hr style="width:100%; opacity:0.1">
         <input type="text" id="b-in" placeholder="Lien Google Drive - AVANT">
         <input type="text" id="a-in" placeholder="Lien Google Drive - APRÈS">
         <div class="btn-group">
@@ -95,17 +84,8 @@
             </div>
             <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser la vue</button>
         </div>
-
-        <div id="zoom-container-after" class="zoom-container">
-            <img id="img-after" class="img-layer">
-        </div>
-        
-        <div id="before-mask">
-            <div id="zoom-container-before" class="zoom-container">
-                <img id="img-before" class="img-layer">
-            </div>
-        </div>
-        
+        <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
+        <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
         <div class="label l-before" id="label-before">Avant</div>
         <div class="label l-after" id="label-after">Après</div>
@@ -124,27 +104,12 @@
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", placeholderT: "Titre", createdBy: "Créé par", btnReset: "Réinitialiser la vue" },
-            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", placeholderT: "Title", createdBy: "Created by", btnReset: "Reset View" },
-            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", placeholderT: "Titel", createdBy: "Erstellt von", btnReset: "Ansicht zurücksetzen" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", placeholderT: "Titolo", createdBy: "Creato da", btnReset: "Ripristina vista" },
-            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", placeholderT: "Título", createdBy: "Creado por", btnReset: "Restablecer vista" }
+            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser la vue", defaultComp: "Comparaison d'image" },
+            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset View", defaultComp: "Image Comparison" },
+            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Ansicht zurücksetzen", defaultComp: "Bildvergleich" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina vista", defaultComp: "Confronto immagini" },
+            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer vista", defaultComp: "Comparación de imágenes" }
         };
-
-        function changeLang() {
-            const l = document.getElementById('lang-selector').value;
-            const t = translations[l];
-            document.getElementById('main-title-text').innerText = t.title;
-            document.title = t.title;
-            document.getElementById('label-before').innerText = t.before;
-            document.getElementById('label-after').innerText = t.after;
-            document.getElementById('theme-toggle').innerText = document.body.classList.contains('light-theme') ? (l === 'fr' ? "Mode Sombre" : "Dark Mode") : t.btnTheme;
-            document.getElementById('gen-btn').innerText = t.btnGen;
-            document.getElementById('share-btn').innerText = t.btnShare;
-            document.getElementById('t-in').placeholder = t.placeholderT;
-            document.getElementById('credit-text').innerText = t.createdBy;
-            document.getElementById('reset-btn').innerText = t.btnReset;
-        }
 
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false };
         const view = document.getElementById('viewport');
@@ -155,44 +120,26 @@
         const imgA = document.getElementById('img-after');
         const handle = document.getElementById('handle');
 
-        if (window.location.protocol === 'file:') {
-            document.getElementById('admin-panel').style.display = 'flex';
+        function changeLang() {
+            const l = document.getElementById('lang-selector').value;
+            const t = translations[l];
+            document.getElementById('main-title-text').innerText = t.title;
+            document.getElementById('label-before').innerText = t.before;
+            document.getElementById('label-after').innerText = t.after;
+            document.getElementById('credit-text').innerText = t.createdBy;
+            document.getElementById('reset-btn').innerText = t.btnReset;
+
+            // Logique de titre personnalisé : On cherche l'input correspondant à la langue
+            const customTitle = document.getElementById('t-' + l).value;
+            document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
+
+        if (window.location.protocol === 'file:') document.getElementById('admin-panel').style.display = 'flex';
 
         function toggleTheme() {
             document.body.classList.toggle('light-theme');
-            const l = document.getElementById('lang-selector').value;
-            const btn = document.getElementById('theme-toggle');
-            btn.innerText = document.body.classList.contains('light-theme') ? (l === 'fr' ? "Mode Sombre" : "Dark Mode") : translations[l].btnTheme;
+            changeLang(); // Refresh texts
         }
-
-        function updateViewportSize() {
-            if (!imgA.naturalWidth) return;
-            const maxWidth = Math.min(window.innerWidth - 40, 1200); 
-            const maxHeight = window.innerHeight - 220; 
-            const ratio = imgA.naturalWidth / imgA.naturalHeight;
-            let finalWidth = maxWidth;
-            let finalHeight = finalWidth / ratio;
-            if (finalHeight > maxHeight) {
-                finalHeight = maxHeight;
-                finalWidth = finalHeight * ratio;
-            }
-            view.style.width = finalWidth + "px";
-            view.style.height = finalHeight + "px";
-            render();
-        }
-
-        window.addEventListener('resize', () => {
-            if (view.style.display === 'block') updateViewportSize();
-        });
-
-        // Gestion du clavier (Barre d'espace)
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && view.style.display === 'block') {
-                e.preventDefault();
-                resetView();
-            }
-        });
 
         function init() {
             const clean = (u) => {
@@ -201,96 +148,68 @@
             };
             imgB.src = clean(document.getElementById('b-in').value);
             imgA.src = clean(document.getElementById('a-in').value);
-            document.getElementById('comp-title-display').innerText = document.getElementById('t-in').value;
-            
-            imgA.onload = () => { 
-                view.style.display = 'block'; 
-                updateViewportSize();
-                setTimeout(render, 100); 
-            };
+            imgA.onload = () => { view.style.display = 'block'; updateViewportSize(); changeLang(); };
+        }
+
+        function updateViewportSize() {
+            if (!imgA.naturalWidth) return;
+            const maxWidth = Math.min(window.innerWidth - 40, 1200); 
+            const maxHeight = window.innerHeight - 220; 
+            const ratio = imgA.naturalWidth / imgA.naturalHeight;
+            let finalWidth = maxWidth, finalHeight = finalWidth / ratio;
+            if (finalHeight > maxHeight) { finalHeight = maxHeight; finalWidth = finalHeight * ratio; }
+            view.style.width = finalWidth + "px"; view.style.height = finalHeight + "px";
+            render();
         }
 
         function render() {
             const transformStr = `translate(${s.x}px, ${s.y}px) scale(${s.z})`;
-            zoomerA.style.transform = transformStr;
-            zoomerB.style.transform = transformStr;
-            zoomerB.style.width = view.offsetWidth + "px";
-            zoomerB.style.height = view.offsetHeight + "px";
-            mask.style.width = `${s.pos}%`;
-            handle.style.left = `${s.pos}%`;
-
-            const resetBtn = document.getElementById('reset-btn');
-            resetBtn.style.display = (s.z !== 1 || s.x !== 0 || s.y !== 0) ? 'block' : 'none';
+            zoomerA.style.transform = transformStr; zoomerB.style.transform = transformStr;
+            zoomerB.style.width = view.offsetWidth + "px"; zoomerB.style.height = view.offsetHeight + "px";
+            mask.style.width = `${s.pos}%`; handle.style.left = `${s.pos}%`;
+            document.getElementById('reset-btn').style.display = (s.z !== 1 || s.x !== 0 || s.y !== 0) ? 'block' : 'none';
         }
 
-        function resetView() {
-            s.z = 1; s.x = 0; s.y = 0;
-            render();
-        }
-
+        function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
         function manualZoom(delta) {
-            const oldZ = s.z;
-            s.z = Math.min(Math.max(1, s.z + delta), 20);
-            // On recentre légèrement vers le milieu du viewport lors du zoom manuel
-            const r = view.getBoundingClientRect();
-            const centerX = r.width / 2;
-            const centerY = r.height / 2;
-            s.x = centerX - ((centerX - s.x) / oldZ) * s.z;
-            s.y = centerY - ((centerY - s.y) / oldZ) * s.z;
+            const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
+            const r = view.getBoundingClientRect(), cX = r.width / 2, cY = r.height / 2;
+            s.x = cX - ((cX - s.x) / oldZ) * s.z; s.y = cY - ((cY - s.y) / oldZ) * s.z;
             render();
         }
 
         view.onwheel = (e) => {
-            e.preventDefault();
-            const r = view.getBoundingClientRect();
-            const mX = (e.clientX - r.left - s.x) / s.z;
-            const mY = (e.clientY - r.top - s.y) / s.z;
+            e.preventDefault(); const r = view.getBoundingClientRect();
+            const mX = (e.clientX - r.left - s.x) / s.z, mY = (e.clientY - r.top - s.y) / s.z;
             s.z = Math.min(Math.max(1, s.z - e.deltaY * 0.0015), 20);
-            s.x = e.clientX - r.left - mX * s.z;
-            s.y = e.clientY - r.top - mY * s.z;
+            s.x = e.clientX - r.left - mX * s.z; s.y = e.clientY - r.top - mY * s.z;
             render();
         };
 
         view.onmousedown = (e) => { 
             if(e.target.closest('.floating-controls')) return;
-            if(e.target.closest('#handle')) {
-                s.slide = true; 
-            } else { 
-                s.drag = true; 
-                s.sx = e.clientX - s.x; 
-                s.sy = e.clientY - s.y; 
-                view.style.cursor = 'grabbing';
-            } 
+            if(e.target.closest('#handle')) s.slide = true; 
+            else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; view.style.cursor = 'grabbing'; } 
         };
         window.onmousemove = (e) => {
-            if(s.slide) { 
-                const r = view.getBoundingClientRect(); 
-                s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); 
-                render();
-            } else if(s.drag) { 
-                s.x = e.clientX - s.sx; 
-                s.y = e.clientY - s.sy; 
-                render();
-            }
+            if(s.slide) { const r = view.getBoundingClientRect(); s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); render(); }
+            else if(s.drag) { s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; render(); }
         };
-        window.onmouseup = () => { 
-            s.drag = s.slide = false; 
-            view.style.cursor = 'grab';
-        };
+        window.onmouseup = () => { s.drag = s.slide = false; view.style.cursor = 'grab'; };
+        window.onkeydown = (e) => { if (e.code === 'Space' && view.style.display === 'block') { e.preventDefault(); resetView(); } };
 
         function copyURL() {
             const u = new URL(window.location.href.split('?')[0]);
-            u.searchParams.set('title', document.getElementById('t-in').value);
+            ['fr', 'en', 'de', 'it', 'es'].forEach(l => u.searchParams.set('t-'+l, document.getElementById('t-'+l).value));
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
-            navigator.clipboard.writeText(u.href);
-            alert("Lien copié !");
+            navigator.clipboard.writeText(u.href); alert("Lien copié !");
         }
 
         window.onload = () => {
             const p = new URLSearchParams(window.location.search);
             if(p.has('before')) {
-                document.getElementById('t-in').value = p.get('title');
+                ['fr', 'en', 'de', 'it', 'es'].forEach(l => document.getElementById('t-'+l).value = p.get('t-'+l) || "");
                 document.getElementById('b-in').value = p.get('before');
                 document.getElementById('a-in').value = p.get('after');
                 init();
