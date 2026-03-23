@@ -25,8 +25,9 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
+        /* Le width n'est plus forcé à 100%, c'est le JavaScript qui va gérer les dimensions parfaites */
         #viewport { 
-            position: relative; width: 100%; max-width: 1200px; 
+            position: relative; 
             background: var(--bg); overflow: hidden; border-radius: 4px; 
             display: none; cursor: grab; user-select: none;
             box-shadow: 0 10px 40px rgba(0,0,0,0.4);
@@ -35,34 +36,31 @@
         #zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         
-        /* Modifié pour que la ligne soit plus visible et centrée */
         #before-mask { 
             position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
             overflow: hidden; z-index: 2; 
-            border-right: 2px solid white; /* La ligne de séparation */
-            box-sizing: border-box; /* Assure que la bordure est à l'intérieur de la largeur */
+            border-right: 2px solid white; 
+            box-sizing: border-box; 
         }
         
-        /* CORRECTION DU BOUTON : Centrage précis sur la ligne */
         #handle { 
             position: absolute; top: 0; left: 50%; width: 4px; height: 100%; 
             z-index: 10; cursor: ew-resize; 
-            transform: translateX(-50%); /* Décale le handle de 2px à gauche pour qu'il soit centré sur la ligne de 4px */
-            background-color: transparent; /* Masquer le conteneur, on ne veut voir que le cercle */
+            transform: translateX(-50%); 
+            background-color: transparent; 
             display: flex; align-items: center; justify-content: center;
         }
         
         #handle-circle { 
-            /* Modifié pour qu'il soit un cercle blanc simple, collé à la ligne */
             background: white; 
             color: #121212; 
-            width: 30px; /* Légèrement plus petit pour un look plus fin */
+            width: 30px; 
             height: 30px; 
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
             box-shadow: 0 0 10px rgba(0,0,0,0.5); 
             font-weight: bold; font-size: 10px; 
-            pointer-events: none; /* Le cercle ne bloque pas le clic pour le drag */
+            pointer-events: none; 
         }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
@@ -157,6 +155,40 @@
             btn.innerText = isLight ? (l === 'fr' ? "Mode Sombre" : "Dark Mode") : translations[l].btnTheme;
         }
 
+        // Nouvelle fonction intelligente pour calculer la taille parfaite
+        function updateViewportSize() {
+            if (!imgA.naturalWidth) return;
+            
+            // On récupère la taille maximale possible (1200px de large max, et on retire 220px en hauteur pour le titre et le footer)
+            const maxWidth = Math.min(window.innerWidth - 40, 1200); 
+            const maxHeight = window.innerHeight - 220; 
+
+            // Ratio de l'image (paysage ou portrait)
+            const ratio = imgA.naturalWidth / imgA.naturalHeight;
+
+            let finalWidth = maxWidth;
+            let finalHeight = finalWidth / ratio;
+
+            // Si le calcul en largeur donne une hauteur trop grande (ex: portrait), on inverse la logique
+            if (finalHeight > maxHeight) {
+                finalHeight = maxHeight;
+                finalWidth = finalHeight * ratio;
+            }
+
+            // Application des dimensions idéales
+            view.style.width = finalWidth + "px";
+            view.style.height = finalHeight + "px";
+            
+            render();
+        }
+
+        // Écouteur pour recalculer la taille si la fenêtre est redimensionnée
+        window.addEventListener('resize', () => {
+            if (view.style.display === 'block') {
+                updateViewportSize();
+            }
+        });
+
         function init() {
             const clean = (u) => {
                 const m = u.match(/\/d\/(.+?)(?:\/|$)/);
@@ -168,8 +200,8 @@
             
             imgA.onload = () => { 
                 view.style.display = 'block'; 
-                const ratio = imgA.naturalHeight / imgA.naturalWidth;
-                view.style.height = (view.offsetWidth * ratio) + "px";
+                // Appel de la nouvelle fonction au chargement
+                updateViewportSize();
                 setTimeout(render, 100); 
             };
         }
@@ -197,7 +229,6 @@
         window.onmousemove = (e) => {
             if(s.slide) { 
                 const r = view.getBoundingClientRect(); 
-                // Correction technique : le calcul de la position tient compte du centrage du handle
                 s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); 
             } else if(s.drag) { s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; }
             render();
