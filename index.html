@@ -12,7 +12,7 @@
             --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff;
         }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; }
         .main-title { margin-bottom: 20px; font-size: 28px; font-weight: bold; }
         
         #theme-toggle { position: absolute; top: 20px; right: 20px; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
@@ -26,47 +26,40 @@
         #share-btn { background: #27ae60; }
 
         #viewport { 
-            position: relative; 
-            background: var(--bg); overflow: hidden; border-radius: 4px; 
+            position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; 
             display: none; cursor: grab; user-select: none;
             box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
-        /* NOUVEAU : Deux conteneurs de zoom séparés pour garder la ligne de coupe fixe à l'écran */
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         
-        /* Le masque est maintenant fixe par rapport au viewport */
-        #before-mask { 
-            position: absolute; top: 0; left: 0; width: 50%; height: 100%; 
-            overflow: hidden; z-index: 2; 
-            border-right: 2px solid white; 
-            box-sizing: border-box; 
-        }
+        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; }
         
-        #handle { 
-            position: absolute; top: 0; left: 50%; width: 4px; height: 100%; 
-            z-index: 10; cursor: ew-resize; 
-            transform: translateX(-50%); 
-            background-color: transparent; 
-            display: flex; align-items: center; justify-content: center;
-        }
-        
-        #handle-circle { 
-            background: white; color: #121212; width: 30px; height: 30px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; pointer-events: none; 
+        #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; }
+        #handle-circle { background: white; color: #121212; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; pointer-events: none; }
+
+        /* Conteneur des contrôles flottants */
+        .floating-controls {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 20;
         }
 
-        /* Style du Bouton Reset faÇon Topaz Labs */
-        #reset-btn {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+        .float-btn {
             background: rgba(0, 0, 0, 0.7); color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4); 
             border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer;
-            display: none; z-index: 20; backdrop-filter: blur(4px); transition: background 0.2s;
+            backdrop-filter: blur(4px); transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
         }
-        #reset-btn:hover { background: rgba(0, 0, 0, 0.9); }
+        .float-btn:hover { background: rgba(0, 0, 0, 0.9); border-color: white; }
+
+        #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
+        .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 16px; transition: 0.2s; min-width: 40px; }
+        .zoom-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .zoom-btn:first-child { border-right: 1px solid rgba(255, 255, 255, 0.2); }
+
+        #reset-btn { padding: 8px 16px; display: none; }
 
         .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
         .l-before { left: 15px; } .l-after { right: 15px; }
@@ -95,7 +88,13 @@
     <h2 id="comp-title-display"></h2>
 
     <div id="viewport">
-        <button id="reset-btn" onclick="resetView()">Réinitialiser la vue</button>
+        <div class="floating-controls">
+            <div id="zoom-controls">
+                <button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
+                <button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
+            </div>
+            <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser la vue</button>
+        </div>
 
         <div id="zoom-container-after" class="zoom-container">
             <img id="img-after" class="img-layer">
@@ -187,6 +186,14 @@
             if (view.style.display === 'block') updateViewportSize();
         });
 
+        // Gestion du clavier (Barre d'espace)
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && view.style.display === 'block') {
+                e.preventDefault();
+                resetView();
+            }
+        });
+
         function init() {
             const clean = (u) => {
                 const m = u.match(/\/d\/(.+?)(?:\/|$)/);
@@ -204,30 +211,32 @@
         }
 
         function render() {
-            // Appliquer le zoom et la position aux deux calques en même temps
             const transformStr = `translate(${s.x}px, ${s.y}px) scale(${s.z})`;
             zoomerA.style.transform = transformStr;
             zoomerB.style.transform = transformStr;
-            
-            // Le calque interne du masque doit conserver la taille exacte du cadre pour que les deux images soient superposées
             zoomerB.style.width = view.offsetWidth + "px";
             zoomerB.style.height = view.offsetHeight + "px";
-            
             mask.style.width = `${s.pos}%`;
             handle.style.left = `${s.pos}%`;
 
-            // Afficher le bouton Reset uniquement si on n'est pas à la position par défaut
             const resetBtn = document.getElementById('reset-btn');
-            if (s.z !== 1 || s.x !== 0 || s.y !== 0) {
-                resetBtn.style.display = 'block';
-            } else {
-                resetBtn.style.display = 'none';
-            }
+            resetBtn.style.display = (s.z !== 1 || s.x !== 0 || s.y !== 0) ? 'block' : 'none';
         }
 
-        // Fonction pour réinitialiser la vue
         function resetView() {
             s.z = 1; s.x = 0; s.y = 0;
+            render();
+        }
+
+        function manualZoom(delta) {
+            const oldZ = s.z;
+            s.z = Math.min(Math.max(1, s.z + delta), 20);
+            // On recentre légèrement vers le milieu du viewport lors du zoom manuel
+            const r = view.getBoundingClientRect();
+            const centerX = r.width / 2;
+            const centerY = r.height / 2;
+            s.x = centerX - ((centerX - s.x) / oldZ) * s.z;
+            s.y = centerY - ((centerY - s.y) / oldZ) * s.z;
             render();
         }
 
@@ -243,7 +252,7 @@
         };
 
         view.onmousedown = (e) => { 
-            if(e.target.closest('#reset-btn')) return; // Ignore si on clique sur le bouton reset
+            if(e.target.closest('.floating-controls')) return;
             if(e.target.closest('#handle')) {
                 s.slide = true; 
             } else { 
