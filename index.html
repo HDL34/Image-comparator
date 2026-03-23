@@ -107,7 +107,7 @@
             fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser la vue", defaultComp: "Comparaison d'image" },
             en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset View", defaultComp: "Image Comparison" },
             de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Ansicht zurücksetzen", defaultComp: "Bildvergleich" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina vista", defaultComp: "Confronto immagini" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina vista", defaultComp: "Confronto images" },
             es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer vista", defaultComp: "Comparación de imágenes" }
         };
 
@@ -128,8 +128,6 @@
             document.getElementById('label-after').innerText = t.after;
             document.getElementById('credit-text').innerText = t.createdBy;
             document.getElementById('reset-btn').innerText = t.btnReset;
-
-            // Logique de titre personnalisé : On cherche l'input correspondant à la langue
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
@@ -138,7 +136,7 @@
 
         function toggleTheme() {
             document.body.classList.toggle('light-theme');
-            changeLang(); // Refresh texts
+            changeLang();
         }
 
         function init() {
@@ -199,11 +197,25 @@
         window.onkeydown = (e) => { if (e.code === 'Space' && view.style.display === 'block') { e.preventDefault(); resetView(); } };
 
         function copyURL() {
-            const u = new URL(window.location.href.split('?')[0]);
-            ['fr', 'en', 'de', 'it', 'es'].forEach(l => u.searchParams.set('t-'+l, document.getElementById('t-'+l).value));
+            // --- CONFIGURATION GITHUB ---
+            const githubURL = "https://haralddeluca.github.io/comparateur-images/"; // REMPLACEZ PAR VOTRE LIEN REEL
+            
+            let baseURL = window.location.href.split('?')[0];
+            // Si on est en local (file://), on remplace par le lien GitHub
+            if (baseURL.startsWith('file://')) {
+                baseURL = githubURL;
+            }
+
+            const u = new URL(baseURL);
+            ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
+                const val = document.getElementById('t-'+l).value;
+                if(val) u.searchParams.set('t-'+l, val);
+            });
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
-            navigator.clipboard.writeText(u.href); alert("Lien copié !");
+            
+            navigator.clipboard.writeText(u.href); 
+            alert("Lien optimisé pour GitHub copié !");
         }
 
         window.onload = () => {
