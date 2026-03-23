@@ -2,54 +2,55 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Simple comparateur d'image</title>
     <link rel="icon" type="image/png" href="favicon.png?v=1.1">
     <style>
         :root { --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525; }
         .light-theme { --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff; }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; }
-        .main-title { margin-bottom: 20px; font-size: 28px; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; touch-action: manipulation; }
+        .main-title { margin-bottom: 15px; font-size: 24px; font-weight: bold; text-align: center; }
         
-        #theme-toggle { position: absolute; top: 20px; right: 20px; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
+        #theme-toggle { position: absolute; top: 15px; right: 15px; padding: 8px 12px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 11px; z-index: 100; }
 
-        #admin-panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); }
-        .title-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        input { padding: 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 4px; background: var(--input-bg); color: var(--text); }
+        #admin-panel { background: var(--panel-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); box-sizing: border-box; }
+        .title-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        @media (min-width: 600px) { .title-grid { grid-template-columns: 1fr 1fr; } }
         
-        .btn-group { display: flex; gap: 10px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
+        input { padding: 10px; border: 1px solid rgba(128,128,128,0.3); border-radius: 4px; background: var(--input-bg); color: var(--text); font-size: 14px; width: 100%; box-sizing: border-box; }
+        
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        button { flex: 1; min-width: 140px; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 
-        #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); touch-action: none; width: 95vw; }
 
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         
         #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; }
         
-        #handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; }
-        #handle-circle { background: white; color: #121212; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-weight: bold; font-size: 10px; pointer-events: none; }
+        #handle { position: absolute; top: 0; left: 50%; width: 40px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; touch-action: none; }
+        #handle-circle { background: white; color: #121212; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-weight: bold; font-size: 12px; pointer-events: none; }
 
-        .floating-controls { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
-        .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .float-btn:hover { background: rgba(0, 0, 0, 0.9); border-color: white; }
+        .floating-controls { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
+        .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 
         #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
-        .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 16px; transition: 0.2s; min-width: 40px; }
-        .zoom-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 18px; min-width: 44px; }
         .zoom-btn:first-child { border-right: 1px solid rgba(255, 255, 255, 0.2); }
 
-        #reset-btn { padding: 8px 16px; display: none; white-space: nowrap; }
+        #reset-btn { display: none; }
 
-        .label { position: absolute; bottom: 15px; padding: 5px 10px; background: rgba(0,0,0,0.8); color: white; font-size: 11px; border-radius: 3px; z-index: 5; text-transform: uppercase; }
-        .l-before { left: 15px; } .l-after { right: 15px; }
-        #comp-title-display { margin: 15px 0; font-size: 22px; min-height: 30px; }
+        .label { position: absolute; bottom: 10px; padding: 4px 8px; background: rgba(0,0,0,0.8); color: white; font-size: 10px; border-radius: 3px; z-index: 5; text-transform: uppercase; pointer-events: none; }
+        .l-before { left: 10px; } .l-after { right: 10px; }
+        #comp-title-display { margin: 10px 0; font-size: 18px; min-height: 25px; text-align: center; padding: 0 10px; }
 
-        footer { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 20px; box-sizing: border-box; font-size: 13px; opacity: 0.7; }
-        #lang-selector { position: absolute; left: 20px; padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
-        .credits { font-style: italic; }
+        footer { position: relative; margin-top: 40px; width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 20px 0; font-size: 12px; opacity: 0.7; }
+        #lang-selector { padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
+        @media (min-width: 600px) { footer { position: fixed; bottom: 10px; flex-direction: row; justify-content: center; } #lang-selector { position: absolute; left: 20px; } }
     </style>
 </head>
 <body>
@@ -65,7 +66,6 @@
             <input type="text" id="t-it" placeholder="Titolo (Italiano)">
             <input type="text" id="t-es" placeholder="Título (Español)">
         </div>
-        <hr style="width:100%; opacity:0.1">
         <input type="text" id="b-in" placeholder="Lien Google Drive - AVANT">
         <input type="text" id="a-in" placeholder="Lien Google Drive - APRÈS">
         <div class="btn-group">
@@ -82,7 +82,7 @@
                 <button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
                 <button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
             </div>
-            <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser la vue</button>
+            <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser</button>
         </div>
         <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
         <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
@@ -104,14 +104,14 @@
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser la vue", defaultComp: "Comparaison d'image" },
-            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset View", defaultComp: "Image Comparison" },
-            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Ansicht zurücksetzen", defaultComp: "Bildvergleich" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina vista", defaultComp: "Confronto immagini" },
-            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer vista", defaultComp: "Comparación de imágenes" }
+            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image" },
+            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison" },
+            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich" },
+            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto immagini" },
+            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes" }
         };
 
-        let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false };
+        let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false, lastDist: 0 };
         const view = document.getElementById('viewport');
         const zoomerA = document.getElementById('zoom-container-after');
         const zoomerB = document.getElementById('zoom-container-before');
@@ -133,10 +133,7 @@
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
 
-        function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            changeLang();
-        }
+        function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
 
         function init() {
             const clean = (u) => {
@@ -150,8 +147,8 @@
 
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
-            const maxWidth = Math.min(window.innerWidth - 40, 1200); 
-            const maxHeight = window.innerHeight - 220; 
+            const maxWidth = Math.min(window.innerWidth - 20, 1200); 
+            const maxHeight = window.innerHeight - 250; 
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
             let finalWidth = maxWidth, finalHeight = finalWidth / ratio;
             if (finalHeight > maxHeight) { finalHeight = maxHeight; finalWidth = finalHeight * ratio; }
@@ -171,10 +168,11 @@
         function manualZoom(delta) {
             const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
             const r = view.getBoundingClientRect(), cX = r.width / 2, cY = r.height / 2;
-            s.x = cX - ((cX - s.x) / oldZ) * s.z; s.y = cY - ((cY - s.y) / oldZ) * s.z;
+            s.x = cX - ((cX - s.x) / oldZ) * s.z; s.y = cY - ((centerY - s.y) / oldZ) * s.z;
             render();
         }
 
+        // --- GESTION SOURIS ---
         view.onwheel = (e) => {
             e.preventDefault(); const r = view.getBoundingClientRect();
             const mX = (e.clientX - r.left - s.x) / s.z, mY = (e.clientY - r.top - s.y) / s.z;
@@ -182,23 +180,52 @@
             s.x = e.clientX - r.left - mX * s.z; s.y = e.clientY - r.top - mY * s.z;
             render();
         };
-
         view.onmousedown = (e) => { 
             if(e.target.closest('.floating-controls')) return;
             if(e.target.closest('#handle')) s.slide = true; 
             else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; view.style.cursor = 'grabbing'; } 
         };
-        window.onmousemove = (e) => {
-            if(s.slide) { const r = view.getBoundingClientRect(); s.pos = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100)); render(); }
-            else if(s.drag) { s.x = e.clientX - s.sx; s.y = e.clientY - s.sy; render(); }
+
+        // --- GESTION TACTILE (Smartphone/Tablette) ---
+        view.ontouchstart = (e) => {
+            if(e.target.closest('.floating-controls')) return;
+            if(e.touches.length === 1) {
+                const t = e.touches[0];
+                if(e.target.closest('#handle')) s.slide = true;
+                else { s.drag = true; s.sx = t.clientX - s.x; s.sy = t.clientY - s.y; }
+            } else if (e.touches.length === 2) {
+                s.drag = false; s.slide = false;
+                s.lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            }
         };
-        window.onmouseup = () => { s.drag = s.slide = false; view.style.cursor = 'grab'; };
+
+        window.onmousemove = (e) => handleMove(e.clientX, e.clientY);
+        window.ontouchmove = (e) => {
+            if(e.touches.length === 1) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            else if(e.touches.length === 2) {
+                const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                const delta = (dist - s.lastDist) * 0.01;
+                manualZoom(delta);
+                s.lastDist = dist;
+            }
+        };
+
+        function handleMove(clientX, clientY) {
+            if(s.slide) { 
+                const r = view.getBoundingClientRect(); 
+                s.pos = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100)); 
+                render(); 
+            } else if(s.drag) { 
+                s.x = clientX - s.sx; s.y = clientY - s.sy; 
+                render(); 
+            }
+        }
+
+        window.onmouseup = window.ontouchend = () => { s.drag = s.slide = false; view.style.cursor = 'grab'; };
 
         function copyURL() {
             let baseURL = window.location.href.split('?')[0];
-            if (window.location.protocol === 'file:') {
-                baseURL = "https://hdl34.github.io/Image-comparator/";
-            }
+            if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
             const u = new URL(baseURL);
             ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
                 const val = document.getElementById('t-'+l).value;
@@ -206,16 +233,12 @@
             });
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
-            navigator.clipboard.writeText(u.href); 
-            alert("Lien copié !");
+            navigator.clipboard.writeText(u.href); alert("Lien copié !");
         }
 
         window.onload = () => {
             const p = new URLSearchParams(window.location.search);
-            // On affiche le panneau si on est en local OU s'il n'y a pas d'image chargée
-            if(window.location.protocol === 'file:' || !p.has('before')) {
-                admin.style.display = 'flex';
-            }
+            if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
             if(p.has('before')) {
                 ['fr', 'en', 'de', 'it', 'es'].forEach(l => document.getElementById('t-'+l).value = p.get('t-'+l) || "");
                 document.getElementById('b-in').value = p.get('before');
