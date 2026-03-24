@@ -13,4 +13,4 @@ Added a language switch button.
 
 Example of what this looks like with an image comparison.
 
-<img width="1900" height="924" alt="image" src="https://github.com/user-attachments/assets/047e5792-c087-4fc2-9417-7656b6b2b148" />
+<img width="1898" height="923" alt="image" src="https://github.com/user-attachments/assets/86f14c45-8b13-41bf-8dbb-30d882277db1" />
