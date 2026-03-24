@@ -12,8 +12,29 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; touch-action: none; }
         .main-title { margin-top: 10px; margin-bottom: 15px; font-size: 24px; font-weight: bold; text-align: center; width: 80%; }
         
+        /* Bouton Home rond et masqué par défaut */
+        #home-btn { 
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            border: 1px solid var(--text); 
+            background: transparent; 
+            color: var(--text); 
+            cursor: pointer; 
+            z-index: 100; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            transition: 0.2s; 
+            text-decoration: none; 
+        }
+        #home-btn:hover { background: rgba(128,128,128,0.2); }
+
         #theme-toggle { position: absolute; top: 15px; right: 15px; padding: 8px 12px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 11px; z-index: 100; }
-        @media (max-width: 600px) { #theme-toggle { top: 15px; right: 15px; transform: none; } .main-title { margin-top: 50px; margin-bottom: 20px; } }
+        @media (max-width: 600px) { #theme-toggle { top: 15px; right: 15px; } #home-btn { top: 15px; left: 15px; } .main-title { margin-top: 50px; margin-bottom: 20px; } }
 
         #admin-panel { background: var(--panel-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 800px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); box-sizing: border-box; }
         .title-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -30,7 +51,7 @@
         #viewport:fullscreen { width: 100vw !important; height: 100vh !important; border-radius: 0; }
 
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; will-change: transform; backface-visibility: hidden; }
-        .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+        .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; image-rendering: pixelated; image-rendering: crisp-edges; }
         
         #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; will-change: width; }
         
@@ -40,16 +61,20 @@
         .floating-controls { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
         .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 
-        /* Style mis à jour pour le bouton plein écran ROND */
+        /* Bouton plein écran restauré en cercle parfait */
         .fullscreen-btn { 
             position: absolute; 
             bottom: 40px; 
             right: 15px; 
             z-index: 20; 
-            width: 44px;  /* Définit une largeur fixe */
-            height: 44px; /* Définit la même hauteur pour faire un carré */
-            padding: 0;   /* Supprime le padding pour ne pas déformer le cercle */
-            border-radius: 50%; /* Crée un cercle parfait */
+            width: 44px; 
+            height: 44px; 
+            min-width: 44px; /* Force la largeur pour contrer le min-width global des boutons */
+            padding: 0; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
         }
 
         #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
@@ -68,6 +93,13 @@
     </style>
 </head>
 <body>
+
+    <a id="home-btn" href="" title="Retour à l'accueil">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+    </a>
 
     <button id="theme-toggle" onclick="toggleTheme()">Mode Clair</button>
     <div class="main-title" id="main-title-text">Simple comparateur d'image</div>
@@ -125,11 +157,11 @@
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image", fullscreen: "Plein écran", exitFullscreen: "Quitter" },
-            en: { title: "Simple Image Comparator", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison", fullscreen: "Fullscreen", exitFullscreen: "Exit" },
-            de: { title: "Einfacher Bildvergleich", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich", fullscreen: "Vollbild", exitFullscreen: "Beenden" },
-            it: { title: "Semplice Comparatore di Immagini", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto images", fullscreen: "Schermo intero", exitFullscreen: "Esci" },
-            es: { title: "Comparador de Imágenes Simple", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes", fullscreen: "Pantalla completa", exitFullscreen: "Salir" }
+            fr: { title: "Simple comparateur d'image", home: "Accueil", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image", fullscreen: "Plein écran", exitFullscreen: "Quitter" },
+            en: { title: "Simple Image Comparator", home: "Home", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison", fullscreen: "Fullscreen", exitFullscreen: "Exit" },
+            de: { title: "Einfacher Bildvergleich", home: "Startseite", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich", fullscreen: "Vollbild", exitFullscreen: "Beenden" },
+            it: { title: "Semplice Comparatore di Immagini", home: "Home", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto images", fullscreen: "Schermo intero", exitFullscreen: "Esci" },
+            es: { title: "Comparador de Imágenes Simple", home: "Inicio", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes", fullscreen: "Pantalla completa", exitFullscreen: "Salir" }
         };
 
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false, lastDist: 0 };
@@ -150,10 +182,8 @@
             document.getElementById('label-after').innerText = t.after;
             document.getElementById('credit-text').innerText = t.createdBy;
             document.getElementById('reset-btn').innerText = t.btnReset;
-            
-            // Mise à jour de l'infobulle (tooltip) du bouton plein écran
+            document.getElementById('home-btn').title = t.home;
             document.getElementById('fs-btn').title = document.fullscreenElement ? t.exitFullscreen : t.fullscreen;
-            
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
@@ -161,30 +191,18 @@
         function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
 
         function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                view.requestFullscreen().catch(err => console.log(err));
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) { view.requestFullscreen().catch(err => console.log(err)); } 
+            else { document.exitFullscreen(); }
         }
 
         document.addEventListener('fullscreenchange', () => {
             updateViewportSize();
             changeLang();
-            
             const fsIcon = document.getElementById('fs-icon');
             if (document.fullscreenElement) {
-                // Icône "Réduire"
                 fsIcon.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>';
             } else {
-                // Icône "Agrandir"
                 fsIcon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>';
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape" && document.fullscreenElement) {
-                document.exitFullscreen();
             }
         });
 
@@ -202,10 +220,8 @@
             if (!imgA.naturalWidth) return;
             const isFS = !!document.fullscreenElement;
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
-            
             if (isFS) {
-                view.style.width = "100vw";
-                view.style.height = "100vh";
+                view.style.width = "100vw"; view.style.height = "100vh";
             } else {
                 const maxWidth = Math.min(window.innerWidth - 20, 1200); 
                 const offsetHeight = window.innerHeight < 500 ? 120 : 250;
@@ -228,13 +244,10 @@
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 
         function manualZoom(delta) {
-            const oldZ = s.z; 
-            s.z = Math.min(Math.max(1, s.z + delta), 20);
+            const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
             const r = view.getBoundingClientRect();
-            const cX = r.width / 2;
-            const cY = r.height / 2;
-            s.x = cX - ((cX - s.x) / oldZ) * s.z; 
-            s.y = cY - ((cY - s.y) / oldZ) * s.z;
+            const cX = r.width / 2; const cY = r.height / 2;
+            s.x = cX - ((cX - s.x) / oldZ) * s.z; s.y = cY - ((cY - s.y) / oldZ) * s.z;
             render();
         }
 
@@ -244,8 +257,7 @@
             const mX = (e.clientX - r.left - s.x) / s.z;
             const mY = (e.clientY - r.top - s.y) / s.z;
             s.z = Math.min(Math.max(1, s.z - e.deltaY * 0.0015), 20);
-            s.x = e.clientX - r.left - mX * s.z; 
-            s.y = e.clientY - r.top - mY * s.z;
+            s.x = e.clientX - r.left - mX * s.z; s.y = e.clientY - r.top - mY * s.z;
             render();
         };
 
@@ -269,23 +281,18 @@
         };
 
         window.onmousemove = (e) => handleMove(e.clientX, e.clientY);
-        
         window.ontouchmove = (e) => {
             if (s.drag || s.slide || e.touches.length > 1) e.preventDefault();
-            if(e.touches.length === 1) {
-                handleMove(e.touches[0].clientX, e.touches[0].clientY);
-            } else if(e.touches.length === 2) {
+            if(e.touches.length === 1) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            else if(e.touches.length === 2) {
                 const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 const delta = (dist - s.lastDist) * (s.z * 0.01);
-                const oldZ = s.z;
-                s.z = Math.min(Math.max(1, s.z + delta), 20);
+                const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
                 const r = view.getBoundingClientRect();
                 const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
                 const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-                s.x = midX - ((midX - s.x) / oldZ) * s.z;
-                s.y = midY - ((midY - s.y) / oldZ) * s.z;
-                s.lastDist = dist;
-                render();
+                s.x = midX - ((midX - s.x) / oldZ) * s.z; s.y = midY - ((midY - s.y) / oldZ) * s.z;
+                s.lastDist = dist; render();
             }
         };
 
@@ -295,8 +302,7 @@
                 s.pos = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100)); 
                 render(); 
             } else if(s.drag) { 
-                s.x = clientX - s.sx; s.y = clientY - s.sy; 
-                render(); 
+                s.x = clientX - s.sx; s.y = clientY - s.sy; render(); 
             }
         }
 
@@ -317,11 +323,21 @@
 
         window.onload = () => {
             const p = new URLSearchParams(window.location.search);
-            if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
+            const homeBtn = document.getElementById('home-btn');
+            homeBtn.href = window.location.pathname;
+
+            if(window.location.protocol === 'file:' || !p.has('before')) {
+                admin.style.display = 'flex';
+                homeBtn.style.display = 'none';
+            }
             if(p.has('before')) {
-                ['fr', 'en', 'de', 'it', 'es'].forEach(l => document.getElementById('t-'+l).value = p.get('t-'+l) || "");
+                ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
+                    const val = p.get('t-'+l);
+                    if(val) document.getElementById('t-'+l).value = val;
+                });
                 document.getElementById('b-in').value = p.get('before');
                 document.getElementById('a-in').value = p.get('after');
+                homeBtn.style.display = 'flex';
                 init();
             }
         };
