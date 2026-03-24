@@ -40,7 +40,7 @@
         #handle { position: absolute; top: 0; left: 50%; width: 60px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; touch-action: none; }
         #handle-circle { background: white; color: #121212; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 14px; pointer-events: none; }
 
-        /* Contrôles haut (Zoom et Réinitialiser) calés au bord */
+        /* Contrôles du haut (Zoom et Reset) */
         .floating-controls { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
         
         .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-top: none; border-radius: 0 0 20px 20px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
@@ -49,17 +49,25 @@
         .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 18px; min-width: 44px; }
         .zoom-btn:first-child { border-right: 1px solid rgba(255, 255, 255, 0.2); }
 
-        /* --- RESTAURATION DU BOUTON PLEIN ÉCRAN ORIGINAL --- */
+        /* Bouton Plein écran ROND */
         .fullscreen-btn { 
             position: absolute; 
             bottom: 40px; 
             right: 15px; 
             z-index: 20; 
-            border-radius: 20px; /* Forme pilule originale */
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.4); /* Rétablit la bordure haute */
+            width: 44px; 
+            height: 44px; 
+            padding: 0; 
+            border-radius: 50% !important; /* Force la rondeur */
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
         }
-        /* --------------------------------------------------- */
 
         #reset-btn { display: none; }
 
@@ -108,7 +116,7 @@
             <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser</button>
         </div>
         
-        <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn" title="Plein écran">
+        <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn" title="Plein écran">
             <svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
             </svg>
