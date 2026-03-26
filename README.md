@@ -1,6 +1,6 @@
 This is a simple image comparator generated with Google Gemini.
 
-<img width="1897" height="921" alt="image" src="https://github.com/user-attachments/assets/9ad80827-166a-457b-8306-5d0765f8f253" />
+<img width="1897" height="921" alt="image" src="https://github.com/user-attachments/assets/fe367dbb-75cd-4a19-bce4-ebe858050582" />
 
 To use it, simply copy image links from your Google Drive and add a title.
 Then, click the "Generate view" button.
