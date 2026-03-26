@@ -116,12 +116,15 @@
             <input type="text" id="t-it" placeholder="Titolo (Italiano)">
             <input type="text" id="t-es" placeholder="Título (Español)">
         </div>
+		
+        <p style="font-size: 14px; margin: 5px 0;">
+            <span id="host-help-text">Vous pouvez importer vos lien d'images depuis google drive ou depuis cet hébergeur</span> : 
+            <a href="https://zupimages.net/" target="_blank">Zupimages.net</a>
+        </p>
+
         <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
         <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
-		<p style="font-size: 14px; margin: 5px 0;">
-    <span id="host-help-text">Vous pouvez importer vos lien d'images depuis google drive ou depuis cet hébergeur. </span> : 
-    <a href="https://zupimages.net/" target="_blank">zupimages.net</a>
-</p>
+        
         <div class="btn-group">
             <button id="gen-btn" onclick="init()">Générer la vue</button>
             <button id="share-btn" onclick="copyURL()">Copier le lien GitHub</button>
