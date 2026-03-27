@@ -122,11 +122,14 @@
             <a href="https://zupimages.net/" target="_blank">Zupimages.net</a> - 
 			<a href="https://freeimage.host/" target="_blank">Freeimage.host</a> - 
 			<a href="https://imgur.com/upload" target="_blank">Imgur.com</a> - 
-			<a href="https://postimages.org/" target="_blank">Postimages.org</a>
+			<a href="https://postimages.org/" target="_blank">Postimages.org</a> - 
+			<a href="https://goopics.net/" target="_blank">Goopics.net</a>
         </p>
 
         <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
         <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
+		
+		<p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;">Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.</p>
         
         <div class="btn-group">
             <button id="gen-btn" onclick="init()">Générer la vue</button>
@@ -171,11 +174,111 @@
 
     <script>
         const translations = {
-            fr: { title: "Simple comparateur d'image", home: "Accueil", before: "Avant", after: "Après", btnTheme: "Mode Clair", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", createdBy: "Créé par", btnReset: "Réinitialiser", defaultComp: "Comparaison d'image", fullscreen: "Plein écran", exitFullscreen: "Quitter", hostHelp: "Vous pouvez importer vos lien d'images depuis google drive ou depuis un hébergeur compatible. Quelques exemples", placeholderBefore: "Lien de l'image - AVANT", placeholderAfter: "Lien de l'image - APRÈS", btnGen: "Générer la vue", btnShare: "Copier le lien GitHub", alertCopy: "Lien copié!" },
-            en: { title: "Simple Image Comparator", home: "Home", before: "Before", after: "After", btnTheme: "Light Mode", btnGen: "Generate View", btnShare: "Copy GitHub Link", createdBy: "Created by", btnReset: "Reset", defaultComp: "Image Comparison", fullscreen: "Fullscreen", exitFullscreen: "Exit", hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", placeholderBefore: "Image Link - BEFORE", placeholderAfter: "Image Link - AFTER", btnGen: "Generate View", btnShare: "Copy GitHub Link", alertCopy: "Link copied!" },
-            de: { title: "Einfacher Bildvergleich", home: "Startseite", before: "Vorher", after: "Nachher", btnTheme: "Heller Modus", btnGen: "Ansicht generieren", btnShare: "GitHub-Link kopieren", createdBy: "Erstellt von", btnReset: "Zurücksetzen", defaultComp: "Bildvergleich", fullscreen: "Vollbild", exitFullscreen: "Beenden", hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", placeholderBefore: "Bildlink - VORHER", placeholderAfter: "Bildlink - NACHHER", btnGen: "Ansicht generieren", btnShare: "Kopiere den GitHub-Link", alertCopy: "Link kopiert!" },
-            it: { title: "Semplice Comparatore di Immagini", home: "Home", before: "Prima", after: "Dopo", btnTheme: "Modalità Chiara", btnGen: "Genera Vista", btnShare: "Copia Link GitHub", createdBy: "Creato da", btnReset: "Ripristina", defaultComp: "Confronto images", fullscreen: "Schermo intero", exitFullscreen: "Esci", hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", placeholderBefore: "Link dell'immagine - PRIMA", placeholderAfter: "Link dell'immagine - DOPO", btnGen: "Genera la vista", btnShare: "Copia il link di GitHub", alertCopy: "Link copiato!" },
-            es: { title: "Comparador de Imágenes Simple", home: "Inicio", before: "Antes", after: "Después", btnTheme: "Modo Claro", btnGen: "Generar Vista", btnShare: "Copiar Enlace GitHub", createdBy: "Creado por", btnReset: "Restablecer", defaultComp: "Comparación de imágenes", fullscreen: "Pantalla completa", exitFullscreen: "Salir", hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", placeholderBefore: "Enlace de la imagen - ANTES", placeholderAfter: "Enlace de la imagen - DESPUÉS", btnGen: "Generar la vista", btnShare: "Copia el enlace de GitHub", alertCopy: "¡Enlace copiado!" }
+            fr: { 
+				title: "Simple comparateur d'image", 
+				home: "Accueil", 
+				before: "Avant", 
+				after: "Après", 
+				btnTheme: "Mode Clair", 
+				btnGen: "Générer la vue", 
+				btnShare: "Copier le lien GitHub", 
+				createdBy: "Créé par", 
+				btnReset: "Réinitialiser", 
+				defaultComp: "Comparaison d'image", 
+				fullscreen: "Plein écran", 
+				exitFullscreen: "Quitter", 
+				hostHelp: "Vous pouvez importer vos lien d'images depuis google drive ou depuis un hébergeur compatible. Quelques exemples", 
+				placeholderBefore: "Lien de l'image - AVANT", 
+				placeholderAfter: "Lien de l'image - APRÈS", 
+				btnGen: "Générer la vue", 
+				btnShare: "Copier le lien GitHub", 
+				alertCopy: "Lien copié!", 
+				directLinkNote: "Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg." 			
+				},
+            en: { 
+				title: "Simple Image Comparator", 
+				home: "Home", 
+				before: "Before", 
+				after: "After", 
+				btnTheme: "Light Mode", 
+				btnGen: "Generate View", 
+				btnShare: "Copy GitHub Link", 
+				createdBy: "Created by", 
+				btnReset: "Reset", 
+				defaultComp: "Image Comparison", 
+				fullscreen: "Fullscreen", 
+				exitFullscreen: "Exit", 
+				hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", 
+				placeholderBefore: "Image Link - BEFORE", 
+				placeholderAfter: "Image Link - AFTER", 
+				btnGen: "Generate View", 
+				btnShare: "Copy GitHub Link", 
+				alertCopy: "Link copied!",
+				directLinkNote: "Make sure to use direct links ending with your image's extension, such as .png, .jpg, or .jpeg." 				
+				},
+            de: { 
+				title: "Einfacher Bildvergleich", 
+				home: "Startseite", 
+				before: "Vorher", 
+				after: "Nachher", 
+				btnTheme: "Heller Modus", 
+				btnGen: "Ansicht generieren", 
+				btnShare: "GitHub-Link kopieren", 
+				createdBy: "Erstellt von", 
+				btnReset: "Zurücksetzen", 
+				defaultComp: "Bildvergleich", 
+				fullscreen: "Vollbild", 
+				exitFullscreen: "Beenden", 
+				hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", 
+				placeholderBefore: "Bildlink - VORHER", 
+				placeholderAfter: "Bildlink - NACHHER", 
+				btnGen: "Ansicht generieren", 
+				btnShare: "Kopiere den GitHub-Link", 
+				alertCopy: "Link kopiert!",
+				directLinkNote: "Stellen Sie sicher, dass Sie direkte Links verwenden, die mit der Dateiendung Ihres Bildes enden, wie .png, .jpg oder .jpeg." 
+				},
+            it: { 
+				title: "Semplice Comparatore di Immagini", 
+				home: "Home", 
+				before: "Prima", 
+				after: "Dopo", 
+				btnTheme: "Modalità Chiara", 
+				btnGen: "Genera Vista", 
+				btnShare: "Copia Link GitHub", 
+				createdBy: "Creato da", 
+				btnReset: "Ripristina", 
+				defaultComp: "Confronto images", 
+				fullscreen: "Schermo intero", 
+				exitFullscreen: "Esci", 
+				hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", 
+				placeholderBefore: "Link dell'immagine - PRIMA", 
+				placeholderAfter: "Link dell'immagine - DOPO", 
+				btnGen: "Genera la vista", 
+				btnShare: "Copia il link di GitHub", 
+				alertCopy: "Link copiato!",
+				directLinkNote: "Assicurati di utilizzare link diretti che terminano con l'estensione dell'immagine, come .png, .jpg o .jpeg." 
+				},
+            es: { 
+				title: "Comparador de Imágenes Simple", 
+				home: "Inicio", 
+				before: "Antes", 
+				after: "Después", 
+				btnTheme: "Modo Claro", 
+				btnGen: "Generar Vista", 
+				btnShare: "Copiar Enlace GitHub", 
+				createdBy: "Creado por", 
+				btnReset: "Restablecer", 
+				defaultComp: "Comparación de imágenes", 
+				fullscreen: "Pantalla completa", 
+				exitFullscreen: "Salir", 
+				hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", 
+				placeholderBefore: "Enlace de la imagen - ANTES", 
+				placeholderAfter: "Enlace de la imagen - DESPUÉS", 
+				btnGen: "Generar la vista", 
+				btnShare: "Copia el enlace de GitHub", 
+				alertCopy: "¡Enlace copiado!",
+				directLinkNote: "Asegúrese de usar enlaces directos que terminen con la extensión de su imagen, como .png, .jpg o .jpeg." 
+				}
         };
 
         let s = { z: 1, x: 0, y: 0, pos: 50, drag: false, slide: false, lastDist: 0 };
@@ -205,6 +308,7 @@
 			document.getElementById('a-in').placeholder = t.placeholderAfter;
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
+			document.getElementById('direct-link-note').innerText = t.directLinkNote;
 			// On traduit la phrase d'aide
 if(document.getElementById('host-help-text')) {
     document.getElementById('host-help-text').innerText = t.hostHelp;
