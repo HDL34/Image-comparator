@@ -9,7 +9,7 @@
         :root { --bg: #121212; --panel-bg: #1e1e1e; --text: #e0e0e0; --accent: #3498db; --input-bg: #252525; }
         .light-theme { --bg: #f4f7f6; --panel-bg: #ffffff; --text: #2c3e50; --accent: #3498db; --input-bg: #ffffff; }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; touch-action: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; }
         .main-title { margin-top: 10px; margin-bottom: 15px; font-size: 24px; font-weight: bold; text-align: center; width: 80%; }
         
         /* Bouton Home rond et masqué par défaut */
@@ -88,7 +88,7 @@
         
         #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; will-change: width; }
         
-        #handle { position: absolute; top: 0; left: 50%; width: 60px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; touch-action: none; }
+        #handle { position: absolute; top: 0; left: 50%; width: 60px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; }
         #handle-circle { background: white; color: #121212; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 14px; pointer-events: none; }
 
         .floating-controls { position: absolute; top: 1px; left: 50%; transform: translateX(-50%); display: none; /* Change "flex" par "none" */ gap: 10px; z-index: 20; }
@@ -454,34 +454,72 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; view.style.cursor = 'grabbing'; } 
         };
 
-        view.ontouchstart = (e) => {
-            if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
-            e.preventDefault();
-            if(e.touches.length === 1) {
-                const t = e.touches[0];
-                if(e.target.closest('#handle')) s.slide = true;
-                else { s.drag = true; s.sx = t.clientX - s.x; s.sy = t.clientY - s.y; }
-            } else if (e.touches.length === 2) {
-                s.drag = false; s.slide = false;
-                s.lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-            }
-        };
+		// Variable pour stocker la position de départ du toucher
+		let startY = 0;
+
+		view.ontouchstart = (e) => {
+			if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
+
+			if(e.touches.length === 1) {
+				const t = e.touches[0];
+				startY = t.clientY; // On stocke la position verticale de départ
+
+				if(e.target.closest('#handle')) {
+					s.slide = true;
+					// On empêche le défilement horizontal de la page
+					e.preventDefault(); 
+				} else {
+					s.drag = true;
+					s.sx = t.clientX - s.x;
+					s.sy = t.clientY - s.y;
+					// Pour le drag simple, on ne fait pas de e.preventDefault() ici.
+					// On le fera dans ontouchmove si le mouvement est horizontal.
+				}
+			} else if (e.touches.length === 2) {
+				// Le e.preventDefault() pour le pinch-zoom est géré dans ontouchmove.
+				s.drag = false;
+				s.slide = false;
+				s.lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+			}
+		};
 
         window.onmousemove = (e) => handleMove(e.clientX, e.clientY);
-        window.ontouchmove = (e) => {
-            if (s.drag || s.slide || e.touches.length > 1) e.preventDefault();
-            if(e.touches.length === 1) handleMove(e.touches[0].clientX, e.touches[0].clientY);
-            else if(e.touches.length === 2) {
-                const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-                const delta = (dist - s.lastDist) * (s.z * 0.01);
-                const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
-                const r = view.getBoundingClientRect();
-                const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
-                const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-                s.x = midX - ((midX - s.x) / oldZ) * s.z; s.y = midY - ((midY - s.y) / oldZ) * s.z;
-                s.lastDist = dist; render();
-            }
-        };
+		window.ontouchmove = (e) => {
+			if(e.touches.length === 1) {
+				const t = e.touches[0];
+				const moveX = Math.abs(t.clientX - (s.sx + s.x)); // Distance horizontale parcourue
+				const moveY = Math.abs(t.clientY - startY);       // Distance verticale parcourue
+
+				if (s.slide) {
+					// Si on utilise la barre de comparaison, on bloque tout défilement de page
+					e.preventDefault(); 
+					handleMove(t.clientX, t.clientY);
+				} else if (s.drag) {
+					// Détection du geste : horizontal ou vertical ?
+					if (moveX > moveY && moveX > 10) { 
+						// Le geste est clairement horizontal (déplacement d'image)
+						e.preventDefault(); // On bloque le défilement horizontal de la page
+						handleMove(t.clientX, t.clientY);
+					} else if (moveY > 10) {
+						// Le geste est vertical (défilement de page)
+						s.drag = false; // On annule le drag de l'image
+						view.style.cursor = 'grab'; // On remet le curseur par défaut
+					}
+					// Si le mouvement est trop faible (<10px), on ne fait rien pour l'instant
+				}
+			} else if(e.touches.length === 2) {
+				// Le zoom tactile est toujours prioritaire et bloque le défilement
+				e.preventDefault();
+				const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+				const delta = (dist - s.lastDist) * (s.z * 0.01);
+				const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
+				const r = view.getBoundingClientRect();
+				const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+				const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+				s.x = midX - ((midX - s.x) / oldZ) * s.z; s.y = midY - ((midY - s.y) / oldZ) * s.z;
+				s.lastDist = dist; render();
+			}
+		};
 
         function handleMove(clientX, clientY) {
             if(s.slide) { 
