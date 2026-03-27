@@ -50,6 +50,35 @@
         button { flex: 1; min-width: 140px; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
+		
+		/* Style pour le groupe de boutons d'hébergement */
+		.host-btn-group {
+			display: flex;
+			gap: 10px; /* Espace entre les boutons */
+			flex-wrap: wrap; /* Les boutons passent à la ligne sur mobile */
+			justify-content: center; /* Centre les boutons */
+			margin: 10px 0 15px 0; /* Espacement autour du groupe */
+		}
+
+		/* Style commun pour chaque bouton d'hébergeur */
+		.host-img-btn {
+			display: inline-block;
+			transition: transform 0.2s, opacity 0.2s;
+			text-decoration: none; /* Enlève le soulignement du lien */
+		}
+
+		/* Effet au survol : léger grossissement */
+		.host-img-btn:hover {
+			transform: scale(1.05);
+		}
+
+		/* Style des images à l'intérieur des boutons */
+		.host-img-btn img {
+			height: 40px; /* Force la hauteur pour l'uniformité */
+			width: auto; /* Conserve les proportions */
+			border: none;
+			display: block; /* Évite les espaces sous l'image */
+		}
 
         #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); touch-action: none; width: 95vw; }
         #viewport:fullscreen { width: 100vw !important; height: 100vh !important; border-radius: 0; }
@@ -117,14 +146,15 @@
             <input type="text" id="t-es" placeholder="Título (Español)">
         </div>
 		
-        <p style="font-size: 14px; margin: 5px 0;">
-            <span id="host-help-text">Vous pouvez importer vos lien d'images depuis google drive ou depuis un hébergeur compatible. Quelques exemples</span>: 
-            <a href="https://zupimages.net/" target="_blank">Zupimages.net</a> - 
-			<a href="https://freeimage.host/" target="_blank">Freeimage.host</a> - 
-			<a href="https://imgur.com/upload" target="_blank">Imgur.com</a> - 
-			<a href="https://postimages.org/" target="_blank">Postimages.org</a> - 
-			<a href="https://goopics.net/" target="_blank">Goopics.net</a>
-        </p>
+        <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;">Vous pouvez importer vos liens d'images depuis google drive ou depuis un hébergeur compatible. Quelques exemples:</p>
+        
+        <div class="host-btn-group">
+            <a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
+            <a href="https://freeimage.host/" target="_blank" class="host-img-btn"><img src="freeimage.host.png" alt="Freeimage"></a>
+            <a href="https://goopics.net/" target="_blank" class="host-img-btn"><img src="goopics.net.png" alt="Goopics"></a>
+            <a href="https://imgur.com/upload" target="_blank" class="host-img-btn"><img src="Imgur_Logo.png" alt="Imgur"></a>
+            <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
+        </div>
 
         <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
         <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
