@@ -12,25 +12,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; transition: background 0.3s, color 0.3s; position: relative; overflow-x: hidden; }
         .main-title { margin-top: 10px; margin-bottom: 15px; font-size: 24px; font-weight: bold; text-align: center; width: 80%; }
         
-        /* Bouton Home rond et masqué par défaut */
-        #home-btn { 
-            position: absolute; 
-            top: 15px; 
-            left: 15px; 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            border: 1px solid var(--text); 
-            background: transparent; 
-            color: var(--text); 
-            cursor: pointer; 
-            z-index: 100; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            transition: 0.2s; 
-            text-decoration: none; 
-        }
+        #home-btn { position: absolute; top: 15px; left: 15px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; z-index: 100; display: none; align-items: center; justify-content: center; transition: 0.2s; text-decoration: none; }
         #home-btn:hover { background: rgba(128,128,128,0.2); }
 
         #theme-toggle { position: absolute; top: 15px; right: 15px; padding: 8px 12px; border-radius: 20px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; font-size: 11px; z-index: 100; }
@@ -39,48 +21,35 @@
         #admin-panel { background: var(--panel-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); width: 100%; max-width: 1100px; display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid rgba(128,128,128,0.2); box-sizing: border-box; }
         .title-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
         @media (min-width: 600px) { .title-grid { grid-template-columns: repeat(5, 1fr); } }
-		.link-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-		@media (min-width: 600px) { .link-grid { grid-template-columns: 1fr 1fr; } }
+        .link-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        @media (min-width: 600px) { .link-grid { grid-template-columns: 1fr 1fr; } }
         
         input { padding: 10px; border: 1px solid rgba(128,128,128,0.3); border-radius: 4px; background: var(--input-bg); color: var(--text); font-size: 14px; width: 100%; box-sizing: border-box; }
+		.btn-group { 
+            display: flex; 
+            gap: 10px; 
+            width: 100%; 
+        }
+        
+        .btn-group button { 
+            flex: 1; /* Force les boutons à prendre 50% de la largeur chacun */
+            padding: 12px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: white; 
+            transition: 0.2s; 
+        }
         
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-		#admin-panel a {
-    color: var(--text);
-    font-weight: bold;
-}
-        button { flex: 1; min-width: 140px; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 		
-		/* Style pour le groupe de boutons d'hébergement */
-		.host-btn-group {
-			display: flex;
-			gap: 10px; /* Espace entre les boutons */
-			flex-wrap: wrap; /* Les boutons passent à la ligne sur mobile */
-			justify-content: center; /* Centre les boutons */
-			margin: 10px 0 15px 0; /* Espacement autour du groupe */
-		}
-
-		/* Style commun pour chaque bouton d'hébergeur */
-		.host-img-btn {
-			display: inline-block;
-			transition: transform 0.2s, opacity 0.2s;
-			text-decoration: none; /* Enlève le soulignement du lien */
-		}
-
-		/* Effet au survol : léger grossissement */
-		.host-img-btn:hover {
-			transform: scale(1.05);
-		}
-
-		/* Style des images à l'intérieur des boutons */
-		.host-img-btn img {
-			height: 40px; /* Force la hauteur pour l'uniformité */
-			width: auto; /* Conserve les proportions */
-			border: none;
-			display: block; /* Évite les espaces sous l'image */
-		}
+        .host-btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 10px 0 15px 0; }
+        .host-img-btn { display: inline-block; transition: transform 0.2s, opacity 0.2s; text-decoration: none; }
+        .host-img-btn:hover { transform: scale(1.05); }
+        .host-img-btn img { height: 40px; width: auto; border: none; display: block; }
 
         #viewport { position: relative; background: var(--bg); overflow: hidden; border-radius: 4px; display: none; cursor: grab; user-select: none; box-shadow: 0 10px 40px rgba(0,0,0,0.4); touch-action: none; width: 95vw; }
         #viewport:fullscreen { width: 100vw !important; height: 100vh !important; border-radius: 0; }
@@ -88,43 +57,25 @@
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; will-change: transform; backface-visibility: hidden; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; image-rendering: pixelated; image-rendering: crisp-edges; }
         
-        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; will-change: width; transition: width 0.5s ease-out; }
-		/* Cette règle doit être présente pour supprimer le délai quand on bouge */
-		.dragging #before-mask, .dragging #handle {
-			transition: none !important;
-		}
-        
-        #handle { position: absolute; top: 0; left: 50%; width: 60px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; transition: left 0.5s ease-out; }
+        #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; will-change: width; }
+        #handle { position: absolute; top: 0; left: 50%; width: 60px; height: 100%; z-index: 10; cursor: ew-resize; transform: translateX(-50%); background-color: transparent; display: flex; align-items: center; justify-content: center; will-change: left; }
         #handle-circle { background: white; color: #121212; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-weight: bold; font-size: 14px; pointer-events: none; }
 
-        .floating-controls { position: absolute; top: 1px; left: 50%; transform: translateX(-50%); display: none; /* Change "flex" par "none" */ gap: 10px; z-index: 20; }
+        /* Transition fluide de retour au centre uniquement */
+        .resetting #before-mask, .resetting #handle { transition: width 0.5s ease-out, left 0.5s ease-out; }
+
+        .floating-controls { position: absolute; top: 1px; left: 50%; transform: translateX(-50%); display: none; gap: 10px; z-index: 20; }
         .float-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; backdrop-filter: blur(4px); transition: 0.2s; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
 
-        /* Bouton plein écran restauré en cercle parfait */
-        .fullscreen-btn { 
-            position: absolute; 
-            bottom: 40px; 
-            right: 12px; 
-            z-index: 20; 
-            width: 44px; 
-            height: 44px; 
-            min-width: 44px; /* Force la largeur pour contrer le min-width global des boutons */
-            padding: 0; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
+        .fullscreen-btn { position: absolute; bottom: 40px; right: 12px; z-index: 20; width: 44px; height: 44px; min-width: 44px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
         #zoom-controls { display: flex; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); }
         .zoom-btn { background: transparent; border: none; color: white; padding: 8px 15px; cursor: pointer; font-size: 18px; min-width: 44px; }
         .zoom-btn:first-child { border-right: 1px solid rgba(255, 255, 255, 0.2); }
 
-        #reset-btn { display: none; }
-
         .label { position: absolute; bottom: 10px; padding: 4px 8px; background: rgba(0,0,0,0.8); color: white; font-size: 10px; border-radius: 3px; z-index: 5; text-transform: uppercase; pointer-events: none; }
         .l-before { left: 10px; } .l-after { right: 10px; }
-        #comp-title-display { margin: 10px 0; font-size: 18px; min-height: 25px; text-align: center; padding: 0 10px; display: none; /* Ajoute cette ligne pour le masquer au départ */ }
+        #comp-title-display { margin: 10px 0; font-size: 18px; min-height: 25px; text-align: center; padding: 0 10px; display: none; }
 
         footer { position: relative; margin-top: 40px; width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 20px 0; font-size: 12px; opacity: 0.7; }
         #lang-selector { padding: 5px; border-radius: 4px; background: var(--panel-bg); color: var(--text); border: 1px solid rgba(128,128,128,0.3); }
@@ -162,12 +113,12 @@
             <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
         </div>
 
-		<div class="link-grid">
+        <div class="link-grid">
             <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
             <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
         </div>
 		
-		<p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;">Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.</p>
+        <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;">Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.</p>
         
         <div class="btn-group">
             <button id="gen-btn" onclick="init()">Générer la vue</button>
@@ -183,10 +134,10 @@
                 <button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
                 <button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
             </div>
-            <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser</button>
+            <button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()">Réinitialiser</button>
         </div>
         
-        <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn" title="Plein écran">
+        <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
             <svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
             </svg>
@@ -339,21 +290,14 @@
             document.getElementById('reset-btn').innerText = t.btnReset;
             document.getElementById('home-btn').title = t.home;
             document.getElementById('fs-btn').title = document.fullscreenElement ? t.exitFullscreen : t.fullscreen;
-			document.getElementById('gen-btn').innerText = t.btnGen;
-			document.getElementById('share-btn').innerText = t.btnShare;
-			document.getElementById('host-help-text').innerText = t.hostHelp;
-			document.getElementById('b-in').placeholder = t.placeholderBefore;
-			document.getElementById('a-in').placeholder = t.placeholderAfter;
+            document.getElementById('gen-btn').innerText = t.btnGen;
+            document.getElementById('share-btn').innerText = t.btnShare;
+            document.getElementById('host-help-text').innerText = t.hostHelp;
+            document.getElementById('b-in').placeholder = t.placeholderBefore;
+            document.getElementById('a-in').placeholder = t.placeholderAfter;
+            document.getElementById('direct-link-note').innerText = t.directLinkNote;
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
-			document.getElementById('direct-link-note').innerText = t.directLinkNote;
-			// On traduit la phrase d'aide
-if(document.getElementById('host-help-text')) {
-    document.getElementById('host-help-text').innerText = t.hostHelp;
-}
-// On traduit les placeholders des champs de saisie
-document.getElementById('b-in').placeholder = t.placeholderBefore;
-document.getElementById('a-in').placeholder = t.placeholderAfter;
         }
 
         function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
@@ -374,53 +318,38 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             }
         });
 
+        const clean = (u) => {
+            if (!u) return "";
+            u = u.trim();
+            const driveMatch = u.match(/\/d\/(.+?)(?:\/|$)/);
+            if (driveMatch) return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w16000&nocache=${Date.now()}`;
+            if (u.includes("imgur.com") && !u.match(/\.(jpg|png|gif|webp)$/)) {
+                const imgurId = u.split('/').pop();
+                return `https://i.imgur.com/${imgurId}.png`;
+            }
+            return u;
+        };
+
         function init() {
-			const clean = (u) => {
-				if (!u) return "";
-				u = u.trim();
-
-				// 1. Gestion Google Drive (déjà présente)
-				const driveMatch = u.match(/\/d\/(.+?)(?:\/|$)/);
-				if (driveMatch) {
-					return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w16000&nocache=${Date.now()}`;
-				}
-
-				// 2. Gestion Imgur (Transformation automatique du lien page en lien direct)
-				// Exemple: https://imgur.com/a/abcde -> https://i.imgur.com/abcde.png
-				if (u.includes("imgur.com") && !u.match(/\.(jpg|png|gif|webp)$/)) {
-					const imgurId = u.split('/').pop();
-					return `https://i.imgur.com/${imgurId}.png`;
-				}
-
-				// 3. Gestion Imgbox & ImgBB
-				// Pour ces deux-là, il est crucial que l'utilisateur prenne le "Lien direct" 
-				// fourni par l'hébergeur. S'il met le lien de la page, l'image ne s'affichera pas.
-				// On retourne l'URL telle quelle si elle semble être un lien direct.
-				return u;
-			};
-
-			imgB.src = clean(document.getElementById('b-in').value);
-			imgA.src = clean(document.getElementById('a-in').value);
-
-			imgA.onload = () => { 
-				view.style.display = 'block'; 
-				document.getElementById('comp-title-display').style.display = 'block';
-				document.querySelector('.floating-controls').style.display = 'flex';
-				updateViewportSize(); 
-				changeLang(); 
-			};
-		}
+            imgB.src = clean(document.getElementById('b-in').value);
+            imgA.src = clean(document.getElementById('a-in').value);
+            imgA.onload = () => { 
+                view.style.display = 'block'; 
+                document.getElementById('comp-title-display').style.display = 'block';
+                document.querySelector('.floating-controls').style.display = 'flex';
+                updateViewportSize(); 
+                changeLang(); 
+            };
+        }
 
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
-            const isFS = !!document.fullscreenElement;
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
-            if (isFS) {
+            if (document.fullscreenElement) {
                 view.style.width = "100vw"; view.style.height = "100vh";
             } else {
                 const maxWidth = Math.min(window.innerWidth - 20, 1200); 
-                const offsetHeight = window.innerHeight < 500 ? 120 : 250;
-                const maxHeight = window.innerHeight - offsetHeight; 
+                const maxHeight = window.innerHeight - (window.innerHeight < 500 ? 120 : 250);
                 let finalWidth = maxWidth, finalHeight = finalWidth / ratio;
                 if (finalHeight > maxHeight) { finalHeight = maxHeight; finalWidth = finalHeight * ratio; }
                 view.style.width = finalWidth + "px"; view.style.height = finalHeight + "px";
@@ -441,7 +370,7 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function manualZoom(delta) {
             const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
             const r = view.getBoundingClientRect();
-            const cX = r.width / 2; const cY = r.height / 2;
+            const cX = r.width / 2, cY = r.height / 2;
             s.x = cX - ((cX - s.x) / oldZ) * s.z; s.y = cY - ((cY - s.y) / oldZ) * s.z;
             render();
         }
@@ -449,8 +378,7 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         view.onwheel = (e) => {
             e.preventDefault(); 
             const r = view.getBoundingClientRect();
-            const mX = (e.clientX - r.left - s.x) / s.z;
-            const mY = (e.clientY - r.top - s.y) / s.z;
+            const mX = (e.clientX - r.left - s.x) / s.z, mY = (e.clientY - r.top - s.y) / s.z;
             s.z = Math.min(Math.max(1, s.z - e.deltaY * 0.0015), 20);
             s.x = e.clientX - r.left - mX * s.z; s.y = e.clientY - r.top - mY * s.z;
             render();
@@ -458,83 +386,40 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
 
         view.onmousedown = (e) => { 
             if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
-			
-			// AJOUTER CETTE LIGNE ICI
-			view.classList.add('dragging');
-			
+            view.classList.remove('resetting');
             if(e.target.closest('#handle')) s.slide = true; 
             else { s.drag = true; s.sx = e.clientX - s.x; s.sy = e.clientY - s.y; view.style.cursor = 'grabbing'; } 
         };
 
-		// Variable pour stocker la position de départ du toucher
-		let startY = 0;
-
-		view.ontouchstart = (e) => {
-			if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
-
-			// AJOUTER CETTE LIGNE ICI
-			view.classList.add('dragging');
-			
-			if(e.touches.length === 1) {
-				const t = e.touches[0];
-				startY = t.clientY; // On stocke la position verticale de départ
-
-				if(e.target.closest('#handle')) {
-					s.slide = true;
-					// On empêche le défilement horizontal de la page
-					e.preventDefault(); 
-				} else {
-					s.drag = true;
-					s.sx = t.clientX - s.x;
-					s.sy = t.clientY - s.y;
-					// Pour le drag simple, on ne fait pas de e.preventDefault() ici.
-					// On le fera dans ontouchmove si le mouvement est horizontal.
-				}
-			} else if (e.touches.length === 2) {
-				// Le e.preventDefault() pour le pinch-zoom est géré dans ontouchmove.
-				s.drag = false;
-				s.slide = false;
-				s.lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-			}
-		};
+        view.ontouchstart = (e) => {
+            if(e.target.closest('.floating-controls') || e.target.closest('.fullscreen-btn')) return;
+            view.classList.remove('resetting');
+            if(e.touches.length === 1) {
+                const t = e.touches[0];
+                if(e.target.closest('#handle')) { s.slide = true; e.preventDefault(); } 
+                else { s.drag = true; s.sx = t.clientX - s.x; s.sy = t.clientY - s.y; }
+            } else if (e.touches.length === 2) {
+                s.drag = s.slide = false;
+                s.lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            }
+        };
 
         window.onmousemove = (e) => handleMove(e.clientX, e.clientY);
-		window.ontouchmove = (e) => {
-			if(e.touches.length === 1) {
-				const t = e.touches[0];
-				const moveX = Math.abs(t.clientX - (s.sx + s.x)); // Distance horizontale parcourue
-				const moveY = Math.abs(t.clientY - startY);       // Distance verticale parcourue
-
-				if (s.slide) {
-					// Si on utilise la barre de comparaison, on bloque tout défilement de page
-					e.preventDefault(); 
-					handleMove(t.clientX, t.clientY);
-				} else if (s.drag) {
-					// Détection du geste : horizontal ou vertical ?
-					if (moveX > moveY && moveX > 10) { 
-						// Le geste est clairement horizontal (déplacement d'image)
-						e.preventDefault(); // On bloque le défilement horizontal de la page
-						handleMove(t.clientX, t.clientY);
-					} else if (moveY > 10) {
-						// Le geste est vertical (défilement de page)
-						s.drag = false; // On annule le drag de l'image
-						view.style.cursor = 'grab'; // On remet le curseur par défaut
-					}
-					// Si le mouvement est trop faible (<10px), on ne fait rien pour l'instant
-				}
-			} else if(e.touches.length === 2) {
-				// Le zoom tactile est toujours prioritaire et bloque le défilement
-				e.preventDefault();
-				const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-				const delta = (dist - s.lastDist) * (s.z * 0.01);
-				const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
-				const r = view.getBoundingClientRect();
-				const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
-				const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-				s.x = midX - ((midX - s.x) / oldZ) * s.z; s.y = midY - ((midY - s.y) / oldZ) * s.z;
-				s.lastDist = dist; render();
-			}
-		};
+        window.ontouchmove = (e) => {
+            if(e.touches.length === 1) {
+                const t = e.touches[0];
+                if (s.slide || s.drag) { e.preventDefault(); handleMove(t.clientX, t.clientY); }
+            } else if(e.touches.length === 2) {
+                e.preventDefault();
+                const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                const delta = (dist - s.lastDist) * (s.z * 0.01);
+                const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
+                const r = view.getBoundingClientRect();
+                const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left, midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+                s.x = midX - ((midX - s.x) / oldZ) * s.z; s.y = midY - ((midY - s.y) / oldZ) * s.z;
+                s.lastDist = dist; render();
+            }
+        };
 
         function handleMove(clientX, clientY) {
             if(s.slide) { 
@@ -546,16 +431,13 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             }
         }
 
-		window.onmouseup = window.ontouchend = () => { 
-            s.drag = s.slide = false; 
-            view.style.cursor = 'grab';
-            
-            // 1. On retire la classe pour réactiver la transition
-            view.classList.remove('dragging'); 
-
-            // 2. On remet à 50% (le navigateur utilisera la transition CSS)
-            s.pos = 50; 
-            render(); 
+        window.onmouseup = window.ontouchend = () => { 
+            if (s.slide || s.drag) {
+                s.drag = s.slide = false; view.style.cursor = 'grab';
+                view.classList.add('resetting');
+                s.pos = 50; render();
+                setTimeout(() => view.classList.remove('resetting'), 500);
+            }
         };
 
         function copyURL() {
@@ -568,21 +450,14 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             });
             u.searchParams.set('before', document.getElementById('b-in').value);
             u.searchParams.set('after', document.getElementById('a-in').value);
-			
-            const l = document.getElementById('lang-selector').value;
-			navigator.clipboard.writeText(u.href);
-			alert(translations[l].alertCopy);
+            navigator.clipboard.writeText(u.href);
+            alert(translations[document.getElementById('lang-selector').value].alertCopy);
         }
 
         window.onload = () => {
             const p = new URLSearchParams(window.location.search);
-            const homeBtn = document.getElementById('home-btn');
-            homeBtn.href = window.location.pathname;
-
-            if(window.location.protocol === 'file:' || !p.has('before')) {
-                admin.style.display = 'flex';
-                homeBtn.style.display = 'none';
-            }
+            document.getElementById('home-btn').href = window.location.pathname;
+            if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
             if(p.has('before')) {
                 ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
                     const val = p.get('t-'+l);
@@ -590,7 +465,7 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
                 });
                 document.getElementById('b-in').value = p.get('before');
                 document.getElementById('a-in').value = p.get('after');
-                homeBtn.style.display = 'flex';
+                document.getElementById('home-btn').style.display = 'flex';
                 init();
             }
         };
