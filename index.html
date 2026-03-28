@@ -87,8 +87,6 @@
 
         .zoom-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; will-change: transform; backface-visibility: hidden; }
         .img-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; image-rendering: pixelated; image-rendering: crisp-edges; }
-		
-		.zoom-btn:nth-child(2) { border-right: 1px solid rgba(255, 255, 255, 0.2); }
         
         #before-mask { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; z-index: 2; border-right: 2px solid white; box-sizing: border-box; will-change: width; }
         
@@ -177,19 +175,10 @@
 
     <div id="viewport">
         <div class="floating-controls">
-			<div id="zoom-controls">
-				<button class="zoom-btn" onclick="swapImages()" title="Inverser les images">
-					<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-						<polyline points="16 3 21 3 21 8"></polyline>
-						<line x1="4" y1="20" x2="21" y2="3"></line>
-						<polyline points="21 16 21 21 16 21"></polyline>
-						<line x1="15" y1="15" x2="21" y2="21"></line>
-						<line x1="4" y1="4" x2="9" y2="9"></line>
-					</svg>
-				</button>
-				<button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
-				<button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
-			</div>
+            <div id="zoom-controls">
+                <button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
+                <button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
+            </div>
             <button id="reset-btn" class="float-btn" onclick="resetView()">Réinitialiser</button>
         </div>
         
@@ -202,8 +191,8 @@
         <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
         <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
-		<div class="label l-before" id="label-before"><span id="text-before">Avant</span></div>
-		<div class="label l-after" id="label-after"><span id="text-after">Après</span></div>
+        <div class="label l-before" id="label-before">Avant</div>
+        <div class="label l-after" id="label-after">Après</div>
     </div>
 
     <footer>
@@ -381,6 +370,7 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             }
         });
 
+        function init() {
 			const clean = (u) => {
 				if (!u) return "";
 				u = u.trim();
@@ -417,8 +407,6 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
 			};
 		}
 
-        function init() {
-
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
             const isFS = !!document.fullscreenElement;
@@ -445,33 +433,6 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         }
 
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
-		
-		function swapImages() {
-			const bIn = document.getElementById('b-in');
-			const aIn = document.getElementById('a-in');
-			const txtB = document.getElementById('text-before');
-			const txtA = document.getElementById('text-after');
-
-			// 1. Inversion des valeurs dans les champs de saisie
-			const tempUrl = bIn.value;
-			bIn.value = aIn.value;
-			aIn.value = tempUrl;
-
-			// 2. Inversion manuelle des sources d'images (plus fiable qu'init)
-			const urlB = clean(bIn.value);
-			const urlA = clean(aIn.value);
-			
-			if(urlB) imgB.src = urlB;
-			if(urlA) imgA.src = urlA;
-
-			// 3. Inversion des textes des labels
-			const tempText = txtB.innerText;
-			txtB.innerText = txtA.innerText;
-			txtA.innerText = tempText;
-
-			// 4. Mise à jour du rendu visuel
-			render();
-		}
 
         function manualZoom(delta) {
             const oldZ = s.z; s.z = Math.min(Math.max(1, s.z + delta), 20);
