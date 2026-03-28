@@ -446,16 +446,24 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 		
 		function swapImages() {
-			// On récupère les valeurs actuelles des inputs
+			// 1. On récupère les éléments des inputs
 			const beforeInput = document.getElementById('b-in');
 			const afterInput = document.getElementById('a-in');
 			
-			// Inversion des valeurs
-			const temp = beforeInput.value;
+			// 2. Inversion des valeurs des liens
+			const tempUrl = beforeInput.value;
 			beforeInput.value = afterInput.value;
-			afterInput.value = temp;
+			afterInput.value = tempUrl;
 
-			// Mise à jour immédiate de l'affichage
+			// 3. Inversion du texte des labels (uniquement pour l'affichage actuel)
+			const labelBefore = document.getElementById('label-before');
+			const labelAfter = document.getElementById('label-after');
+			
+			const tempText = labelBefore.innerText;
+			labelBefore.innerText = labelAfter.innerText;
+			labelAfter.innerText = tempText;
+
+			// 4. Mise à jour immédiate de la vue
 			init();
 		}
 
