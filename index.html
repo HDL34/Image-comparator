@@ -202,8 +202,8 @@
         <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
         <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
-        <div class="label l-before" id="label-before">Avant</div>
-        <div class="label l-after" id="label-after">Après</div>
+        <div class="label l-before" id="label-before"><span id="text-before">Avant</span></div>
+        <div class="label l-after" id="label-after"><span id="text-after">Après</span></div>
     </div>
 
     <footer>
@@ -446,24 +446,22 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 		
 		function swapImages() {
-			// 1. On récupère les éléments des inputs
+			// 1. Inversion des liens dans les champs de saisie
 			const beforeInput = document.getElementById('b-in');
 			const afterInput = document.getElementById('a-in');
-			
-			// 2. Inversion des valeurs des liens
 			const tempUrl = beforeInput.value;
 			beforeInput.value = afterInput.value;
 			afterInput.value = tempUrl;
 
-			// 3. Inversion du texte des labels (uniquement pour l'affichage actuel)
-			const labelBefore = document.getElementById('label-before');
-			const labelAfter = document.getElementById('label-after');
+			// 2. Inversion des textes des labels
+			const textBefore = document.getElementById('text-before');
+			const textAfter = document.getElementById('text-after');
 			
-			const tempText = labelBefore.innerText;
-			labelBefore.innerText = labelAfter.innerText;
-			labelAfter.innerText = tempText;
+			const tempText = textBefore.innerText;
+			textBefore.innerText = textAfter.innerText;
+			textAfter.innerText = tempText;
 
-			// 4. Mise à jour immédiate de la vue
+			// 3. Rafraîchissement de la vue
 			init();
 		}
 
