@@ -446,27 +446,31 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 		
 		function swapImages() {
+			const l = document.getElementById('lang-selector').value;
 			const beforeInput = document.getElementById('b-in');
 			const afterInput = document.getElementById('a-in');
 			const textBefore = document.getElementById('text-before');
 			const textAfter = document.getElementById('text-after');
 
-			// 1. Inversion des URLs
+			// 1. Inversion des URLs dans les champs
 			const tempUrl = beforeInput.value;
 			beforeInput.value = afterInput.value;
 			afterInput.value = tempUrl;
 
-			// 2. Inversion des sources d'images directement
-			imgB.src = beforeInput.value;
-			imgA.src = afterInput.value;
+			// 2. Inversion des textes dans l'objet de traduction pour cette session
+			// Cela empêche changeLang() de remettre les valeurs d'origine
+			const tempTrans = translations[l].before;
+			translations[l].before = translations[l].after;
+			translations[l].after = tempTrans;
 
-			// 3. Inversion des textes des labels
-			const tempText = textBefore.innerText;
+			// 3. Mise à jour physique des labels à l'écran
+			const tempVisibleText = textBefore.innerText;
 			textBefore.innerText = textAfter.innerText;
-			textAfter.innerText = tempText;
+			textAfter.innerText = tempVisibleText;
 
-			// 4. On rafraîchit uniquement le rendu visuel (sans repasser par changeLang)
-			render();
+			// 4. Relancer l'initialisation pour mettre à jour les images
+			// Maintenant init() appellera changeLang() qui lira les traductions inversées
+			init();
 		}
 
         function manualZoom(delta) {
