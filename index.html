@@ -446,31 +446,30 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 		
 		function swapImages() {
-			const l = document.getElementById('lang-selector').value;
-			const beforeInput = document.getElementById('b-in');
-			const afterInput = document.getElementById('a-in');
-			const textBefore = document.getElementById('text-before');
-			const textAfter = document.getElementById('text-after');
+			const bIn = document.getElementById('b-in');
+			const aIn = document.getElementById('a-in');
+			const txtB = document.getElementById('text-before');
+			const txtA = document.getElementById('text-after');
 
-			// 1. Inversion des URLs dans les champs
-			const tempUrl = beforeInput.value;
-			beforeInput.value = afterInput.value;
-			afterInput.value = tempUrl;
+			// 1. Inversion des valeurs dans les champs de saisie
+			const tempUrl = bIn.value;
+			bIn.value = aIn.value;
+			aIn.value = tempUrl;
 
-			// 2. Inversion des textes dans l'objet de traduction pour cette session
-			// Cela empêche changeLang() de remettre les valeurs d'origine
-			const tempTrans = translations[l].before;
-			translations[l].before = translations[l].after;
-			translations[l].after = tempTrans;
+			// 2. Inversion manuelle des sources d'images (plus fiable qu'init)
+			const urlB = clean(bIn.value);
+			const urlA = clean(aIn.value);
+			
+			if(urlB) imgB.src = urlB;
+			if(urlA) imgA.src = urlA;
 
-			// 3. Mise à jour physique des labels à l'écran
-			const tempVisibleText = textBefore.innerText;
-			textBefore.innerText = textAfter.innerText;
-			textAfter.innerText = tempVisibleText;
+			// 3. Inversion des textes des labels
+			const tempText = txtB.innerText;
+			txtB.innerText = txtA.innerText;
+			txtA.innerText = tempText;
 
-			// 4. Relancer l'initialisation pour mettre à jour les images
-			// Maintenant init() appellera changeLang() qui lira les traductions inversées
-			init();
+			// 4. Mise à jour du rendu visuel
+			render();
 		}
 
         function manualZoom(delta) {
