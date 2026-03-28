@@ -381,7 +381,6 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
             }
         });
 
-        function init() {
 			const clean = (u) => {
 				if (!u) return "";
 				u = u.trim();
@@ -417,6 +416,8 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
 				changeLang(); 
 			};
 		}
+
+        function init() {
 
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
