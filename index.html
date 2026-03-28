@@ -202,8 +202,8 @@
         <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
         <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
         <div id="handle"><div id="handle-circle">◀▶</div></div>
-        <div class="label l-before" id="label-before"><span id="text-before">Avant</span></div>
-        <div class="label l-after" id="label-after"><span id="text-after">Après</span></div>
+		<div class="label l-before" id="label-before"><span id="text-before">Avant</span></div>
+		<div class="label l-after" id="label-after"><span id="text-after">Après</span></div>
     </div>
 
     <footer>
@@ -446,23 +446,27 @@ document.getElementById('a-in').placeholder = t.placeholderAfter;
         function resetView() { s.z = 1; s.x = 0; s.y = 0; render(); }
 		
 		function swapImages() {
-			// 1. Inversion des liens dans les champs de saisie
 			const beforeInput = document.getElementById('b-in');
 			const afterInput = document.getElementById('a-in');
+			const textBefore = document.getElementById('text-before');
+			const textAfter = document.getElementById('text-after');
+
+			// 1. Inversion des URLs
 			const tempUrl = beforeInput.value;
 			beforeInput.value = afterInput.value;
 			afterInput.value = tempUrl;
 
-			// 2. Inversion des textes des labels
-			const textBefore = document.getElementById('text-before');
-			const textAfter = document.getElementById('text-after');
-			
+			// 2. Inversion des sources d'images directement
+			imgB.src = beforeInput.value;
+			imgA.src = afterInput.value;
+
+			// 3. Inversion des textes des labels
 			const tempText = textBefore.innerText;
 			textBefore.innerText = textAfter.innerText;
 			textAfter.innerText = tempText;
 
-			// 3. Rafraîchissement de la vue
-			init();
+			// 4. On rafraîchit uniquement le rendu visuel (sans repasser par changeLang)
+			render();
 		}
 
         function manualZoom(delta) {
