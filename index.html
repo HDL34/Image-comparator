@@ -764,6 +764,51 @@
             }
         };
         window.addEventListener('resize', updateViewportSize);
+		
+		// --- GESTION DU DOUBLE TAPE (1 doigt et 2 doigts) ---
+		let lastTapTime = 0;
+		const doubleTapDelay = 300; // Délai maximum entre deux tapes (en millisecondes)
+
+		// Assure-toi que "container" correspond bien à la variable de ta zone d'image principale
+		// Si ton conteneur s'appelle différemment dans ton JS, remplace "container" par le bon nom.
+		container.addEventListener('touchend', function(e) {
+			const currentTime = new Date().getTime();
+			const tapDelay = currentTime - lastTapTime;
+			
+			// On compte le nombre de doigts impliqués dans ce "touchend"
+			const fingers = e.changedTouches.length;
+
+			// Si le temps entre deux tapes est court, c'est un double tape
+			if (tapDelay < doubleTapDelay && tapDelay > 0) {
+				
+				if (fingers === 1) {
+					// --- Action : Double tape à 1 doigt ---
+					if (scale >= 3) { 
+						// Si on est déjà au zoom maximum (ajuste le '3' selon ta variable max_scale)
+						resetView(); 
+					} else {
+						// Sinon, on zoome de 0.5
+						scale += 0.5;
+						if (scale > 3) scale = 3; // On bloque au maximum
+						render(); // Met à jour l'affichage
+					}
+				} 
+				else if (fingers === 2) {
+					// --- Action : Double tape à 2 doigts ---
+					scale -= 0.5; // On dézoome
+					if (scale <= 1) {
+						resetView(); // Si on atteint la taille normale, on réinitialise tout
+					} else {
+						render();
+					}
+				}
+				
+				// Empêche le navigateur de faire son propre zoom natif sur le double tap
+				e.preventDefault(); 
+			}
+			
+			lastTapTime = currentTime;
+		});
     </script>
 </body>
 </html>
