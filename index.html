@@ -385,7 +385,7 @@
         </svg>
     </a>
 
-    <button id="theme-toggle" onclick="toggleTheme()">Mode Clair</button>
+    <button id="theme-toggle" onclick="toggleTheme()">Mode clair</button>
     <div class="main-title" id="main-title-text">Simple comparateur d'image</div>
 
     <div id="admin-panel">
@@ -462,7 +462,8 @@
 				home: "Accueil", 
 				before: "Avant", 
 				after: "Après", 
-				btnTheme: "Mode Clair", 
+				btnThemeLight: "Mode clair", 
+				btnThemeDark: "Mode sombre", 
 				btnGen: "Générer la vue", 
 				btnShare: "Copier le lien GitHub", 
 				createdBy: "Créé par", 
@@ -483,7 +484,8 @@
 				home: "Home", 
 				before: "Before", 
 				after: "After", 
-				btnTheme: "Light Mode", 
+				btnThemeLight: "Light mode", 
+				btnThemeDark: "Dark mode", 
 				btnGen: "Generate View", 
 				btnShare: "Copy GitHub Link", 
 				createdBy: "Created by", 
@@ -504,7 +506,8 @@
 				home: "Startseite", 
 				before: "Vorher", 
 				after: "Nachher", 
-				btnTheme: "Heller Modus", 
+				btnThemeLight: "Heller Modus", 
+				btnThemeDark: "Dunkler Modus", 
 				btnGen: "Ansicht generieren", 
 				btnShare: "GitHub-Link kopieren", 
 				createdBy: "Erstellt von", 
@@ -525,7 +528,8 @@
 				home: "Home", 
 				before: "Prima", 
 				after: "Dopo", 
-				btnTheme: "Modalità Chiara", 
+				btnThemeLight: "Modalità Chiara", 
+				btnThemeDark: "Scura", 
 				btnGen: "Genera Vista", 
 				btnShare: "Copia Link GitHub", 
 				createdBy: "Creato da", 
@@ -546,7 +550,8 @@
 				home: "Inicio", 
 				before: "Antes", 
 				after: "Después", 
-				btnTheme: "Modo Claro", 
+				btnThemeLight: "Modo Claro", 
+				btnThemeDark: "Modo Oscuro", 
 				btnGen: "Generar Vista", 
 				btnShare: "Copiar Enlace GitHub", 
 				createdBy: "Creado por", 
@@ -590,6 +595,15 @@
             document.getElementById('b-in').placeholder = t.placeholderBefore;
             document.getElementById('a-in').placeholder = t.placeholderAfter;
             document.getElementById('direct-link-note').innerText = t.directLinkNote;
+			
+			// CORRECTION DU BUG DE LANGUE DU BOUTON THÈME
+            const themeBtn = document.getElementById('theme-toggle');
+            if (document.body.classList.contains('light-theme')) {
+                themeBtn.innerText = t.btnThemeDark;
+            } else {
+                themeBtn.innerText = t.btnThemeLight;
+            }
+			
             const customTitle = document.getElementById('t-' + l).value;
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
