@@ -608,7 +608,10 @@
             document.getElementById('comp-title-display').innerText = customTitle || t.defaultComp;
         }
 
-        function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
+        function toggleTheme() { 
+			document.body.classList.toggle('light-theme'); 
+			changeLang(); 
+		}
 
         function toggleFullscreen() {
             if (!document.fullscreenElement) { view.requestFullscreen().catch(err => console.log(err)); } 
