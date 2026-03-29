@@ -764,20 +764,25 @@
             }
         };
         window.addEventListener('resize', updateViewportSize);
-		
-		// --- GESTION DU DOUBLE TAPE (1 doigt et 2 doigts) ---
-		let lastTap = 0;
+		// --- GESTION DU DOUBLE TAPE ULTRA-ROBUSTE (Edge/Chrome Mobile) ---
+		let lastTapTime = 0;
+		let tapCount = 0;
+		let fingersCount = 0;
 
 		container.addEventListener('touchstart', function(e) {
+			fingersCount = e.touches.length; // On mémorise combien de doigts touchent l'écran
+		}, { passive: false });
+
+		container.addEventListener('touchend', function(e) {
 			const now = Date.now();
-			const fingers = e.touches.length; // Nombre de doigts sur l'écran
+			const delay = now - lastTapTime;
 
-			// On vérifie si l'intervalle entre deux tapes est inférieur à 300ms
-			if (now - lastTap < 300) {
-				e.preventDefault(); // Bloque le zoom natif du navigateur
+			if (delay < 300 && delay > 0) {
+				// C'est un double-tap !
+				e.preventDefault(); // On bloque le comportement natif d'Edge
 
-				if (fingers === 1) {
-					// Double tape à 1 doigt : Zoom avant ou Reset
+				if (fingersCount === 1) {
+					// Un doigt : Zoom avant ou Reset
 					if (scale >= 3) {
 						resetView();
 					} else {
@@ -785,9 +790,8 @@
 						if (scale > 3) scale = 3;
 						render();
 					}
-				} 
-				else if (fingers === 2) {
-					// Double tape à 2 doigts : Zoom arrière
+				} else if (fingersCount === 2) {
+					// Deux doigts : Zoom arrière
 					scale -= 0.5;
 					if (scale <= 1) {
 						resetView();
@@ -795,10 +799,12 @@
 						render();
 					}
 				}
+				// Reset du temps pour éviter qu'un 3ème tap déclenche un autre zoom
+				lastTapTime = 0; 
+			} else {
+				lastTapTime = now;
 			}
-			lastTap = now;
-		}, { passive: false }); 
-		// { passive: false } est obligatoire pour que e.preventDefault() fonctionne
+		}, { passive: false });
     </script>
 </body>
 </html>
