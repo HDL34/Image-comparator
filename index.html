@@ -312,12 +312,8 @@
 			font-size: 18px; 
 			min-width: 44px; 
 		}
-		
         .zoom-btn:first-child { 
 			border-right: 1px solid rgba(255, 255, 255, 0.2); 
-		}
-		#container {
-			touch-action: none; /* Indispensable pour bloquer le zoom natif d'Edge */
 		}
 
         .label { 
@@ -599,8 +595,6 @@
         }
 
         function toggleTheme() { document.body.classList.toggle('light-theme'); changeLang(); }
-		
-		function updateTranslations(lang) { document.getElementById('theme-toggle').title = translations[lang].themeTitle || "Toggle Theme"; }
 
         function toggleFullscreen() {
             if (!document.fullscreenElement) { view.requestFullscreen().catch(err => console.log(err)); } 
@@ -770,33 +764,6 @@
             }
         };
         window.addEventListener('resize', updateViewportSize);
-		let lastClickTime = 0;
-
-		container.addEventListener('pointerdown', function(e) {
-			// On ne gère que le tactile
-			if (e.pointerType !== 'touch') return;
-
-			const currentTime = Date.now();
-			const delay = currentTime - lastClickTime;
-
-			if (delay < 300) {
-				// C'est un double-tap !
-				e.preventDefault();
-				
-				// On vérifie si un deuxième doigt est posé (e.isPrimary est faux si c'est le 2ème doigt)
-				// Mais pour plus de simplicité sur Edge, restons sur le double-tap à 1 doigt d'abord
-				if (scale >= 3) {
-					resetView();
-				} else {
-					scale += 0.5;
-					if (scale > 3) scale = 3;
-					render();
-				}
-				lastClickTime = 0; // Reset pour éviter le triple-tap
-			} else {
-				lastClickTime = currentTime;
-			}
-		});
     </script>
 </body>
 </html>
