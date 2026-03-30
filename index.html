@@ -387,8 +387,8 @@
         </svg>
     </a>
 
-    <button id="theme-toggle" onclick="toggleTheme()">Mode clair</button>
-    <div class="main-title" id="main-title-text">Simple comparateur d'image</div>
+    <button id="theme-toggle" onclick="toggleTheme()"></button>
+    <div class="main-title" id="main-title-text"></div>
 
     <div id="admin-panel">
         <div class="title-grid">
@@ -399,7 +399,7 @@
             <input type="text" id="t-es" placeholder="Título (Español)">
         </div>
 		
-        <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;">Vous pouvez importer vos liens d'images depuis Google Drive ou depuis un hébergeur compatible. Quelques exemples:</p>
+        <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;"></p>
         
         <div class="host-btn-group">
             <a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
@@ -414,7 +414,7 @@
             <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
         </div>
 		
-        <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;">Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.</p>
+        <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
         
         <div class="btn-group">
             <button id="gen-btn" onclick="init()">Générer la vue</button>
@@ -794,6 +794,7 @@
                 document.getElementById('home-btn').style.display = 'flex';
                 init();
             }
+			changeLang(); // <--- Cette ligne remplit tous tes titres et boutons d'un coup!
         };
         window.addEventListener('resize', updateViewportSize);
     </script>
