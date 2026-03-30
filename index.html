@@ -423,12 +423,12 @@
     <h2 id="comp-title-display"></h2>
 
     <div id="viewport">
-        <div class="floating-controls">
-            <div id="zoom-controls">
-                <button class="zoom-btn" onclick="manualZoom(-0.5)">−</button>
-                <button class="zoom-btn" onclick="manualZoom(0.5)">+</button>
-            </div>
-            <button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()">Réinitialiser</button>
+	    <div class="floating-controls">
+			<div id="zoom-controls">
+				<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title="Zoom arrière">−</button>
+				<button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title="Zoom avant">+</button>
+			</div>
+			<button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title="Réinitialiser">Réinitialiser</button>
         </div>
         
         <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
@@ -467,7 +467,7 @@
 				btnGen: "Générer la vue", 
 				btnShare: "Copier le lien GitHub", 
 				createdBy: "Créé par", 
-				btnReset: "Réinitialiser", 
+				btnReset: "Réinitialiser la vue", 
 				defaultComp: "Comparaison d'image", 
 				fullscreen: "Plein écran", 
 				exitFullscreen: "Quitter", 
@@ -477,7 +477,9 @@
 				btnGen: "Générer la vue", 
 				btnShare: "Copier le lien GitHub", 
 				alertCopy: "Lien copié!", 
-				directLinkNote: "Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg." 			
+				directLinkNote: "Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.", 
+				zoomIn: "Zoom avant", 
+				zoomOut: "Zoom arrière" 
 				},
             en: { 
 				title: "Simple Image Comparator", 
@@ -489,7 +491,7 @@
 				btnGen: "Generate View", 
 				btnShare: "Copy GitHub Link", 
 				createdBy: "Created by", 
-				btnReset: "Reset", 
+				btnReset: "Reset view", 
 				defaultComp: "Image Comparison", 
 				fullscreen: "Fullscreen", 
 				exitFullscreen: "Exit", 
@@ -499,7 +501,9 @@
 				btnGen: "Generate View", 
 				btnShare: "Copy GitHub Link", 
 				alertCopy: "Link copied!",
-				directLinkNote: "Make sure to use direct links ending with your image's extension, such as .png, .jpg, or .jpeg." 				
+				directLinkNote: "Make sure to use direct links ending with your image's extension, such as .png, .jpg, or .jpeg.", 
+				zoomIn: "Zoom in", 
+				zoomOut: "Zoom out" 
 				},
             de: { 
 				title: "Einfacher Bildvergleich", 
@@ -511,7 +515,7 @@
 				btnGen: "Ansicht generieren", 
 				btnShare: "GitHub-Link kopieren", 
 				createdBy: "Erstellt von", 
-				btnReset: "Zurücksetzen", 
+				btnReset: "Ansicht zurücksetzenA", 
 				defaultComp: "Bildvergleich", 
 				fullscreen: "Vollbild", 
 				exitFullscreen: "Beenden", 
@@ -521,7 +525,9 @@
 				btnGen: "Ansicht generieren", 
 				btnShare: "Kopiere den GitHub-Link", 
 				alertCopy: "Link kopiert!",
-				directLinkNote: "Stellen Sie sicher, dass Sie direkte Links verwenden, die mit der Dateiendung Ihres Bildes enden, wie .png, .jpg oder .jpeg." 
+				directLinkNote: "Stellen Sie sicher, dass Sie direkte Links verwenden, die mit der Dateiendung Ihres Bildes enden, wie .png, .jpg oder .jpeg.", 
+				zoomIn: "Vergrößern", 
+				zoomOut: "Verkleinern" 
 				},
             it: { 
 				title: "Semplice Comparatore di Immagini", 
@@ -533,7 +539,7 @@
 				btnGen: "Genera Vista", 
 				btnShare: "Copia Link GitHub", 
 				createdBy: "Creato da", 
-				btnReset: "Ripristina", 
+				btnReset: "Ripristina la visualizzazione", 
 				defaultComp: "Confronto images", 
 				fullscreen: "Schermo intero", 
 				exitFullscreen: "Esci", 
@@ -543,7 +549,9 @@
 				btnGen: "Genera la vista", 
 				btnShare: "Copia il link di GitHub", 
 				alertCopy: "Link copiato!",
-				directLinkNote: "Assicurati di utilizzare link diretti che terminano con l'estensione dell'immagine, come .png, .jpg o .jpeg." 
+				directLinkNote: "Assicurati di utilizzare link diretti che terminano con l'estensione dell'immagine, come .png, .jpg o .jpeg.", 
+				zoomIn: "Ingrandisci", 
+				zoomOut: "Riduci" 
 				},
             es: { 
 				title: "Comparador de Imágenes Simple", 
@@ -555,7 +563,7 @@
 				btnGen: "Generar Vista", 
 				btnShare: "Copiar Enlace GitHub", 
 				createdBy: "Creado por", 
-				btnReset: "Restablecer", 
+				btnReset: "Restablecer vista", 
 				defaultComp: "Comparación de imágenes", 
 				fullscreen: "Pantalla completa", 
 				exitFullscreen: "Salir", 
@@ -565,7 +573,9 @@
 				btnGen: "Generar la vista", 
 				btnShare: "Copia el enlace de GitHub", 
 				alertCopy: "¡Enlace copiado!",
-				directLinkNote: "Asegúrese de usar enlaces directos que terminen con la extensión de su imagen, como .png, .jpg o .jpeg." 
+				directLinkNote: "Asegúrese de usar enlaces directos que terminen con la extensión de su imagen, como .png, .jpg o .jpeg.", 
+				zoomIn: "Acercar", 
+				zoomOut: "Alejar" 
 				}
         };
 
@@ -587,7 +597,10 @@
             document.getElementById('label-after').innerText = t.after;
             document.getElementById('credit-text').innerText = t.createdBy;
             document.getElementById('reset-btn').innerText = t.btnReset;
-            document.getElementById('home-btn').title = t.home;
+			document.getElementById('reset-btn').title = t.btnReset; // Traduit l'infobulle du bouton Reset
+			document.getElementById('zoom-in-btn').title = t.zoomIn; // Traduit le bouton +
+			document.getElementById('zoom-out-btn').title = t.zoomOut; // Traduit le bouton -
+            document.getElementById('home-btn').title = t.home; // Bouton du retour à la page d'accueil
             document.getElementById('fs-btn').title = document.fullscreenElement ? t.exitFullscreen : t.fullscreen;
             document.getElementById('gen-btn').innerText = t.btnGen;
             document.getElementById('share-btn').innerText = t.btnShare;
