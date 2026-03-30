@@ -454,7 +454,7 @@
             <option value="it">Italiano</option>
             <option value="es">Español</option>
         </select>
-        <div class="credits"><span id="credit-text">Créé par</span> Harald de Luca</div>
+        <div class="credits"><span id="credit-text"></span> Harald de Luca</div>
     </footer>
 
     <script>
@@ -610,6 +610,7 @@
             document.getElementById('b-in').placeholder = t.placeholderBefore;
             document.getElementById('a-in').placeholder = t.placeholderAfter;
             document.getElementById('direct-link-note').innerText = t.directLinkNote;
+			document.getElementById('credit-text').innerText = t.createdBy + " ";
 			
 			// CORRECTION DU BUG DE LANGUE DU BOUTON THÈME
             const themeBtn = document.getElementById('theme-toggle');
