@@ -13,4 +13,7 @@ Added a language switch button.
 
 Example of what this looks like with an image comparison.
 
-<img width="1898" height="923" alt="image" src="https://github.com/user-attachments/assets/86f14c45-8b13-41bf-8dbb-30d882277db1" />
+<img width="1897" height="919" alt="image" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
+
+A "Reset" button will appear when you zoom in on the image. It is used to reset the view.
+<img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
