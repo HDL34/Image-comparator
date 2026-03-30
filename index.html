@@ -799,6 +799,31 @@
 			changeLang(); // <--- Cette ligne remplit tous tes titres et boutons d'un coup!
         };
         window.addEventListener('resize', updateViewportSize);
+		// --- GESTION DU DOUBLE TAPE (Zoom rapide sur mobile) ---
+		let lastTapTime = 0;
+		const doubleTapDelay = 300; 
+
+		// On utilise "view" qui est déjà défini dans votre code pour le viewport
+		view.addEventListener('touchend', function(e) {
+			const currentTime = new Date().getTime();
+			const tapDelay = currentTime - lastTapTime;
+
+			// On ne gère le double tape que s'il n'y a qu'un seul doigt
+			if (e.changedTouches.length === 1) {
+				if (tapDelay < doubleTapDelay && tapDelay > 0) {
+					// Si on est déjà zoomé, on réinitialise
+					if (s.z > 1) {
+						resetView();
+					} else {
+						// Sinon, on applique un zoom rapide (x3) au centre
+						s.z = 3;
+						render();
+					}
+					e.preventDefault(); // Empêche le zoom natif du navigateur
+				}
+			}
+			lastTapTime = currentTime;
+		});
     </script>
 </body>
 </html>
