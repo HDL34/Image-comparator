@@ -417,8 +417,8 @@
         <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
         
         <div class="btn-group">
-            <button id="gen-btn" onclick="init()">Générer la vue</button>
-            <button id="share-btn" onclick="copyURL()">Copier le lien GitHub</button>
+            <button id="gen-btn" onclick="init()"></button>
+            <button id="share-btn" onclick="copyURL()"></button>
         </div>
     </div>
 
@@ -427,10 +427,10 @@
     <div id="viewport">
 	    <div class="floating-controls">
 			<div id="zoom-controls">
-				<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title="Zoom arrière">−</button>
-				<button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title="Zoom avant">+</button>
+				<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
+				<button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title=""></button>
 			</div>
-			<button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title="Réinitialiser">Réinitialiser</button>
+			<button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title=""></button>
         </div>
         
         <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
@@ -597,7 +597,8 @@
             document.getElementById('main-title-text').innerText = t.title;
             document.getElementById('label-before').innerText = t.before;
             document.getElementById('label-after').innerText = t.after;
-            document.getElementById('credit-text').innerText = t.createdBy;
+			document.getElementById('zoom-out-btn').innerText = "−"; 
+			document.getElementById('zoom-in-btn').innerText = "+";
             document.getElementById('reset-btn').innerText = t.btnReset;
 			document.getElementById('reset-btn').title = t.btnReset; // Traduit l'infobulle du bouton Reset
 			document.getElementById('zoom-in-btn').title = t.zoomIn; // Traduit le bouton +
