@@ -199,6 +199,41 @@
 			touch-action: none; 
 			width: 95vw; 
 		}
+		
+		/* --- SPINNER DE CHARGEMENT --- */
+		#loading-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--bg); /* S'adapte au mode clair/sombre */
+			z-index: 50;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.spinner {
+			width: 50px;
+			height: 50px;
+			border: 5px solid rgba(128, 128, 128, 0.2);
+			border-top-color: var(--accent); /* La bordure qui tourne est bleue */
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
+
+		#loading-text {
+			margin-top: 15px;
+			font-weight: bold;
+			color: var(--text); /* S'adapte au mode clair/sombre */
+		}
+		
         #viewport:fullscreen { 
 			width: 100vw !important; 
 			height: 100vh !important; 
@@ -436,6 +471,10 @@
     <h2 id="comp-title-display"></h2>
 
     <div id="viewport">
+		<div id="loading-overlay" style="display: none;">
+			<div class="spinner"></div>
+			<div id="loading-text"></div>
+		</div>
 	    <div class="floating-controls">
 			<div id="zoom-controls">
 				<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
@@ -484,6 +523,7 @@
 				defaultComp: "Comparaison d'image", 
 				fullscreen: "Plein écran", 
 				exitFullscreen: "Quitter", 
+				loading: "Chargement en cours...", 
 				hostHelp: "Vous pouvez importer vos liens d'images depuis Google Drive ou depuis un hébergeur compatible. Quelques exemples", 
 				placeholderBefore: "Lien de l'image - AVANT", 
 				placeholderAfter: "Lien de l'image - APRÈS", 
@@ -508,6 +548,7 @@
 				defaultComp: "Image Comparison", 
 				fullscreen: "Fullscreen", 
 				exitFullscreen: "Exit", 
+				loading: "Loading...", 
 				hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", 
 				placeholderBefore: "Image Link - BEFORE", 
 				placeholderAfter: "Image Link - AFTER", 
@@ -532,6 +573,7 @@
 				defaultComp: "Bildvergleich", 
 				fullscreen: "Vollbild", 
 				exitFullscreen: "Beenden", 
+				loading: "Wird geladen...", 
 				hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", 
 				placeholderBefore: "Bildlink - VORHER", 
 				placeholderAfter: "Bildlink - NACHHER", 
@@ -556,6 +598,7 @@
 				defaultComp: "Confronto images", 
 				fullscreen: "Schermo intero", 
 				exitFullscreen: "Esci", 
+				loading: "Caricamento...", 
 				hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", 
 				placeholderBefore: "Link dell'immagine - PRIMA", 
 				placeholderAfter: "Link dell'immagine - DOPO", 
@@ -580,6 +623,7 @@
 				defaultComp: "Comparación de imágenes", 
 				fullscreen: "Pantalla completa", 
 				exitFullscreen: "Salir", 
+				loading: "Cargando...", 
 				hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", 
 				placeholderBefore: "Enlace de la imagen - ANTES", 
 				placeholderAfter: "Enlace de la imagen - DESPUÉS", 
@@ -616,6 +660,7 @@
 			document.getElementById('zoom-out-btn').title = t.zoomOut; // Traduit le bouton -
             document.getElementById('home-btn').title = t.home; // Bouton du retour à la page d'accueil
             document.getElementById('fs-btn').title = document.fullscreenElement ? t.exitFullscreen : t.fullscreen;
+			document.getElementById('loading-text').innerText = t.loading;
             document.getElementById('gen-btn').innerText = t.btnGen;
             document.getElementById('share-btn').innerText = t.btnShare;
             document.getElementById('host-help-text').innerText = t.hostHelp;
@@ -682,16 +727,22 @@
 		function init() {
 			applyFlash('gen-btn'); // Ajoute l'éclaircie
 			
+			// 1. On affiche la zone de travail et le spinner immédiatement
 			// On affiche le comparateur tout de suite pour donner un retour visuel
 			view.style.display = 'block'; 
 			document.getElementById('comp-title-display').style.display = 'block';
-			document.querySelector('.floating-controls').style.display = 'flex';
+			document.querySelector('.floating-controls').style.display = 'none'; // On cache les boutons pour l'instant
+			document.getElementById('loading-overlay').style.display = 'flex'; // On affiche le spinner
 			
+			// 2. On lance le téléchargement des images
 			// On lance le chargement des images
 			imgB.src = clean(document.getElementById('b-in').value);
 			imgA.src = clean(document.getElementById('a-in').value);
 
+			// 3. Quand l'image principale est chargée...
 			imgA.onload = () => { 
+				document.getElementById('loading-overlay').style.display = 'none'; // On cache le spinner
+				document.querySelector('.floating-controls').style.display = 'flex'; // On révèle les boutons
 				updateViewportSize(); 
 				changeLang(); 
 			};
