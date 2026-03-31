@@ -862,25 +862,30 @@
             alert(translations[document.getElementById('lang-selector').value].alertCopy);
         }
 
-        window.onload = () => {
-            const p = new URLSearchParams(window.location.search);
-			// ... détection de la langue et des titres ...
-            document.getElementById('home-btn').href = window.location.pathname;
-            if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
-            if(p.has('before')) {
-				// ... remplissage des inputs ...
-                ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
-                    const val = p.get('t-'+l);
-                    if(val) document.getElementById('t-'+l).value = val;
-                });
-                document.getElementById('b-in').value = p.get('before');
-                document.getElementById('a-in').value = p.get('after');
-                document.getElementById('home-btn').style.display = 'flex';
-				// On lance la vue (qui affichera le spinner grâce à ta nouvelle fonction init)
-				init(); 
+		window.onload = () => {
+			const p = new URLSearchParams(window.location.search);
+			document.getElementById('home-btn').href = window.location.pathname;
+
+			if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
+
+			if(p.has('before')) {
+				// 1. Remplissage des données
+				['fr', 'en', 'de', 'it', 'es'].forEach(l => {
+					const val = p.get('t-'+l);
+					if(val) document.getElementById('t-'+l).value = val;
+				});
+				document.getElementById('b-in').value = p.get('before');
+				document.getElementById('a-in').value = p.get('after');
+				document.getElementById('home-btn').style.display = 'flex';
+
+				// 2. PRÉPARATION VISUELLE (Crucial pour le spinner)
+				changeLang(); // On traduit "Chargement..." avant de l'afficher
+				
+				// 3. LANCEMENT
+				init(); // Affiche le viewport et le spinner
+			} else {
+				changeLang(); // Si pas de lien de partage, on traduit quand même l'accueil
 			}
-			// On s'assure que les textes sont prêts avant d'afficher le spinner
-			changeLang(); // <--- Cette ligne remplit tous tes titres et boutons d'un coup!
 		};
         window.addEventListener('resize', updateViewportSize);
     </script>
