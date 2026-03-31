@@ -208,11 +208,12 @@
 			width: 100%;
 			height: 100%;
 			background: var(--bg); /* S'adapte au mode clair/sombre */
-			z-index: 50;
+			z-index: 100;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
+			transition: background 0.3s; /* Pour la douceur si on change de thème */
 		}
 
 		.spinner {
@@ -863,9 +864,11 @@
 
         window.onload = () => {
             const p = new URLSearchParams(window.location.search);
+			// ... détection de la langue et des titres ...
             document.getElementById('home-btn').href = window.location.pathname;
             if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
             if(p.has('before')) {
+				// ... remplissage des inputs ...
                 ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
                     const val = p.get('t-'+l);
                     if(val) document.getElementById('t-'+l).value = val;
@@ -874,9 +877,13 @@
                 document.getElementById('a-in').value = p.get('after');
                 document.getElementById('home-btn').style.display = 'flex';
                 init();
-            }
+				
+				// On lance la vue (qui affichera le spinner grâce à ta nouvelle fonction init)
+				init(); 
+			}
+			// On s'assure que les textes sont prêts avant d'afficher le spinner
 			changeLang(); // <--- Cette ligne remplit tous tes titres et boutons d'un coup!
-        };
+		};
         window.addEventListener('resize', updateViewportSize);
     </script>
 </body>
