@@ -188,7 +188,7 @@
 		}
 
         #viewport { 
-			position: relative; 
+			position: relative; /* INDISPENSABLE pour que le spinner se place au centre */
 			background: var(--bg); 
 			overflow: hidden; 
 			border-radius: 4px; 
@@ -527,6 +527,7 @@
 				fullscreen: "Plein écran", 
 				exitFullscreen: "Quitter", 
 				loading: "Chargement en cours...", 
+				error: "Erreur de chargement des images", 
 				hostHelp: "Vous pouvez importer vos liens d'images depuis Google Drive ou depuis un hébergeur compatible. Quelques exemples", 
 				placeholderBefore: "Lien de l'image - AVANT", 
 				placeholderAfter: "Lien de l'image - APRÈS", 
@@ -552,6 +553,7 @@
 				fullscreen: "Fullscreen", 
 				exitFullscreen: "Exit", 
 				loading: "Loading...", 
+				error: "Image loading error", 
 				hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", 
 				placeholderBefore: "Image Link - BEFORE", 
 				placeholderAfter: "Image Link - AFTER", 
@@ -577,6 +579,7 @@
 				fullscreen: "Vollbild", 
 				exitFullscreen: "Beenden", 
 				loading: "Wird geladen...", 
+				error: "Fehler beim Laden des Bildes", 
 				hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", 
 				placeholderBefore: "Bildlink - VORHER", 
 				placeholderAfter: "Bildlink - NACHHER", 
@@ -602,6 +605,7 @@
 				fullscreen: "Schermo intero", 
 				exitFullscreen: "Esci", 
 				loading: "Caricamento...", 
+				error: "Errore durante il caricamento dell'immagine", 
 				hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", 
 				placeholderBefore: "Link dell'immagine - PRIMA", 
 				placeholderAfter: "Link dell'immagine - DOPO", 
@@ -627,6 +631,7 @@
 				fullscreen: "Pantalla completa", 
 				exitFullscreen: "Salir", 
 				loading: "Cargando...", 
+				error: "Error al cargar la imagen", 
 				hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", 
 				placeholderBefore: "Enlace de la imagen - ANTES", 
 				placeholderAfter: "Enlace de la imagen - DESPUÉS", 
@@ -747,19 +752,25 @@
 					imgA.src = clean(document.getElementById('a-in').value);
 
 			imgA.onload = () => {
-							document.getElementById('loading-overlay').style.display = 'none'; // On cache le spinner
-							document.querySelector('.floating-controls').style.display = 'flex'; // On révèle les boutons
-							updateViewportSize();
-							changeLang();
-						};
-						// Gestion d'erreur (si l'image ne charge jamais)
-						imgA.onerror = () => {
-							document.getElementById('loading-text').innerText = "Erreur de chargement";
-							// On pourrait rajouter un bouton retour ici
-						};
-					});
+				setTimeout(() => {
+					document.getElementById('loading-overlay').style.display = 'none'; // On cache le spinner
+					document.querySelector('.floating-controls').style.display = 'flex'; // On révèle les boutons
+					updateViewportSize();
+					changeLang();
+				}, 500); // Force 2 secondes d'attente
+					};
+					// Gestion d'erreur (si l'image ne charge jamais)
+					imgA.onerror = () => {
+					const l = document.getElementById('lang-selector').value;
+					const t = translations[l];
+					document.getElementById('loading-text').innerText = t.error;
+					// Optionnel : masquer le spinner (le cercle qui tourne) pour ne laisser que le texte
+					document.querySelector('.spinner').style.display = 'none';
+					};
 				});
-			}
+			});
+		}
+		
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
