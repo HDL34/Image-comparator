@@ -155,6 +155,17 @@
         #gen-btn { background: var(--accent); }
         #share-btn { background: #27ae60; }
 		
+		/* Animation d'éclaircissement */
+		@keyframes flash-white {
+			0% { filter: brightness(1); }
+			50% { filter: brightness(1.8); }
+			100% { filter: brightness(1); }
+		}
+
+		.flash-effect {
+			animation: flash-white 0.3s ease-out;
+		}		
+		
         .host-btn-group { 
 			display: flex; 
 			gap: 10px; 
@@ -658,7 +669,18 @@
             return u;
         };
 
+		function applyFlash(elementId) {
+			const el = document.getElementById(elementId);
+			el.classList.remove('flash-effect'); // On retire si déjà présent
+			void el.offsetWidth; // "Magic" pour forcer le redémarrage de l'animation
+			el.classList.add('flash-effect');
+			
+			// On retire la classe après l'animation (0.3s) pour pouvoir recommencer
+			setTimeout(() => el.classList.remove('flash-effect'), 300);
+		}
+		
         function init() {
+			applyFlash('gen-btn'); // Ajoute l'éclaircie
             imgB.src = clean(document.getElementById('b-in').value);
             imgA.src = clean(document.getElementById('a-in').value);
             imgA.onload = () => { 
@@ -769,6 +791,7 @@
         };
 
         function copyURL() {
+			applyFlash('share-btn'); // Ajoute l'éclaircie
             let baseURL = window.location.href.split('?')[0];
             if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
             const u = new URL(baseURL);
