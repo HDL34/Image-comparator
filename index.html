@@ -722,7 +722,6 @@
 			el.classList.remove('flash-effect'); // On retire si déjà présent
 			void el.offsetWidth; // "Magic" pour forcer le redémarrage de l'animation
 			el.classList.add('flash-effect');
-			
 			// On retire la classe après l'animation (0.3s) pour pouvoir recommencer
 			setTimeout(() => el.classList.remove('flash-effect'), 300);
 		}
@@ -734,23 +733,33 @@
 			// On affiche le comparateur tout de suite pour donner un retour visuel
 			view.style.display = 'block'; 
 			document.getElementById('comp-title-display').style.display = 'block';
-			document.querySelector('.floating-controls').style.display = 'none'; // On cache les boutons pour l'instant
 			document.getElementById('loading-overlay').style.display = 'flex'; // On affiche le spinner
-			
-			// 2. On lance le téléchargement des images
-			// On lance le chargement des images
-			imgB.src = clean(document.getElementById('b-in').value);
-			imgA.src = clean(document.getElementById('a-in').value);
+			document.querySelector('.floating-controls').style.display = 'none'; // On cache les boutons pour l'instant
 
-			// 3. Quand l'image principale est chargée...
-			imgA.onload = () => { 
-				document.getElementById('loading-overlay').style.display = 'none'; // On cache le spinner
-				document.querySelector('.floating-controls').style.display = 'flex'; // On révèle les boutons
-				updateViewportSize(); 
-				changeLang(); 
-			};
-		}
+			// 3. LA CLÉ : On utilise requestAnimationFrame pour s'assurer 
+			// que le navigateur a BIEN DESSINÉ le spinner avant de lancer les images.
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					// Maintenant le spinner est visible à 100%, on peut charger les images
+					// 2. On lance le téléchargement des images
+					// On lance le chargement des images
+					imgB.src = clean(document.getElementById('b-in').value);
+					imgA.src = clean(document.getElementById('a-in').value);
 
+			imgA.onload = () => {
+							document.getElementById('loading-overlay').style.display = 'none'; // On cache le spinner
+							document.querySelector('.floating-controls').style.display = 'flex'; // On révèle les boutons
+							updateViewportSize();
+							changeLang();
+						};
+						// Gestion d'erreur (si l'image ne charge jamais)
+						imgA.onerror = () => {
+							document.getElementById('loading-text').innerText = "Erreur de chargement";
+							// On pourrait rajouter un bouton retour ici
+						};
+					});
+				});
+			}
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
             const ratio = imgA.naturalWidth / imgA.naturalHeight;
@@ -871,7 +880,7 @@
 			if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
 
 			if(p.has('before')) {
-				// 1. Remplissage des données
+				// Remplissage des inputs
 				['fr', 'en', 'de', 'it', 'es'].forEach(l => {
 					const val = p.get('t-'+l);
 					if(val) document.getElementById('t-'+l).value = val;
@@ -879,18 +888,9 @@
 				document.getElementById('b-in').value = p.get('before');
 				document.getElementById('a-in').value = p.get('after');
 				document.getElementById('home-btn').style.display = 'flex';
-
-				// 2. Traduire d'abord
-				changeLang(); 
-
-				// 3. FORCER l'affichage du viewport et du spinner AVANT de lancer le reste
-				view.style.display = 'block'; 
-				document.getElementById('loading-overlay').style.display = 'flex';
-
-				// 4. Laisser un tout petit délai (0ms) pour que le navigateur dessine le spinner
-				setTimeout(() => {
-					init();
-				}, 10);
+				// On traduit et on lance init qui gère maintenant lui-même le spinner
+				changeLang();
+				init();
 			} else {
 				changeLang();
 			}
