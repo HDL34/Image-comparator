@@ -679,18 +679,23 @@
 			setTimeout(() => el.classList.remove('flash-effect'), 300);
 		}
 		
-        function init() {
+		function init() {
 			applyFlash('gen-btn'); // Ajoute l'éclaircie
-            imgB.src = clean(document.getElementById('b-in').value);
-            imgA.src = clean(document.getElementById('a-in').value);
-            imgA.onload = () => { 
-                view.style.display = 'block'; 
-                document.getElementById('comp-title-display').style.display = 'block';
-                document.querySelector('.floating-controls').style.display = 'flex';
-                updateViewportSize(); 
-                changeLang(); 
-            };
-        }
+			
+			// On affiche le comparateur tout de suite pour donner un retour visuel
+			view.style.display = 'block'; 
+			document.getElementById('comp-title-display').style.display = 'block';
+			document.querySelector('.floating-controls').style.display = 'flex';
+			
+			// On lance le chargement des images
+			imgB.src = clean(document.getElementById('b-in').value);
+			imgA.src = clean(document.getElementById('a-in').value);
+
+			imgA.onload = () => { 
+				updateViewportSize(); 
+				changeLang(); 
+			};
+		}
 
         function updateViewportSize() {
             if (!imgA.naturalWidth) return;
