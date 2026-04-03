@@ -1,3 +1,4 @@
+NomDuProjet - Simple Comparateur d'images [Techno utilisée]
 This is a simple image comparator generated with Google Gemini.
 
 <img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
