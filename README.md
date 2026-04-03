@@ -11,7 +11,7 @@ Zoom Interactif & Reset : Explorez les détails avec une fonction de zoom intég
 
 <img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
 
-Compatibilité Étendue : Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe.
+Compatibilité Étendue : Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe. Fonctionne parfaitement bien également sur des support tactile tel que les smartphone et tablette.
 
 Interface Personnalisable : Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
 
