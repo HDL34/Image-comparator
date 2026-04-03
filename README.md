@@ -1,21 +1,26 @@
-Simple Comparateur d'images.
+📸 Image Comparator - [Nom de votre Projet]
+Image Comparator est un outil web léger et intuitif conçu pour comparer deux images côte à côte en utilisant des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à des fonctionnalités de zoom et de thèmes personnalisables.
 
-This is a simple image comparator generated with Google Gemini.
+<img width="1898" height="921" alt="Aperçu principal" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
 
-<img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
+✨ Fonctionnalités
+Comparaison Multimode : Visualisez deux images simultanément pour détecter les moindres différences.
 
-To use it, simply copy image links from your Google Drive and add a title.
-Then, click the "Generate view" button.
-I've added a button to switch between dark and light themes. 
-Also, in the link fields, it says "Google Drive link". But that's just an example. I've tested it with links from other hosting sites and it works perfectly fine too.
+Zoom Interactif & Reset : Explorez les détails avec une fonction de zoom intégrée. Un bouton "Reset" apparaît automatiquement pour revenir à la vue initiale.
 
-Added a language switch button.
+Compatibilité Étendue : Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe.
 
-<img width="129" height="190" alt="image" src="https://github.com/user-attachments/assets/e9ca23f3-b609-4575-b101-fbd5ee3465fd" />
+Interface Personnalisable : Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
 
-Example of what this looks like with an image comparison.
+Multilingue : Support intégré pour changer la langue de l'interface en un clic.
 
-<img width="1897" height="919" alt="image" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
+🚀 Comment l'utiliser ?
+Récupérez vos liens : Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
 
-A "Reset" button will appear when you zoom in on the image. It is used to reset the view.
-<img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
+Configurez la vue : Collez les liens dans les champs correspondants et ajoutez un titre pour chaque image.
+
+Générez : Cliquez sur le bouton "Generate view" pour afficher la comparaison.
+
+Analysez : Utilisez la souris pour zoomer sur des zones spécifiques si nécessaire.
+
+<img width="1897" height="919" alt="Exemple de comparaison" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
