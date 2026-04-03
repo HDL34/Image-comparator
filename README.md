@@ -12,7 +12,7 @@ Visualisez deux images simultanément pour détecter les moindres différences.
 
 **Zoom Interactif & Reset:** 
 
-Explorez les détails avec une fonction de zoom intégrée. Un bouton "Reset" apparaît automatiquement pour revenir à la vue initiale.
+Explorez les détails avec une fonction de zoom intégrée. Un bouton "Réinitialiser" apparaît automatiquement pour revenir à la vue initiale.
 
 <img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
 
@@ -35,7 +35,7 @@ Collez les liens dans les champs correspondants et ajoutez un titre pour chaque 
 
 **Générez:**
 
-Cliquez sur le bouton "Generate view" pour afficher la comparaison.
+Cliquez sur le bouton "Générer la vue" pour afficher la comparaison.
 
 **Analysez:**
 
