@@ -4,7 +4,7 @@ Image Comparator est un outil web léger et intuitif conçu pour comparer deux i
 
 <img width="1898" height="921" alt="Aperçu principal" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
 
-✨ **Fonctionnalités**
+## ✨ **Fonctionnalités**
 
 Comparaison Multimode : Visualisez deux images simultanément pour détecter les moindres différences.
 
