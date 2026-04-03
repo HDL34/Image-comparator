@@ -865,20 +865,35 @@
             }
         };
 
-        function copyURL() {
+		function copyURL() {
 			applyFlash('share-btn'); // Ajoute l'éclaircie
-            let baseURL = window.location.href.split('?')[0];
-            if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
-            const u = new URL(baseURL);
-            ['fr', 'en', 'de', 'it', 'es'].forEach(l => {
-                const val = document.getElementById('t-'+l).value;
-                if(val) u.searchParams.set('t-'+l, val);
-            });
-            u.searchParams.set('before', document.getElementById('b-in').value);
-            u.searchParams.set('after', document.getElementById('a-in').value);
-            navigator.clipboard.writeText(u.href);
-            alert(translations[document.getElementById('lang-selector').value].alertCopy);
-        }
+			let baseURL = window.location.href.split('?')[0];
+			if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
+			const u = new URL(baseURL);
+			
+			['fr', 'en', 'de', 'it', 'es'].forEach(l => {
+				const val = document.getElementById('t-'+l).value;
+				if(val) u.searchParams.set('t-'+l, val);
+			});
+			
+			u.searchParams.set('before', document.getElementById('b-in').value);
+			u.searchParams.set('after', document.getElementById('a-in').value);
+			navigator.clipboard.writeText(u.href);
+
+			// --- NOUVEAU COMPORTEMENT DU BOUTON ---
+			const btn = document.getElementById('share-btn');
+			const l = document.getElementById('lang-selector').value;
+			
+			// On change le texte en "Lien copié !" (en utilisant ta traduction existante)
+			btn.innerText = translations[l].alertCopy;
+
+			// On remet le texte normal après 2 secondes (1500 millisecondes)
+			setTimeout(() => {
+				// On récupère la langue actuelle au cas où l'utilisateur l'aurait changée entre-temps
+				const currentLang = document.getElementById('lang-selector').value;
+				btn.innerText = translations[currentLang].btnShare;
+			}, 1500);
+		}
 
 		window.onload = () => {
 			const p = new URLSearchParams(window.location.search);
