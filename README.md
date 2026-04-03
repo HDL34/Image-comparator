@@ -17,9 +17,11 @@ Explorez les détails avec une fonction de zoom intégrée. Un bouton "Réinitia
 <img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
 
 ### **Compatibilité Étendue:** 
+
 Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe. Fonctionne parfaitement bien également sur des support tactile tel que les smartphone et tablette.
 
 **Interface Personnalisable:** 
+
 Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
 
 **Multilingue:** 
@@ -27,7 +29,10 @@ Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
 Support intégré pour changer la langue de l'interface en un clic.
 
 # 🚀 **Comment l'utiliser?**
-Récupérez vos liens : Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
+
+Récupérez vos liens: 
+
+Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
 
 **Configurez la vue:**
 
