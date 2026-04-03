@@ -1,4 +1,5 @@
-📸 Image Comparator - [Nom de votre Projet]
+📸 Simple comparateur d'image.
+
 Image Comparator est un outil web léger et intuitif conçu pour comparer deux images côte à côte en utilisant des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à des fonctionnalités de zoom et de thèmes personnalisables.
 
 <img width="1898" height="921" alt="Aperçu principal" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
@@ -7,6 +8,8 @@ Image Comparator est un outil web léger et intuitif conçu pour comparer deux i
 Comparaison Multimode : Visualisez deux images simultanément pour détecter les moindres différences.
 
 Zoom Interactif & Reset : Explorez les détails avec une fonction de zoom intégrée. Un bouton "Reset" apparaît automatiquement pour revenir à la vue initiale.
+
+<img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
 
 Compatibilité Étendue : Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe.
 
