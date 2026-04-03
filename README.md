@@ -5,6 +5,7 @@ Image Comparator est un outil web léger et intuitif conçu pour comparer deux i
 <img width="1898" height="921" alt="Aperçu principal" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
 
 ✨ **Fonctionnalités**
+
 Comparaison Multimode : Visualisez deux images simultanément pour détecter les moindres différences.
 
 **Zoom Interactif & Reset:** 
@@ -19,7 +20,9 @@ Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeu
 **Interface Personnalisable:** 
 Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
 
-**Multilingue:** Support intégré pour changer la langue de l'interface en un clic.
+**Multilingue:** 
+
+Support intégré pour changer la langue de l'interface en un clic.
 
 🚀 **Comment l'utiliser ?**
 Récupérez vos liens : Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
