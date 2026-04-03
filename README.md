@@ -38,11 +38,11 @@ Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
 
 Collez les liens dans les champs correspondants et ajoutez un titre pour chaque image.
 
-### **Générez:**
+### **Générer:**
 
 Cliquez sur le bouton "Générer la vue" pour afficher la comparaison.
 
-### **Analysez:**
+### **Analyser:**
 
 Utilisez la souris pour zoomer sur des zones spécifiques si nécessaire.
 
