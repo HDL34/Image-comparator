@@ -525,6 +525,7 @@
 				exitFullscreen: "Quitter", 
 				loading: "Chargement en cours...", 
 				error: "Erreur : lien invalide ou image lourde", 
+				errorEmpty: "Veuillez d'abord remplir les champs liens d'image", 
 				hostHelp: "Vous pouvez importer vos liens d'images depuis Google Drive ou depuis un hébergeur compatible. Quelques exemples", 
 				placeholderBefore: "Lien de l'image - AVANT", 
 				placeholderAfter: "Lien de l'image - APRÈS", 
@@ -551,6 +552,7 @@
 				exitFullscreen: "Exit", 
 				loading: "Loading...", 
 				error: "Error: invalid link or heavy image", 
+				errorEmpty: "Please fill in the image link fields first", 
 				hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", 
 				placeholderBefore: "Image Link - BEFORE", 
 				placeholderAfter: "Image Link - AFTER", 
@@ -577,6 +579,7 @@
 				exitFullscreen: "Beenden", 
 				loading: "Wird geladen...", 
 				error: "Fehler: ungültiger Link", 
+				errorEmpty: "Bitte füllen Sie zuerst die Bildlink-Felder aus", 
 				hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", 
 				placeholderBefore: "Bildlink - VORHER", 
 				placeholderAfter: "Bildlink - NACHHER", 
@@ -603,6 +606,7 @@
 				exitFullscreen: "Esci", 
 				loading: "Caricamento...", 
 				error: "Errore: link non valido", 
+				errorEmpty: "Si prega di compilare prima i campi dei link alle immagini", 
 				hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", 
 				placeholderBefore: "Link dell'immagine - PRIMA", 
 				placeholderAfter: "Link dell'immagine - DOPO", 
@@ -629,6 +633,7 @@
 				exitFullscreen: "Salir", 
 				loading: "Cargando...", 
 				error: "Error: enlace no válido", 
+				errorEmpty: "Por favor, rellene primero los campos de enlaces de imagen", 
 				hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", 
 				placeholderBefore: "Enlace de la imagen - ANTES", 
 				placeholderAfter: "Enlace de la imagen - DESPUÉS", 
@@ -866,32 +871,49 @@
         };
 
 		function copyURL() {
-			applyFlash('share-btn'); // Ajoute l'éclaircie
+			const beforeVal = document.getElementById('b-in').value.trim();
+			const afterVal = document.getElementById('a-in').value.trim();
+			const btn = document.getElementById('share-btn');
+			const l = document.getElementById('lang-selector').value;
+			const t = translations[l];
+
+			// --- VÉRIFICATION DES CHAMPS ---
+			if (!beforeVal || !afterVal) {
+				// On affiche le message d'erreur en rouge
+				btn.innerText = t.errorEmpty;
+				btn.style.backgroundColor = "#e74c3c"; // Rouge
+				btn.style.borderColor = "#c0392b";
+
+				// On remet le bouton à la normale après 2 secondes
+				setTimeout(() => {
+					btn.innerText = t.btnShare;
+					btn.style.backgroundColor = ""; // Reprend le style CSS (bleu)
+					btn.style.borderColor = "";
+				}, 2000);
+				
+				return; // On arrête la fonction ici, le lien n'est PAS copié
+			}
+
+			// --- SI TOUT EST OK, ON COPIE LE LIEN ---
+			applyFlash('share-btn');
 			let baseURL = window.location.href.split('?')[0];
 			if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
 			const u = new URL(baseURL);
 			
-			['fr', 'en', 'de', 'it', 'es'].forEach(l => {
-				const val = document.getElementById('t-'+l).value;
-				if(val) u.searchParams.set('t-'+l, val);
+			['fr', 'en', 'de', 'it', 'es'].forEach(lang => {
+				const val = document.getElementById('t-'+lang).value;
+				if(val) u.searchParams.set('t-'+lang, val);
 			});
 			
-			u.searchParams.set('before', document.getElementById('b-in').value);
-			u.searchParams.set('after', document.getElementById('a-in').value);
+			u.searchParams.set('before', beforeVal);
+			u.searchParams.set('after', afterVal);
+			
 			navigator.clipboard.writeText(u.href);
 
-			// --- NOUVEAU COMPORTEMENT DU BOUTON ---
-			const btn = document.getElementById('share-btn');
-			const l = document.getElementById('lang-selector').value;
-			
-			// On change le texte en "Lien copié !" (en utilisant ta traduction existante)
-			btn.innerText = translations[l].alertCopy;
-
-			// On remet le texte normal après 2 secondes (1500 millisecondes)
+			// Message de succès (pendant 1.5s comme tu l'as réglé)
+			btn.innerText = t.alertCopy;
 			setTimeout(() => {
-				// On récupère la langue actuelle au cas où l'utilisateur l'aurait changée entre-temps
-				const currentLang = document.getElementById('lang-selector').value;
-				btn.innerText = translations[currentLang].btnShare;
+				btn.innerText = translations[document.getElementById('lang-selector').value].btnShare;
 			}, 1500);
 		}
 
