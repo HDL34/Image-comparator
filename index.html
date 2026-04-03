@@ -735,38 +735,56 @@
 		}
 		
 		function init() {
-			applyFlash('gen-btn'); // Effet sur le bouton
+			const beforeVal = document.getElementById('b-in').value.trim();
+			const afterVal = document.getElementById('a-in').value.trim();
+			const btn = document.getElementById('gen-btn');
+			const l = document.getElementById('lang-selector').value;
+			const t = translations[l];
 
-			// 1. On affiche l'interface et le spinner
+			// --- 1. VÉRIFICATION DES CHAMPS ---
+			if (!beforeVal || !afterVal) {
+				btn.innerText = t.errorEmpty;
+				btn.style.backgroundColor = "#e74c3c"; // Rouge
+				btn.style.borderColor = "#c0392b";
+
+				setTimeout(() => {
+					const currentLang = document.getElementById('lang-selector').value;
+					btn.innerText = translations[currentLang].btnGen;
+					btn.style.backgroundColor = ""; 
+					btn.style.borderColor = "";
+				}, 1500);
+				
+				return; // On stoppe tout si un champ est vide
+			}
+
+			// --- 2. PRÉPARATION DE L'INTERFACE ---
+			applyFlash('gen-btn');
 			view.style.display = 'block'; 
 			document.getElementById('comp-title-display').style.display = 'block';
 			document.getElementById('loading-overlay').style.display = 'flex'; 
-			document.querySelector('.floating-controls').style.display = 'none';
+			document.querySelector('.floating-controls').style.display = 'none'; 
 
-			// 2. L'ASTUCE MAGIQUE : Force le navigateur à dessiner le spinner MAINTENANT
-			void view.offsetWidth; 
+			// L'astuce magique pour forcer le dessin du spinner
+			void view.offsetWidth;
 
-			// 3. On fait une micro-pause (50ms) AVANT de lancer les images
+			// --- 3. MICRO-PAUSE DE 50ms AVANT DE CHARGER ---
 			setTimeout(() => {
-				imgB.src = clean(document.getElementById('b-in').value);
-				imgA.src = clean(document.getElementById('a-in').value);
+				imgB.src = clean(beforeVal);
+				imgA.src = clean(afterVal);
 
-				// 4. Quand l'image principale est chargée...
 				imgA.onload = () => { 
-					// On laisse un délai de 300ms pour que l'animation soit fluide à l'œil
+					// --- 4. DÉLAI DE 300ms POUR UNE ANIMATION FLUIDE ---
 					setTimeout(() => {
-						document.getElementById('loading-overlay').style.display = 'none';
-						document.querySelector('.floating-controls').style.display = 'flex';
+						document.getElementById('loading-overlay').style.display = 'none'; 
+						document.querySelector('.floating-controls').style.display = 'flex'; 
 						updateViewportSize(); 
-						// changeLang() n'est plus nécessaire ici car déjà fait dans window.onload
-					}, 300); 
+						changeLang(); 
+					}, 300); // Fin du délai de 300ms
 				};
 
-				// Gestion d'erreur
 				imgA.onerror = () => {
-					const l = document.getElementById('lang-selector').value;
-					const t = translations[l];
-					document.getElementById('loading-text').innerText = t.error;
+					const currentLang = document.getElementById('lang-selector').value;
+					document.getElementById('loading-text').innerText = translations[currentLang].error;
 					document.querySelector('.spinner').style.display = 'none';
 				};
 			}, 50); // Fin du SetTimeout de 50ms
