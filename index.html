@@ -730,35 +730,41 @@
 		}
 		
 		function init() {
-			applyFlash('gen-btn');
-			
-			// Affichage immédiat des conteneurs
+			applyFlash('gen-btn'); // Effet sur le bouton
+
+			// 1. On affiche l'interface et le spinner
 			view.style.display = 'block'; 
 			document.getElementById('comp-title-display').style.display = 'block';
 			document.getElementById('loading-overlay').style.display = 'flex'; 
 			document.querySelector('.floating-controls').style.display = 'none';
 
-			// On laisse 20ms au navigateur pour RELÉGUER le chargement des images 
-			// APRÈS avoir dessiné le spinner à l'écran.
+			// 2. L'ASTUCE MAGIQUE : Force le navigateur à dessiner le spinner MAINTENANT
+			void view.offsetWidth; 
+
+			// 3. On fait une micro-pause (50ms) AVANT de lancer les images
 			setTimeout(() => {
 				imgB.src = clean(document.getElementById('b-in').value);
 				imgA.src = clean(document.getElementById('a-in').value);
 
+				// 4. Quand l'image principale est chargée...
 				imgA.onload = () => { 
-					// Petit délai de confort pour éviter le flash visuel
+					// On laisse un délai de 300ms pour que l'animation soit fluide à l'œil
 					setTimeout(() => {
 						document.getElementById('loading-overlay').style.display = 'none';
 						document.querySelector('.floating-controls').style.display = 'flex';
 						updateViewportSize(); 
+						// changeLang() n'est plus nécessaire ici car déjà fait dans window.onload
 					}, 300); 
 				};
 
+				// Gestion d'erreur
 				imgA.onerror = () => {
 					const l = document.getElementById('lang-selector').value;
-					document.getElementById('loading-text').innerText = translations[l].error;
+					const t = translations[l];
+					document.getElementById('loading-text').innerText = t.error;
 					document.querySelector('.spinner').style.display = 'none';
 				};
-			}, 20);
+			}, 50); // Fin du SetTimeout de 50ms
 		}
 
         function updateViewportSize() {
@@ -878,7 +884,7 @@
 			const p = new URLSearchParams(window.location.search);
 			document.getElementById('home-btn').href = window.location.pathname;
 			
-			// 1. On définit la langue et les textes d'abord
+			// TRÈS IMPORTANT : On traduit tout de suite, avant même de savoir si c'est un lien partagé
 			changeLang(); 
 
 			if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
@@ -892,10 +898,10 @@
 				document.getElementById('a-in').value = p.get('after');
 				document.getElementById('home-btn').style.display = 'flex';
 				
-				// 2. On rafraîchit les titres une deuxième fois pour injecter les valeurs des inputs
+				// On re-traduit au cas où le titre aurait été modifié par le lien
 				changeLang(); 
 				
-				// 3. On lance la vue
+				// On lance enfin le chargement (le spinner apparaîtra correctement)
 				init();
 			}
 		};
