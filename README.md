@@ -1,4 +1,4 @@
-<h1 align="center"><b>📸 Simple Comparateur d'Images</b></h1>
+<h1 align="center"><b>Simple Comparateur d'Images</b></h1>
 
 Image Comparator est un outil web léger et intuitif conçu pour comparer deux images côte à côte en utilisant des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à des fonctionnalités de zoom et de thèmes personnalisables.
 
