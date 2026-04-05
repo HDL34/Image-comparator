@@ -195,6 +195,11 @@
 			font-weight: bold;
 		}		
 		
+		/* Empêche le plugin de créer des boutons automatiques */
+		.pup-button, .pup-container {
+			display: none !important;
+		}
+
         input { 
 			padding: 10px; 
 			border: 1px solid rgba(128,128,128,0.3); 
@@ -509,6 +514,7 @@
 		}
 		}
     </style>
+	<script async src="https://freeimage.host/sdk/pup.js"></script>
 </head>
 <body>
 
@@ -551,12 +557,16 @@
 		<div class="link-grid">
 			<div class="input-container">
 				<input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
-				<button id="up-btn-b" class="up-btn" onclick="triggerUpload('b-in')" style="display:none">📁 Parcourir (AVANT)</button>
+				<button id="up-btn-b" class="up-btn" onclick="openFreeimage('b-in')" style="display:none">
+					📁 Parcourir (AVANT)
+				</button>
 			</div>
 
 			<div class="input-container">
 				<input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
-				<button id="up-btn-a" class="up-btn" onclick="triggerUpload('a-in')" style="display:none">📁 Parcourir (APRÈS)</button>
+				<button id="up-btn-a" class="up-btn" onclick="openFreeimage('a-in')" style="display:none">
+					📁 Parcourir (APRÈS)
+				</button>
 			</div>
 		</div>
 		
@@ -873,6 +883,7 @@
 		function toggleGlobalMode(mode) {
 			const bInput = document.getElementById('b-in');
 			const aInput = document.getElementById('a-in');
+			// On cible directement les boutons maintenant !
 			const bBtn = document.getElementById('up-btn-b');
 			const aBtn = document.getElementById('up-btn-a');
 
@@ -899,12 +910,14 @@
 				const file = e.target.files[0];
 				if (!file) return;
 
+				// Récupération de la langue et du bouton correspondant
 				const l = document.getElementById('lang-selector').value;
 				const t = translations[l];
 				const btnId = inputId === 'b-in' ? 'up-btn-b' : 'up-btn-a';
 				const btn = document.getElementById(btnId);
 				const originalText = btn.innerText;
 
+				// État de chargement
 				btn.innerText = t.upLoading;
 				btn.disabled = true;
 
@@ -914,39 +927,58 @@
 				formData.append('format', 'json');
 
 				try {
-					// On utilise un proxy pour contourner le blocage CORS
-					// Note : Si celui-ci est saturé, on peut en utiliser d'autres.
-					const proxy = "https://corsproxy.io/?"; 
-					const targetUrl = "https://freeimage.host/api/1/upload";
-
-					const response = await fetch(proxy + encodeURIComponent(targetUrl), {
+					const response = await fetch('https://freeimage.host/api/1/upload', {
 						method: 'POST',
 						body: formData
 					});
-
-					if (!response.ok) throw new Error();
-
 					const data = await response.json();
 					
 					if (data.image && data.image.url) {
+						// On injecte le lien direct dans l'input caché
 						document.getElementById(inputId).value = data.image.url;
+						
+						// Feedback de succès
 						btn.innerText = t.upDone;
-						btn.style.background = "#27ae60";
+						btn.style.background = "#27ae60"; // Vert succès temporaire
 						
 						setTimeout(() => { 
 							btn.innerText = inputId === 'b-in' ? t.btnBrowseBefore : t.btnBrowseAfter;
 							btn.style.background = ""; 
 						}, 2000);
+					} else {
+						throw new Error();
 					}
 				} catch (err) {
-					// Si le proxy échoue, on prévient l'utilisateur
-					alert(t.error + " (CORS Error)");
+					alert(t.error); // Utilise ton message d'erreur de traduction
 					btn.innerText = originalText;
 				} finally {
 					btn.disabled = false;
 				}
 			};
 			fileInput.click();
+		}
+
+		function openFreeimage(inputId) {
+			// On vérifie si le plugin est chargé
+			if (typeof CHV === 'undefined') {
+				alert("Le service d'upload est encore en cours de chargement...");
+				return;
+			}
+
+			// On lance l'upload manuellement
+			CHV.obj.uploader.trigger({
+				hosting: 'freeimage',
+				onSelect: function() {
+					// Optionnel : tu peux changer le texte du bouton ici
+					console.log("Image sélectionnée");
+				},
+				onSuccess: function(response) {
+					// Une fois fini, on récupère l'URL directe et on l'injecte
+					if (response.image && response.image.url) {
+						document.getElementById(inputId).value = response.image.url;
+					}
+				}
+			});
 		}
 
 		function init() {
