@@ -959,24 +959,45 @@
 		}
 
 		function openFreeimage(inputId) {
-			// On vérifie si le plugin est chargé
-			if (typeof CHV === 'undefined') {
-				alert("Le service d'upload est encore en cours de chargement...");
+			// 1. On vérifie toutes les variantes possibles de l'objet CHV
+			const sdk = window.CHV || (window.CHV_SDK ? window.CHV_SDK.obj : null);
+
+			if (!sdk) {
+				console.error("SDK Freeimage non détecté dans window.");
+				alert("Le service d'upload n'est pas encore prêt. Veuillez patienter quelques secondes ou rafraîchir la page.");
 				return;
 			}
 
-			// On lance l'upload manuellement
-			CHV.obj.uploader.trigger({
+			// 2. On lance l'uploader du SDK
+			sdk.uploader.trigger({
 				hosting: 'freeimage',
-				onSelect: function() {
-					// Optionnel : tu peux changer le texte du bouton ici
-					console.log("Image sélectionnée");
+				options: {
+					// On force le format JSON pour récupérer l'URL facilement
+					format: 'json'
 				},
 				onSuccess: function(response) {
-					// Une fois fini, on récupère l'URL directe et on l'injecte
-					if (response.image && response.image.url) {
-						document.getElementById(inputId).value = response.image.url;
+					// On vérifie la structure de réponse que tu as trouvée (le JSON)
+					if (response && response.image && response.image.url) {
+						const urlDirecte = response.image.url;
+						document.getElementById(inputId).value = urlDirecte;
+						
+						// Petit retour visuel sur le bouton
+						const btnId = inputId === 'b-in' ? 'up-btn-b' : 'up-btn-a';
+						const btn = document.getElementById(btnId);
+						const l = document.getElementById('lang-selector').value;
+						
+						btn.innerText = translations[l].upDone;
+						btn.style.backgroundColor = "#27ae60";
+						
+						setTimeout(() => {
+							btn.innerText = (inputId === 'b-in') ? translations[l].btnBrowseBefore : translations[l].btnBrowseAfter;
+							btn.style.backgroundColor = "";
+						}, 2000);
 					}
+				},
+				onError: function(err) {
+					console.error("Erreur SDK:", err);
+					alert("Erreur lors de l'upload.");
 				}
 			});
 		}
