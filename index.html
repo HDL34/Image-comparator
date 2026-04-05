@@ -899,14 +899,12 @@
 				const file = e.target.files[0];
 				if (!file) return;
 
-				// Récupération de la langue et du bouton correspondant
 				const l = document.getElementById('lang-selector').value;
 				const t = translations[l];
 				const btnId = inputId === 'b-in' ? 'up-btn-b' : 'up-btn-a';
 				const btn = document.getElementById(btnId);
 				const originalText = btn.innerText;
 
-				// État de chargement
 				btn.innerText = t.upLoading;
 				btn.disabled = true;
 
@@ -916,29 +914,33 @@
 				formData.append('format', 'json');
 
 				try {
-					const response = await fetch('https://freeimage.host/api/1/upload', {
+					// On utilise un proxy pour contourner le blocage CORS
+					// Note : Si celui-ci est saturé, on peut en utiliser d'autres.
+					const proxy = "https://corsproxy.io/?"; 
+					const targetUrl = "https://freeimage.host/api/1/upload";
+
+					const response = await fetch(proxy + encodeURIComponent(targetUrl), {
 						method: 'POST',
 						body: formData
 					});
+
+					if (!response.ok) throw new Error();
+
 					const data = await response.json();
 					
 					if (data.image && data.image.url) {
-						// On injecte le lien direct dans l'input caché
 						document.getElementById(inputId).value = data.image.url;
-						
-						// Feedback de succès
 						btn.innerText = t.upDone;
-						btn.style.background = "#27ae60"; // Vert succès
+						btn.style.background = "#27ae60";
 						
 						setTimeout(() => { 
 							btn.innerText = inputId === 'b-in' ? t.btnBrowseBefore : t.btnBrowseAfter;
 							btn.style.background = ""; 
 						}, 2000);
-					} else {
-						throw new Error();
 					}
 				} catch (err) {
-					alert(t.error); // Utilise ton message d'erreur de traduction
+					// Si le proxy échoue, on prévient l'utilisateur
+					alert(t.error + " (CORS Error)");
 					btn.innerText = originalText;
 				} finally {
 					btn.disabled = false;
