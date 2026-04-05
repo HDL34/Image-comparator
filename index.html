@@ -65,7 +65,6 @@
 		}
 		
         #home-btn:hover { background: rgba(128,128,128,0.2); 
-		
 		}
 
         #theme-toggle { 
@@ -88,6 +87,7 @@
 			#home-btn { top: 15px; 
 				left: 15px; 
 			} 
+			
 			.main-title { margin-top: 50px; 
 				margin-bottom: 20px; 
 			} 
@@ -111,7 +111,6 @@
 			grid-template-columns: 1fr; 
 			gap: 8px; 
 		}
-		
         @media (min-width: 600px) { 
 			.title-grid { grid-template-columns: repeat(5, 1fr); 
 			} 
@@ -128,78 +127,7 @@
 				grid-template-columns: 1fr 1fr; 
 			} 
 		}
-		
-		.input-group {
-			display: flex;
-			background: var(--input-bg);
-			border: 1px solid #444;
-			border-radius: 6px;
-			overflow: hidden;
-		}
-
-		.source-sel {
-			background: #333;
-			color: white;
-			border: none;
-			border-right: 1px solid #444;
-			padding: 0 5px;
-			font-size: 11px;
-			cursor: pointer;
-			outline: none;
-		}
-
-		.input-group input {
-			border: none !important; /* On enlève la bordure de l'input car le groupe en a une */
-			flex-grow: 1;
-		}
-
-		.up-btn {
-			flex-grow: 1;
-			background: var(--accent);
-			color: white;
-			border: none;
-			cursor: pointer;
-			font-weight: bold;
-			font-size: 13px;
-		}
-
-		.up-btn:hover { background: #2980b9; 
-		
-		}
-
-		.source-sel-main {
-			background: var(--panel-bg);
-			color: var(--text);
-			border: 1px solid #444;
-			border-radius: 6px;
-			padding: 8px 15px;
-			cursor: pointer;
-			outline: none;
-			font-weight: bold;
-		}
-
-		.input-container {
-			width: 100%;
-			display: flex;
-		}
-
-		/* Force le bouton à prendre TOUTE la largeur du champ texte */
-		.up-btn {
-			width: 100%;
-			height: 42px; /* Ajuste selon la hauteur de tes inputs */
-			background: var(--accent);
-			color: white;
-			border: 1px solid #444;
-			border-radius: 6px;
-			cursor: pointer;
-			font-weight: bold;
-		}		
-		
-		/* Empêche le plugin de créer des boutons automatiques */
-		.pup-button, .pup-container {
-			display: none !important;
-		}
-
+        
         input { 
 			padding: 10px; 
 			border: 1px solid rgba(128,128,128,0.3); 
@@ -265,7 +193,6 @@
         .host-img-btn:hover { 
 			transform: scale(1.05); 
 		}
-		
 			.host-img-btn img { 
 			height: 40px; width: auto; 
 			border: none; 
@@ -358,6 +285,7 @@
 			box-sizing: border-box; 
 			will-change: width; 
 		}
+		
         #handle { 
 			position: absolute; 
 			top: 0; left: 50%; 
@@ -514,7 +442,6 @@
 		}
 		}
     </style>
-	<script async src="//freeimage.host/sdk/pup.js" data-url="https://freeimage.host/upload"></script>
 </head>
 <body>
 
@@ -547,30 +474,10 @@
             <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
         </div>
 
-		<div class="main-controls">
-			<div style="margin-bottom: 15px; display: flex; justify-content: center;">
-				<select id="global-source-sel" class="source-sel-main" onchange="toggleGlobalMode(this.value)">
-					<option value="url">🌐 Mode : Coller des liens URL</option>
-					<option value="upload">☁️ Mode : Uploader une image (Auto)</option>
-				</select>
-			</div>
-
-			<div class="link-grid">
-				<div class="input-container">
-					<input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
-					<button id="up-btn-b" class="up-btn" onclick="triggerUpload('b-in')" style="display:none">
-						📁 Choisir l'image (AVANT)
-					</button>
-				</div>
-
-				<div class="input-container">
-					<input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
-					<button id="up-btn-a" class="up-btn" onclick="openFreeimage('a-in')" style="display:none">
-						📁 Choisir l'image (APRÈS)
-					</button>
-				</div>
-			</div>
-		</div>
+        <div class="link-grid">
+            <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
+            <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
+        </div>
 		
         <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
         
@@ -646,13 +553,7 @@
 				alertCopy: "Lien copié!", 
 				directLinkNote: "Assurez-vous de prendre les liens directs finissant par l'extension de vos images comme .png, .jpg ou .jpeg.", 
 				zoomIn: "Zoom avant", 
-				zoomOut: "Zoom arrière", 
-				modeUrl: "🌐 Mode : Coller des liens URL",
-				modeUpload: "☁️ Mode : Uploader via Freeimage",
-				btnBrowseBefore: "📁 Parcourir (AVANT)",
-				btnBrowseAfter: "📁 Parcourir (APRÈS)",
-				upLoading: "⏳ Envoi en cours...",
-				upDone: "✅ Image chargée !" 				
+				zoomOut: "Zoom arrière" 
 				},
             en: { 
 				title: "Simple Image Comparator", 
@@ -679,13 +580,7 @@
 				alertCopy: "Link copied!",
 				directLinkNote: "Make sure to use direct links ending with your image's extension, such as .png, .jpg, or .jpeg.", 
 				zoomIn: "Zoom in", 
-				zoomOut: "Zoom out", 
-				modeUrl: "🌐 Mode: Paste URL links",
-				modeUpload: "☁️ Mode: Upload via Freeimage",
-				btnBrowseBefore: "📁 Browse (BEFORE)",
-				btnBrowseAfter: "📁 Browse (AFTER)",
-				upLoading: "⏳ Uploading...",
-				upDone: "✅ Image loaded!"				
+				zoomOut: "Zoom out" 
 				},
             de: { 
 				title: "Einfacher Bildvergleich", 
@@ -712,13 +607,7 @@
 				alertCopy: "Link kopiert!",
 				directLinkNote: "Stellen Sie sicher, dass Sie direkte Links verwenden, die mit der Dateiendung Ihres Bildes enden, wie .png, .jpg oder .jpeg.", 
 				zoomIn: "Vergrößern", 
-				zoomOut: "Verkleinern", 
-				modeUrl: "🌐 Modus: URL-Links einfügen",
-				modeUpload: "☁️ Modus: Über Freeimage hochladen",
-				btnBrowseBefore: "📁 Durchsuchen (VORHER)",
-				btnBrowseAfter: "📁 Durchsuchen (NACHHER)",
-				upLoading: "⏳ Hochladen...",
-				upDone: "✅ Bild geladen!"
+				zoomOut: "Verkleinern" 
 				},
             it: { 
 				title: "Semplice Comparatore di Immagini", 
@@ -745,13 +634,7 @@
 				alertCopy: "Link copiato!",
 				directLinkNote: "Assicurati di utilizzare link diretti che terminano con l'estensione dell'immagine, come .png, .jpg o .jpeg.", 
 				zoomIn: "Ingrandisci", 
-				zoomOut: "Riduci", 
-				modeUrl: "🌐 Modalità: Incolla link URL",
-				modeUpload: "☁️ Modalità: Carica tramite Freeimage",
-				btnBrowseBefore: "📁 Sfoglia (PRIMA)",
-				btnBrowseAfter: "📁 Sfoglia (DOPO)",
-				upLoading: "⏳ Caricamento...",
-				upDone: "✅ Immagine caricata!"				
+				zoomOut: "Riduci" 
 				},
             es: { 
 				title: "Comparador de Imágenes Simple", 
@@ -778,13 +661,7 @@
 				alertCopy: "¡Enlace copiado!",
 				directLinkNote: "Asegúrese de usar enlaces directos que terminen con la extensión de su imagen, como .png, .jpg o .jpeg.", 
 				zoomIn: "Acercar", 
-				zoomOut: "Alejar", 
-				modeUrl: "🌐 Modo: Pegar enlaces URL",
-				modeUpload: "☁️ Modo: Subir vía Freeimage",
-				btnBrowseBefore: "📁 Buscar (ANTES)",
-				btnBrowseAfter: "📁 Buscar (DESPUÉS)",
-				upLoading: "⏳ Subiendo...",
-				upDone: "✅ ¡Imagen cargada!"
+				zoomOut: "Alejar" 
 				}
         };
 
@@ -801,9 +678,6 @@
         function changeLang() {
             const l = document.getElementById('lang-selector').value;
             const t = translations[l];
-			const modeSel = document.getElementById('global-source-sel');
-			modeSel.options[0].text = t.modeUrl;
-			modeSel.options[1].text = t.modeUpload;
             document.getElementById('main-title-text').innerText = t.title;
             document.getElementById('label-before').innerText = t.before;
             document.getElementById('label-after').innerText = t.after;
@@ -821,8 +695,6 @@
             document.getElementById('host-help-text').innerText = t.hostHelp;
             document.getElementById('b-in').placeholder = t.placeholderBefore;
             document.getElementById('a-in').placeholder = t.placeholderAfter;
-			document.getElementById('up-btn-b').innerText = t.btnBrowseBefore;
-			document.getElementById('up-btn-a').innerText = t.btnBrowseAfter;
             document.getElementById('direct-link-note').innerText = t.directLinkNote;
 			document.getElementById('credit-text').innerText = t.createdBy + " ";
 			
@@ -881,81 +753,6 @@
 			setTimeout(() => el.classList.remove('flash-effect'), 300);
 		}
 		
-		// Alterne entre le champ texte et le bouton Parcourir
-		function toggleGlobalMode(mode) {
-			const bIn = document.getElementById('b-in');
-			const aIn = document.getElementById('a-in');
-			const bBtn = document.getElementById('up-btn-b');
-			const aBtn = document.getElementById('up-btn-a');
-
-			if (mode === 'upload') {
-				bIn.style.display = 'none';
-				aIn.style.display = 'none';
-				bBtn.style.display = 'block';
-				aBtn.style.display = 'block';
-			} else {
-				bIn.style.display = 'block';
-				aIn.style.display = 'block';
-				bBtn.style.display = 'none';
-				aBtn.style.display = 'none';
-			}
-		}
-
-		// La fonction magique qui gère l'envoi automatique
-		async function triggerUpload(inputId) {
-			const fileInput = document.createElement('input');
-			fileInput.type = 'file';
-			fileInput.accept = 'image/*';
-
-			fileInput.onchange = async (e) => {
-				const file = e.target.files[0];
-				if (!file) return;
-
-				const btn = document.getElementById(inputId === 'b-in' ? 'up-btn-b' : 'up-btn-a');
-				const originalText = btn.innerText;
-				btn.innerText = "⏳ Envoi en cours...";
-
-				const formData = new FormData();
-				formData.append('source', file);
-				formData.append('key', '6d207e02198a847aa98d0a2a901485a5'); // Ta clé API
-				formData.append('action', 'upload');
-				formData.append('format', 'json');
-
-				try {
-					// Utilisation du proxy pour passer à travers le blocage CORS de GitHub
-					const apiUrl = 'https://freeimage.host/api/1/upload';
-					const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(apiUrl);
-
-					const response = await fetch(proxiedUrl, {
-						method: 'POST',
-						body: formData
-					});
-
-					const data = await response.json();
-
-					if (data.status_code === 200 && data.image) {
-						// On remplit le champ avec l'URL directe reçue dans le JSON
-						document.getElementById(inputId).value = data.image.url;
-						btn.innerText = "✅ Image ajoutée !";
-						btn.style.backgroundColor = "#27ae60";
-						
-						setTimeout(() => { 
-							btn.innerText = originalText;
-							btn.style.backgroundColor = ""; 
-						}, 2000);
-					} else {
-						throw new Error("Réponse API invalide");
-					}
-				} catch (error) {
-					console.error("Erreur d'upload:", error);
-					alert("L'envoi a échoué. Vérifiez votre connexion ou réessayez.");
-					btn.innerText = originalText;
-				}
-			};
-
-			fileInput.click();
-		}
-
 		function init() {
 			const beforeVal = document.getElementById('b-in').value.trim();
 			const afterVal = document.getElementById('a-in').value.trim();
