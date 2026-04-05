@@ -1,49 +1,49 @@
-<h1 align="center"><b>Simple Comparateur d'Images</b></h1>
+<h1 align="center"><b>Simple Image Comparator</b></h1>
 
-Image Comparator est un outil web léger et intuitif conçu pour comparer deux images côte à côte en utilisant des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à des fonctionnalités de zoom et de thèmes personnalisables.
+Image Comparator is a lightweight and intuitive web tool designed to compare two images side-by-side using direct links. Developed with the help of Google Gemini, this tool allows for precise visual analysis thanks to zoom features and customizable themes.
 
 <img width="1898" height="921" alt="Aperçu principal" src="https://github.com/user-attachments/assets/26bd3fad-f0b4-486e-8fff-43c14fd68b71" />
 
-# ✨ **Fonctionnalités**
+# ✨ **Features**
 
-### **Comparaison Multimode:**
+### **Multimode Comparison:**
 
-Visualisez deux images simultanément pour détecter les moindres différences.
+View two images simultaneously to detect the slightest differences.
 
-### **Zoom Interactif & Reset:** 
+### **Interactive Zoom & Reset:** 
 
-Explorez les détails avec une fonction de zoom intégrée. Un bouton "Réinitialiser" apparaît automatiquement pour revenir à la vue initiale.
+Explore the details with the built-in zoom function. A "Reset" button automatically appears to return to the initial view.
 
 <img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
 
-### **Compatibilité Étendue:** 
+### **Extended Compatibility:** 
 
-Fonctionne avec des liens Google Drive, mais aussi avec n'importe quel hébergeur d'images externe. Fonctionne parfaitement bien également sur des support tactile tel que les smartphone et tablette.
+Works with Google Drive links, but also with any external image hosting service. Works perfectly on touch devices such as smartphones and tablets.
 
-### **Interface Personnalisable:** 
+### **Customizable Interface:** 
 
-Basculez entre le Mode Sombre et le Mode Clair selon vos préférences.
+Switch between Dark Mode and Light Mode according to your preferences.
 
-### **Multilingue:** 
+### **Multilingual:** 
 
-Support intégré pour changer la langue de l'interface en un clic.
+Integrated support to change the interface language with one click.
 
-# 🚀 **Comment l'utiliser?**
+# 🚀 **How do I use it?**
 
-### **Récupérez vos liens:** 
+### **Retrieve your links:** 
 
-Copiez l'URL de vos images (Google Drive, Imgur, ou autre).
+Copy the URL of your images (Google Drive, Imgur, or other).
 
-### **Configurez la vue:**
+### **Configure the view:**
 
-Collez les liens dans les champs correspondants et ajoutez un titre pour chaque image.
+Paste the links into the corresponding fields and add a title for each image.
 
-### **Générer:**
+### **Generate:**
 
-Cliquez sur le bouton "Générer la vue" pour afficher la comparaison.
+Click the "Generate view" button to display the comparison.
 
-### **Analyser:**
+### **Analyze:**
 
-Utilisez la souris pour zoomer sur des zones spécifiques si nécessaire.
+Use the mouse to zoom in on specific areas if necessary.
 
 <img width="1897" height="919" alt="Exemple de comparaison" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
