@@ -48,13 +48,9 @@ Use the mouse to zoom in on specific areas if necessary.
 
 <img width="1897" height="919" alt="Exemple de comparaison" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
 
-### **Tutoriel:**
+## 📺 Tutorial: How to use the comparison tool
 
-[![Simple comparateur d'image tutorial](https://img.youtube.com/vi/KWQblJgHV18/maxresdefault.jpg?v=2)](https://www.youtube.com/watch?v=KWQblJgHV18)
-
-## 📺 Tutoriel : Comment utiliser le comparateur
-
-Découvrez comment intégrer vos images et générer une vue comparative en quelques clics. Cette vidéo vous montre comment récupérer les **liens directs** sur les différents hébergeurs compatibles.
+Learn how to integrate your images and generate a comparison view in just a few clicks. This video shows you how to retrieve **direct links** from various compatible image hosting services.
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=KWQblJgHV18">
@@ -62,8 +58,8 @@ Découvrez comment intégrer vos images et générer une vue comparative en quel
   </a>
 </p>
 
-### 🛠️ Points clés abordés :
-* **Hébergement d'images :** Utilisation de Zupimages, Freeimage.host, ImgBB, PostImage et Imgur.
-* **Extraction de lien direct :** Comment récupérer l'URL se terminant par `.jpg`, `.png` ou `.webp` (essentiel pour l'affichage).
-* **Personnalisation :** Modification des titres (FR, EN, IT, ES, DE) et gestion du mode plein écran.
-* **Partage :** Génération d'un lien unique via GitHub pour partager votre comparaison.
+### 🛠️ Key points covered :
+* **Image Hosting:** Using Zupimages, Freeimage.host, ImgBB, PostImage, and Imgur.
+* **Direct Link Extraction:** How to retrieve the URL ending in `.jpg`, `.png`, or `.webp` (essential for display).
+* **Customization:** Editing titles (FR, EN, IT, ES, DE) and managing full-screen mode.
+* **Sharing:** Generating a unique link via GitHub to share your comparison.
