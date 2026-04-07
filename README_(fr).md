@@ -69,3 +69,9 @@ Apprenez à intégrer vos images et à générer un affichage comparatif en quel
 * **Personnalisation :** Modification des titres (FR, EN, IT, ES, DE) et gestion du mode plein écran.
 * **Partage :** Génération d’un lien unique via GitHub pour partager votre comparaison.
 * **Résolution :** Prise en charge des images haute résolution. Veuillez noter que le chargement des images peut prendre un peu plus de temps avant leur affichage.
+
+## 🚀 Prochaines étapes (Roadmap)
+
+- [ ] **Intégration d'API d'Upload :** Téléversement direct des images via ImgBB ou Imgur sans quitter l'interface.
+- [ ] **Drag & Drop :** Support du glisser-déposer pour une expérience utilisateur plus fluide.
+- [ ] **Historique local :** Sauvegarde des dernières comparaisons dans le navigateur (LocalStorage).
