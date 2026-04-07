@@ -60,8 +60,6 @@ Apprenez à intégrer vos images et à générer un affichage comparatif en quel
 
 <img src="https://img.youtube.com/vi/KWQblJgHV18/maxresdefault.jpg" alt="Tutoriel Comparateur d'images" width="100%">
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/KWQblJgHV18?si=hFGde_eumDNWOMsM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
 </a>
 </p>
 
