@@ -65,3 +65,9 @@ Learn how to integrate your images and generate a comparison view in just a few 
 * **Customization:** Editing titles (FR, EN, IT, ES, DE) and managing full-screen mode.
 * **Sharing:** Generating a unique link via GitHub to share your comparison.
 * **Resolution:** It easily supports high-resolution images. However, be aware that it takes a little longer to load before the images appear in the viewport.
+
+## 🚀 Next Steps (Roadmap)
+
+- [ ] **Upload API Integration:** Direct image uploads via ImgBB or Imgur without leaving the interface.
+- [ ] **Drag & Drop:** Drag-and-drop support for a smoother user experience.
+- [ ] **Local History:** Saving recent comparisons in the browser (LocalStorage).
