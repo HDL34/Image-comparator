@@ -52,6 +52,7 @@ Use the mouse to zoom in on specific areas if necessary.
 
 Learn how to integrate your images and generate a comparison view in just a few clicks. This video shows you how to retrieve **direct links** from various compatible image hosting services.
 
+![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)
 <p align="center">
   <a href="https://www.youtube.com/watch?v=KWQblJgHV18">
    <img src="https://img.youtube.com/vi/KWQblJgHV18/maxresdefault.jpg" alt="Tutoriel Comparateur d'images" width="100%">
