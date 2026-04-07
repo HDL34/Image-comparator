@@ -70,4 +70,3 @@ Learn how to integrate your images and generate a comparison view in just a few 
 
 - [ ] **Upload API Integration:** Direct image uploads via ImgBB or Imgur without leaving the interface.
 - [ ] **Drag & Drop:** Drag-and-drop support for a smoother user experience.
-- [ ] **Local History:** Saving recent comparisons in the browser (LocalStorage).
