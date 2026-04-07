@@ -50,4 +50,4 @@ Use the mouse to zoom in on specific areas if necessary.
 
 ### **Tutoriel:**
 
-[![Titre](https://img.youtube.com/vi/KWQblJgHV18/hqdefault.jpg?v=2)](https://www.youtube.com/watch?v=KWQblJgHV18)
+[![Simple comparateur d'image tutorial](https://img.youtube.com/vi/KWQblJgHV18/hqdefault.jpg?v=2)](https://www.youtube.com/watch?v=KWQblJgHV18)
