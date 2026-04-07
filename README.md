@@ -51,3 +51,19 @@ Use the mouse to zoom in on specific areas if necessary.
 ### **Tutoriel:**
 
 [![Simple comparateur d'image tutorial](https://img.youtube.com/vi/KWQblJgHV18/maxresdefault.jpg?v=2)](https://www.youtube.com/watch?v=KWQblJgHV18)
+
+## 📺 Tutoriel : Comment utiliser le comparateur
+
+Découvrez comment intégrer vos images et générer une vue comparative en quelques clics. Cette vidéo vous montre comment récupérer les **liens directs** sur les différents hébergeurs compatibles.
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=KWQblJgHV18">
+   <img src="https://img.youtube.com/vi/KWQblJgHV18/maxresdefault.jpg" alt="Tutoriel Comparateur d'images" width="100%">
+  </a>
+</p>
+
+### 🛠️ Points clés abordés :
+* **Hébergement d'images :** Utilisation de Zupimages, Freeimage.host, ImgBB, PostImage et Imgur.
+* **Extraction de lien direct :** Comment récupérer l'URL se terminant par `.jpg`, `.png` ou `.webp` (essentiel pour l'affichage).
+* **Personnalisation :** Modification des titres (FR, EN, IT, ES, DE) et gestion du mode plein écran.
+* **Partage :** Génération d'un lien unique via GitHub pour partager votre comparaison.
