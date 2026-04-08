@@ -2,6 +2,14 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPQ6RTZSKG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-TPQ6RTZSKG');
+    </script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Simple comparateur d'image</title>
     <link rel="icon" type="image/png" href="favicon.png?v=1.1">
@@ -760,7 +768,13 @@
 			const btn = document.getElementById('gen-btn');
 			const l = document.getElementById('lang-selector').value;
 			const t = translations[l];
-
+			
+			// --- ENVOI DE L'ÉVÉNEMENT GOOGLE ANALYTICS ---
+			// Utilise bien les accolades {} pour les détails de l'événement
+			gtag('event', 'generate_view', {
+					'event_category': 'engagement',
+					'event_label': 'Bouton Générer cliqué'
+				});		
 			// --- 1. VÉRIFICATION DES CHAMPS ---
 			if (!beforeVal || !afterVal) {
 				btn.innerText = t.errorEmpty;
