@@ -28,6 +28,14 @@ Switch between Dark Mode and Light Mode according to your preferences.
 
 Integrated support to change the interface language with one click.
 
+</a>
+</p>
+
+### **Other graphic elements:**
+
+* Added a visit counter at the bottom of the page to the right of the credits.
+* Added a GitHub link to the image comparison tool documentation to the left of the credits.
+
 # 🚀 **How do I use it?**
 
 ### **Retrieve your links:** 
