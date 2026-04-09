@@ -28,6 +28,14 @@ Basculez entre le mode sombre et le mode clair selon vos préférences.
 
 Prise en charge intégrée pour changer la langue de l'interface en un clic.
 
+</a>
+</p>
+
+### **Autre élémént graphique :**
+
+* Ajout d'un compteur de visite en bat de la page à droite des crédits
+* ajout de du lien GitHub vers la doc du comparateur d'image à gauche des crédits.
+
 # 🚀 **Comment l'utiliser ?**
 
 ### **Récupérer vos liens :**
