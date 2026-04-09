@@ -2,7 +2,7 @@
 
 Image Comparator is a lightweight and intuitive web tool designed to compare two images side-by-side using direct links. Developed with the help of Google Gemini, this tool allows for precise visual analysis thanks to zoom features and customizable themes.
 
-<img width="1901" height="926" alt="image" src="https://github.com/user-attachments/assets/5cebc03e-b261-42f1-b993-2827ec5a98ba" />
+<img width="1903" height="923" alt="image" src="https://github.com/user-attachments/assets/71975f1a-d982-42ac-a959-e9ec830082ae" />
 
 # ✨ **Features**
 
