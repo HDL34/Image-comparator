@@ -934,6 +934,10 @@
         };
 
 		function copyURL() {
+			gtag('event', 'share_link_generated', {
+				'method': 'clipboard',
+				'content_type': 'image_comparison'
+			});		
 			const beforeVal = document.getElementById('b-in').value.trim();
 			const afterVal = document.getElementById('a-in').value.trim();
 			const btn = document.getElementById('share-btn');
@@ -990,6 +994,7 @@
 			if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
 			
 			if(p.has('before')) {
+				gtag('event', 'view_shared_comparison');
 				['fr', 'en', 'de', 'it', 'es'].forEach(l => {
 					const val = p.get('t-'+l);
 					if(val) document.getElementById('t-'+l).value = val;
