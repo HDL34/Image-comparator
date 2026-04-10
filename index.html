@@ -940,10 +940,12 @@
         };
 
 		function copyURL() {
+			// 1. Analytics
 			gtag('event', 'share_link_generated', {
 				'method': 'clipboard',
 				'content_type': 'image_comparison'
-			});		
+			});        
+
 			const beforeVal = document.getElementById('b-in').value.trim();
 			const afterVal = document.getElementById('a-in').value.trim();
 			const btn = document.getElementById('share-btn');
@@ -956,11 +958,11 @@
 				btn.innerText = t.errorEmpty;
 				btn.style.backgroundColor = "#e74c3c"; // Rouge
 				btn.style.borderColor = "#c0392b";
-
+				
 				// On remet le bouton à la normale après 2 secondes
 				setTimeout(() => {
 					btn.innerText = t.btnShare;
-					btn.style.backgroundColor = ""; // Reprend le style CSS (bleu)
+					btn.style.backgroundColor = ""; 
 					btn.style.borderColor = "";
 				}, 2000);
 				
@@ -969,21 +971,28 @@
 
 			// --- SI TOUT EST OK, ON COPIE LE LIEN ---
 			applyFlash('share-btn');
+
+			// Détermination de l'URL de base (Gestion GitHub Pages vs local)
 			let baseURL = window.location.href.split('?')[0];
 			if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
+			
+			// Utilisation de URLSearchParams pour une URL "propre" (optimisée)
 			const u = new URL(baseURL);
 			
+			// --- OPTIMISATION : On n'ajoute que ce qui est rempli ---
 			['fr', 'en', 'de', 'it', 'es'].forEach(lang => {
-				const val = document.getElementById('t-'+lang).value;
-				if(val) u.searchParams.set('t-'+lang, val);
+				const val = document.getElementById('t-'+lang).value.trim();
+				// Si le titre est vide, on ne l'ajoute pas du tout à l'URL (gain de place)
+				if(val !== "") u.searchParams.set('t-'+lang, val);
 			});
 			
 			u.searchParams.set('before', beforeVal);
 			u.searchParams.set('after', afterVal);
 			
+			// Copie du lien optimisé
 			navigator.clipboard.writeText(u.href);
 
-			// Message de succès (pendant 1.5s comme tu l'as réglé)
+			// Message de succès
 			btn.innerText = t.alertCopy;
 			setTimeout(() => {
 				btn.innerText = translations[document.getElementById('lang-selector').value].btnShare;
