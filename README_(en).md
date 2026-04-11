@@ -33,7 +33,7 @@ Integrated support to change the interface language with one click.
 
 ### **Other graphic elements:**
 
-* Added a visit counter at the bottom of the page to the right of the credits.
+* Added a visit counter at the bottom of the page to the right of the credits (Note: If ad blockers are enabled, it will not be visible).
 * Added a GitHub link to the image comparison tool documentation to the left of the credits.
 
 # 🚀 **How do I use it?**
