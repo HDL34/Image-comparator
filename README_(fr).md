@@ -33,7 +33,7 @@ Prise en charge intégrée pour changer la langue de l'interface en un clic.
 
 ### **Autre élémént graphique :**
 
-* Ajout d'un compteur de visite en bas de la page à droite des crédits
+* Ajout d'un compteur de visite en bas de la page à droite des crédits (attention: si des bloqueurs de pub sont activé, il ne sera pas visible)
 * ajout du lien GitHub vers la doc du comparateur d'image à gauche des crédits.
 
 # 🚀 **Comment l'utiliser ?**
