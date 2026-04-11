@@ -14,7 +14,7 @@ Affichez deux images simultanément pour détecter les moindres différences.
 
 Explorez les détails grâce à la fonction de zoom intégrée. Un bouton « Réinitialiser » apparaît automatiquement pour revenir à l'affichage initial.
 
-<img width="1898" height="921" alt="image" src="https://github.com/user-attachments/assets/9f266238-afe8-4a82-b44c-d7df72137485" />
+<img width="1899" height="920" alt="image" src="https://github.com/user-attachments/assets/9874edd4-e464-40cc-9db3-f7f46d33fe6b" />
 
 ### **Compatibilité étendue :**
 
