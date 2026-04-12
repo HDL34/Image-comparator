@@ -14,7 +14,7 @@ View two images simultaneously to detect the slightest differences.
 
 Explore the details with the built-in zoom function. A "Reset" button automatically appears to return to the initial view.
 
-<img width="1920" height="927" alt="image" src="https://github.com/user-attachments/assets/546ed453-27f5-48a2-bf10-3ef59b3468b1" />
+<img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/68baa9a9-17a3-42e9-87c4-01f981f986c8" />
 
 ### **Extended Compatibility:** 
 
