@@ -54,7 +54,7 @@ Cliquez sur le bouton « Générer l'affichage » pour afficher la comparaison
 
 Utilisez la souris pour zoomer sur des zones spécifiques si nécessaire.
 
-<img width="1897" height="919" alt="Exemple de comparaison" src="https://github.com/user-attachments/assets/8db6bef1-ee1f-4ce3-a965-b0d13f5c1941" />
+<img width="1920" height="922" alt="image" src="https://github.com/user-attachments/assets/c3632955-8d12-46ce-9ea3-aa677e75a860" />
 
 ## 📺 Tutoriel : Comment utiliser l'outil de comparaison
 
