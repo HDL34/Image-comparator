@@ -2,7 +2,7 @@
 
 Le Comparateur d'images est un outil web léger et intuitif conçu pour comparer deux images côte à côte via des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à ses fonctions de zoom et ses thèmes personnalisables.
 
-<img width="1912" height="923" alt="image" src="https://github.com/user-attachments/assets/3791dc11-b422-4d7c-9d23-8e37bd21df07" />
+<img width="1920" height="925" alt="image" src="https://github.com/user-attachments/assets/50d2197f-97c6-4ed5-b2ee-bd464491dc2f" />
 
 # ✨ **Fonctionnalités**
 
