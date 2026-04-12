@@ -30,20 +30,30 @@
 			--input-bg: #ffffff; 
 		}
         
+		html, body {
+			height: 100%; /* Force le navigateur à calculer la hauteur totale */
+			margin: 0;
+		}
+
         body { 
 			font-family: 'Segoe UI', sans-serif; 
 			background: var(--bg); 
 			color: var(--text); 
 			display: flex; 
-			flex-direction: column; 
+			flex-direction: column; /* Aligne les éléments verticalement */
 			align-items: center; 
 			padding: 10px; margin: 0; 
-			min-height: 100vh; 
+			min-height: 100vh; /* S'assure que le corps fait au moins la taille de l'écran */
 			transition: background 0.3s, color 0.3s; 
 			position: relative; 
 			overflow-x: hidden; 
 		}
 		
+		/* On crée un conteneur pour ton contenu principal */
+		.main-content {
+			flex: 1; /* Cette ligne magique dit : "Prends tout l'espace restant et pousse le footer en bas" */
+		}
+
         .main-title { 
 			margin-top: 10px; 
 			margin-bottom: 15px; 
@@ -426,6 +436,46 @@
 			min-height: 50px;
 		}
 
+		/* Styles spécifiques pour le nouveau pied de page */
+		.site-footer {
+			background-color: #2c3e50; /* Une couleur de fond foncée et moderne */
+			color: #ecf0f1; /* Texte clair */
+			padding: 25px 20px;
+			margin-top: 50px;
+			border-top: 1px solid rgba(255, 255, 255, 0.1); /* Ligne de séparation subtile */
+			width: 100%;
+			box-sizing: border-box;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.footer-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 20px;
+			flex-wrap: wrap; /* S'adapte bien sur les téléphones */
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.footer-link {
+			color: #ecf0f1;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			transition: opacity 0.2s ease, color 0.2s ease;
+		}
+
+		.footer-link:hover {
+			opacity: 0.7; /* Petit effet de survol */
+		}
+
+		.footer-separator {
+			opacity: 0.3;
+			user-select: none;
+		}
+	
 		@media (min-width: 600px) {
 			#lang-selector { 
 				position: absolute; 
@@ -449,82 +499,86 @@
 			border: 1px solid rgba(128,128,128,0.3); 
 		}
 		}
+		
     </style>
 </head>
 <body>
 
-    <a id="home-btn" href="" title="Retour à l'accueil">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-    </a>
-
-    <button id="theme-toggle" onclick="toggleTheme()"></button>
-    <div class="main-title" id="main-title-text"></div>
-
-    <div id="admin-panel">
-        <div class="title-grid">
-            <input type="text" id="t-fr" placeholder="Titre (Français)">
-            <input type="text" id="t-en" placeholder="Title (English)">
-            <input type="text" id="t-de" placeholder="Titel (Deutsch)">
-            <input type="text" id="t-it" placeholder="Titolo (Italiano)">
-            <input type="text" id="t-es" placeholder="Título (Español)">
-        </div>
-		
-        <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;"></p>
-        
-        <div class="host-btn-group">
-            <a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
-            <a href="https://freeimage.host/" target="_blank" class="host-img-btn"><img src="freeimage.host.png" alt="Freeimage"></a>
-            <a href="https://goopics.net/" target="_blank" class="host-img-btn"><img src="goopics.net.png" alt="Goopics"></a>
-            <a href="https://imgur.com/upload" target="_blank" class="host-img-btn"><img src="Imgur_Logo.png" alt="Imgur"></a>
-            <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
-			<a href="https://imgbb.com/upload" target="_blank" class="host-img-btn"><img src="imgbb-logo.png" alt="ImgBB"></a>
-        </div>
-
-        <div class="link-grid">
-            <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
-            <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
-        </div>
-		
-        <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
-        
-        <div class="btn-group">
-            <button id="gen-btn" onclick="init()"></button>
-            <button id="share-btn" onclick="copyURL()"></button>
-        </div>
-    </div>
-
-    <h2 id="comp-title-display"></h2>
-
-    <div id="viewport">
-		<div id="loading-overlay" style="display: none;">
-			<div class="spinner"></div>
-			<div id="loading-text"></div>
-		</div>
-	    <div class="floating-controls">
-			<div id="zoom-controls">
-				<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
-				<button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title=""></button>
-			</div>
-			<button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title=""></button>
-        </div>
-        
-        <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
-            <svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+    <div class="main-content">
+        <a id="home-btn" href="" title="Retour à l'accueil">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
-        </button>
+        </a>
 
-        <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
-        <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
-        <div id="handle"><div id="handle-circle">◀▶</div></div>
-        <div class="label l-before" id="label-before">Avant</div>
-        <div class="label l-after" id="label-after">Après</div>
-    </div>
+        <button id="theme-toggle" onclick="toggleTheme()"></button>
+        <div class="main-title" id="main-title-text"></div>
 
-    <footer>
+        <div id="admin-panel">
+            <div class="title-grid">
+                <input type="text" id="t-fr" placeholder="Titre (Français)">
+                <input type="text" id="t-en" placeholder="Title (English)">
+                <input type="text" id="t-de" placeholder="Titel (Deutsch)">
+                <input type="text" id="t-it" placeholder="Titolo (Italiano)">
+                <input type="text" id="t-es" placeholder="Título (Español)">
+            </div>
+            
+            <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;"></p>
+            
+            <div class="host-btn-group">
+                <a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
+                <a href="https://freeimage.host/" target="_blank" class="host-img-btn"><img src="freeimage.host.png" alt="Freeimage"></a>
+                <a href="https://goopics.net/" target="_blank" class="host-img-btn"><img src="goopics.net.png" alt="Goopics"></a>
+                <a href="https://imgur.com/upload" target="_blank" class="host-img-btn"><img src="Imgur_Logo.png" alt="Imgur"></a>
+                <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
+                <a href="https://imgbb.com/upload" target="_blank" class="host-img-btn"><img src="imgbb-logo.png" alt="ImgBB"></a>
+            </div>
+
+            <div class="link-grid">
+                <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
+                <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
+            </div>
+            
+            <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
+            
+            <div class="btn-group">
+                <button id="gen-btn" onclick="init()"></button>
+                <button id="share-btn" onclick="copyURL()"></button>
+            </div>
+        </div>
+
+        <h2 id="comp-title-display"></h2>
+
+        <div id="viewport">
+            <div id="loading-overlay" style="display: none;">
+                <div class="spinner"></div>
+                <div id="loading-text"></div>
+            </div>
+            <div class="floating-controls">
+                <div id="zoom-controls">
+                    <button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
+                    <button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title=""></button>
+                </div>
+                <button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title=""></button>
+            </div>
+            
+            <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
+                <svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                </svg>
+            </button>
+
+            <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
+            <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
+            <div id="handle"><div id="handle-circle">◀▶</div></div>
+            <div class="label l-before" id="label-before">Avant</div>
+            <div class="label l-after" id="label-after">Après</div>
+        </div>
+    </div> 
+	
+    <footer class="site-footer">
+	
         <select id="lang-selector" onchange="changeLang()">
             <option value="fr">Français</option>
             <option value="en">English</option>
@@ -532,25 +586,34 @@
             <option value="it">Italiano</option>
             <option value="es">Español</option>
         </select>
-		<div class="credits" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; width: 100%;">
-			<a href="https://github.com/HDL34/Image-comparator/blob/imgsli/README_(en).md" target="_blank" title="GitHub Repository" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="opacity: 0.8;">
-					<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.416-4.041-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-				</svg>
-			</a>
 
-			<span id="credit-text"></span> Harald de Luca
-			
-			<div id="sfcgegmt336agr9axulj11hnjylmwy4l589"></div>
-			<script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=gegmt336agr9axulj11hnjylmwy4l589&down=async" async></script>
-			
-			<noscript>
-				<a href="https://www.freecounterstat.com" title="free website counter code">
-					<img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=gegmt336agr9axulj11hnjylmwy4l589" border="0" title="free website counter code" alt="free website counter code" style="vertical-align: middle;">
-				</a>
-			</noscript>
-		</div>
-	</footer>
+        <div class="footer-content">
+		
+            <a href="https://github.com/HDL34/Image-comparator/blob/imgsli/README_(en).md" target="_blank" title="GitHub Repository" class="footer-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.416-4.041-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+
+            <span class="footer-separator">|</span>
+
+            <span style="font-weight: 500;"><span id="credit-text"></span> Harald de Luca</span>
+            
+            <span class="footer-separator">|</span>
+
+            <div style="display: flex; align-items: center;">
+                <div id="sfcgegmt336agr9axulj11hnjylmwy4l589"></div>
+                <script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=gegmt336agr9axulj11hnjylmwy4l589&down=async" async></script>
+                <noscript>
+                    <a href="https://www.freecounterstat.com" title="free website counter code">
+                        <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=gegmt336agr9axulj11hnjylmwy4l589" border="0" title="free website counter code" alt="free website counter code" style="vertical-align: middle;">
+                    </a>
+                </noscript>
+            </div>
+        </div>
+    </footer>
+</body>
 
     <script>
         const translations = {
@@ -940,7 +1003,7 @@
         };
 
 		function copyURL() {
-			// 1. Analytics
+			// 1. GOOGLE ANALYTICS
 			gtag('event', 'share_link_generated', {
 				'method': 'clipboard',
 				'content_type': 'image_comparison'
