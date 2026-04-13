@@ -54,7 +54,11 @@ Cliquez sur le bouton « Générer l'affichage » pour afficher la comparaison
 
 Utilisez la souris pour zoomer sur des zones spécifiques si nécessaire.
 
-<img width="1920" height="922" alt="image" src="https://github.com/user-attachments/assets/c3632955-8d12-46ce-9ea3-aa677e75a860" />
+<img width="1906" height="918" alt="image" src="https://github.com/user-attachments/assets/73573929-cad9-4a85-a2bd-78ee70e326ba" />
+
+### **Copie du lien :**
+
+Ensuite cliquez sur "Copier le lien GitHub" pour générer un lien de partage. 
 
 ## 📺 Tutoriel : Comment utiliser l'outil de comparaison
 
@@ -75,7 +79,7 @@ Apprenez à intégrer vos images et à générer un affichage comparatif en quel
 * **Hébergement d'images :** Utilisation de Zupimages, Freeimage.host, ImgBB, PostImage et Imgur.
 * **Extraction de liens directs :** Comment récupérer l'URL se terminant par `.jpg`, `.png` ou `.webp` (indispensable pour l'affichage).
 * **Personnalisation :** Modification des titres (FR, EN, IT, ES, DE) et gestion du mode plein écran.
-* **Partage :** Génération d’un lien unique via GitHub pour partager votre comparaison.
+* **Partage :** Génération d’un lien unique via GitHub pour partager votre comparaison. J'ai ajouté l'API de TinyURL pour réduire le lien de partage. Donc une nouvelle fenêtre va s'afficher mais vous pouvez cliquer sur la zone de preview pour accéder directement à la comparaison d'images.
 * **Résolution :** Prise en charge des images haute résolution. Veuillez noter que le chargement des images peut prendre un peu plus de temps avant leur affichage.
 
 ## 🚀 Prochaines étapes (Roadmap)
