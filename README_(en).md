@@ -75,7 +75,7 @@ Learn how to integrate your images and generate a comparison view in just a few 
 * **Image Hosting:** Using Zupimages, Freeimage.host, ImgBB, PostImage, and Imgur.
 * **Direct Link Extraction:** How to retrieve the URL ending in `.jpg`, `.png`, or `.webp` (essential for display).
 * **Customization:** Editing titles (FR, EN, IT, ES, DE) and managing full-screen mode.
-* **Sharing:** Generating a unique link via GitHub to share your comparison.
+* **Sharing:** Generating a unique link via GitHub to share your comparison. I've added the TinyURL API to shorten the sharing link. A new window will open, but you can click on the preview area to go directly to the image comparison.
 * **Resolution:** It easily supports high-resolution images. However, be aware that it takes a little longer to load before the images appear in the viewport.
 
 ## 🚀 Next Steps (Roadmap)
