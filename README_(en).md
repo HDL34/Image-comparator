@@ -54,7 +54,11 @@ Click the "Generate view" button to display the comparison.
 
 Use the mouse to zoom in on specific areas if necessary.
 
-<img width="1920" height="926" alt="image" src="https://github.com/user-attachments/assets/5c5527b0-1007-4992-8214-d6e3ffff2848" />
+<img width="1905" height="923" alt="image" src="https://github.com/user-attachments/assets/edd52d32-c8cc-498f-89ce-b7bfd63b0e3c" />
+
+### **Copy link:**
+
+Then click on "Copy GitHub link" to generate a shareable link.
 
 ## 📺 Tutorial: How to use the comparison tool
 
