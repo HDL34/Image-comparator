@@ -12,6 +12,9 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Simple comparateur d'image</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simple comparateur d'image</title>
     <link rel="icon" type="image/png" href="favicon.png?v=1.1">
     <style>
         :root { 
@@ -39,8 +42,8 @@
 			display: flex;
 			flex-direction: column;
 			overflow-x: hidden; /* Empêche tout glissement horizontal */
-		}
-
+		}		
+		
         body { 
 			font-family: 'Segoe UI', sans-serif; 
 			background: var(--bg); 
@@ -49,12 +52,12 @@
 			flex-direction: column; /* Aligne les éléments verticalement */
 			align-items: center; 
 			padding: 10px; margin: 0; 
-			min-height: 100vh; /* S'assure que le corps fait au moins la taille de l'écran */
+			min-height: 100vh;  /* S'assure que le corps fait au moins la taille de l'écran */
 			transition: background 0.3s, color 0.3s; 
 			position: relative; 
 			overflow-x: hidden; 
 		}
-		
+
 		/* Contenu principal centré normalement */
 		.main-content {
 			flex: 1;
@@ -66,7 +69,7 @@
 			padding-bottom: 40px; 
 			box-sizing: border-box;
 		}
-
+		
         .main-title { 
 			margin-top: 10px; 
 			margin-bottom: 15px; 
@@ -152,14 +155,78 @@
 			display: grid; 
 			grid-template-columns: 1fr; 
 			gap: 10px; 
-		}
-		
+		}		
+
         @media (min-width: 600px) { 
 			.link-grid { 
 				grid-template-columns: 1fr 1fr; 
 			} 
 		}
-        
+		
+		.input-group {
+			display: flex;
+			background: var(--input-bg);
+			border: 1px solid #444;
+			border-radius: 6px;
+			overflow: hidden;
+		}
+
+		.source-sel {
+			background: #333;
+			color: white;
+			border: none;
+			border-right: 1px solid #444;
+			padding: 0 5px;
+			font-size: 11px;
+			cursor: pointer;
+			outline: none;
+		}
+
+		.input-group input {
+			border: none !important; /* On enlève la bordure de l'input car le groupe en a une */
+			flex-grow: 1;
+		}
+
+		.up-btn {
+			flex-grow: 1;
+			background: var(--accent);
+			color: white;
+			border: none;
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 13px;
+		}
+
+		.up-btn:hover { background: #2980b9; }
+
+		.source-sel-main {
+			background: var(--panel-bg);
+			color: var(--text);
+			border: 1px solid #444;
+			border-radius: 6px;
+			padding: 8px 15px;
+			cursor: pointer;
+			outline: none;
+			font-weight: bold;
+		}
+
+		.input-container {
+			width: 100%;
+			display: flex;
+		}
+
+		/* Force le bouton à prendre TOUTE la largeur du champ texte */
+		.up-btn {
+			width: 100%;
+			height: 42px; /* Ajuste selon la hauteur de tes inputs */
+			background: var(--accent);
+			color: white;
+			border: 1px solid #444;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: bold;
+		}
+		
         input { 
 			padding: 10px; 
 			border: 1px solid rgba(128,128,128,0.3); 
@@ -493,7 +560,7 @@
 			opacity: 0.3;
 			user-select: none;
 		}
-	
+
 		@media (min-width: 600px) {
 			#lang-selector { 
 				position: absolute; 
@@ -539,86 +606,101 @@
 		}
 		
     </style>
+<script async src="https://freeimage.host/sdk/pup.js"></script>
 </head>
 
 <body>
 
     <div class="main-content">
-        <a id="home-btn" href="" title="Retour à l'accueil">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-        </a>
+		<a id="home-btn" href="" title="Retour à l'accueil">
+			<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+				<polyline points="9 22 9 12 15 12 15 22"></polyline>
+			</svg>
+		</a>
 
-        <button id="theme-toggle" onclick="toggleTheme()"></button>
-        <div class="main-title" id="main-title-text"></div>
+		<button id="theme-toggle" onclick="toggleTheme()"></button>
+		<div class="main-title" id="main-title-text"></div>
 
-        <div id="admin-panel">
-            <div class="title-grid">
-                <input type="text" id="t-fr" placeholder="Titre (Français)">
-                <input type="text" id="t-en" placeholder="Title (English)">
-                <input type="text" id="t-de" placeholder="Titel (Deutsch)">
-                <input type="text" id="t-it" placeholder="Titolo (Italiano)">
-                <input type="text" id="t-es" placeholder="Título (Español)">
-            </div>
-            
-            <p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;"></p>
-            
-            <div class="host-btn-group">
-                <a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
-                <a href="https://freeimage.host/upload" target="_blank" class="host-img-btn"><img src="freeimage.host.png" alt="Freeimage"></a>
-                <a href="https://goopics.net/" target="_blank" class="host-img-btn"><img src="goopics.net.png" alt="Goopics"></a>
-                <a href="https://imgur.com/upload" target="_blank" class="host-img-btn"><img src="Imgur_Logo.png" alt="Imgur"></a>
-                <a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
-                <a href="https://imgbb.com/upload" target="_blank" class="host-img-btn"><img src="imgbb-logo.png" alt="ImgBB"></a>
-            </div>
+		<div id="admin-panel">
+			<div class="title-grid">
+				<input type="text" id="t-fr" placeholder="Titre (Français)">
+				<input type="text" id="t-en" placeholder="Title (English)">
+				<input type="text" id="t-de" placeholder="Titel (Deutsch)">
+				<input type="text" id="t-it" placeholder="Titolo (Italiano)">
+				<input type="text" id="t-es" placeholder="Título (Español)">
+			</div>
+			
+			<p id="host-help-text" style="font-size: 14px; margin: 5px 0; text-align: center;"></p>
+			
+			<div class="host-btn-group">
+				<a href="https://zupimages.net/" target="_blank" class="host-img-btn"><img src="zupimages.net.png" alt="Zupimages"></a>
+				<a href="https://freeimage.host/upload" target="_blank" class="host-img-btn"><img src="freeimage.host.png" alt="Freeimage"></a>
+				<a href="https://goopics.net/" target="_blank" class="host-img-btn"><img src="goopics.net.png" alt="Goopics"></a>
+				<a href="https://imgur.com/upload" target="_blank" class="host-img-btn"><img src="Imgur_Logo.png" alt="Imgur"></a>
+				<a href="https://postimages.org/" target="_blank" class="host-img-btn"><img src="postimages.org.png" alt="PostImage"></a>
+				<a href="https://imgbb.com/upload" target="_blank" class="host-img-btn"><img src="imgbb-logo.png" alt="ImgBB"></a>
+			</div>
 
-            <div class="link-grid">
-                <input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
-                <input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
-            </div>
-            
-            <p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
-            
-            <div class="btn-group">
-                <button id="gen-btn" onclick="init()"></button>
-                <button id="share-btn" onclick="copyURL()"></button>
-            </div>
-        </div>
+			<div style="margin-bottom: 10px; width: 100%; display: flex; justify-content: center;">
+				<select id="global-source-sel" class="source-sel-main" onchange="toggleGlobalMode(this.value)">
+					<option value="url">🌐 Mode : Coller des liens URL</option>
+					<option value="upload">☁️ Mode : Uploader via Freeimage</option>
+				</select>
+			</div>
 
-        <h2 id="comp-title-display"></h2>
+			<div class="link-grid">
+				<div class="input-container">
+					<input type="text" id="b-in" placeholder="Lien de l'image - AVANT">
+					<button id="up-btn-b" class="up-btn" onclick="triggerUpload('b-in')" style="display:none">📁 Parcourir (AVANT)</button>
+				</div>
 
-        <div id="viewport">
-            <div id="loading-overlay" style="display: none;">
-                <div class="spinner"></div>
-                <div id="loading-text"></div>
-            </div>
-            <div class="floating-controls">
-                <div id="zoom-controls">
-                    <button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
-                    <button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title=""></button>
-                </div>
-                <button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title=""></button>
-            </div>
-            
-            <button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
-                <svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                </svg>
-            </button>
+				<div class="input-container">
+					<input type="text" id="a-in" placeholder="Lien de l'image - APRÈS">
+					<button id="up-btn-a" class="up-btn" onclick="triggerUpload('a-in')" style="display:none">📁 Parcourir (APRÈS)</button>
+				</div>
+			</div>
+			
+			<p id="direct-link-note" style="font-size: 12px; margin-top: -5px; margin-bottom: 10px; opacity: 0.8; font-style: italic;"></p>
+			
+			<div class="btn-group">
+				<button id="gen-btn" onclick="init()"></button>
+				<button id="share-btn" onclick="copyURL()"></button>
+			</div>
+		</div>
 
-            <div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
-            <div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
-            <div id="handle"><div id="handle-circle">◀▶</div></div>
-            <div class="label l-before" id="label-before">Avant</div>
-            <div class="label l-after" id="label-after">Après</div>
-        </div>
+		<h2 id="comp-title-display"></h2>
+
+		<div id="viewport">
+			<div id="loading-overlay" style="display: none;">
+				<div class="spinner"></div>
+				<div id="loading-text"></div>
+			</div>
+			<div class="floating-controls">
+				<div id="zoom-controls">
+					<button id="zoom-out-btn" class="zoom-btn" onclick="manualZoom(-0.5)" title=""></button>
+					<button id="zoom-in-btn" class="zoom-btn" onclick="manualZoom(0.5)" title=""></button>
+				</div>
+				<button id="reset-btn" class="float-btn" style="display:none;" onclick="resetView()" title=""></button>
+			</div>
+			
+			<button class="float-btn fullscreen-btn" onclick="toggleFullscreen()" id="fs-btn">
+				<svg id="fs-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+				</svg>
+			</button>
+
+			<div id="zoom-container-after" class="zoom-container"><img id="img-after" class="img-layer"></div>
+			<div id="before-mask"><div id="zoom-container-before" class="zoom-container"><img id="img-before" class="img-layer"></div></div>
+			<div id="handle"><div id="handle-circle">◀▶</div></div>
+			<div class="label l-before" id="label-before">Avant</div>
+			<div class="label l-after" id="label-after">Après</div>
+		</div>
     </div> 
 	
-	<footer class="site-footer">
-		
-		<div class="footer-left">
+    <footer class="site-footer">
+
+		<div class="footer-left">	
 			<select id="lang-selector" onchange="changeLang()">
 				<option value="fr">Français</option>
 				<option value="en">English</option>
@@ -627,7 +709,7 @@
 				<option value="es">Español</option>
 			</select>
 		</div>
-
+		
 		<div class="footer-center">
 			<a href="https://github.com/HDL34/Image-comparator/blob/imgsli/README_(en).md" target="_blank" title="GitHub Repository" class="footer-link">
 				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -675,6 +757,12 @@
 				loading: "Chargement en cours...", 
 				error: "Erreur : lien invalide ou image lourde", 
 				errorEmpty: "Veuillez d'abord remplir les champs liens d'image", 
+				modeUrl: "🌐 Mode : Coller des liens URL",
+				modeUpload: "☁️ Mode : Uploader via Freeimage",
+				btnBrowseBefore: "📁 Parcourir (AVANT)",
+				btnBrowseAfter: "📁 Parcourir (APRÈS)",
+				upLoading: "⏳ Envoi en cours...",
+				upDone: "✅ Image chargée !",				
 				hostHelp: "Vous pouvez importer vos liens d'images depuis Google Drive ou depuis un hébergeur compatible. Quelques exemples", 
 				placeholderBefore: "Lien de l'image - AVANT", 
 				placeholderAfter: "Lien de l'image - APRÈS", 
@@ -702,6 +790,12 @@
 				loading: "Loading...", 
 				error: "Error: invalid link or heavy image", 
 				errorEmpty: "Please fill in the image link fields first", 
+				modeUrl: "🌐 Mode: Paste URL links",
+				modeUpload: "☁️ Mode: Upload via Freeimage",
+				btnBrowseBefore: "📁 Browse (BEFORE)",
+				btnBrowseAfter: "📁 Browse (AFTER)",
+				upLoading: "⏳ Uploading...",
+				upDone: "✅ Image loaded!",		
 				hostHelp: "You can import your image links from Google Drive or a compatible image hosting service. Some examples", 
 				placeholderBefore: "Image Link - BEFORE", 
 				placeholderAfter: "Image Link - AFTER", 
@@ -729,6 +823,12 @@
 				loading: "Wird geladen...", 
 				error: "Fehler: ungültiger Link", 
 				errorEmpty: "Bitte füllen Sie zuerst die Bildlink-Felder aus", 
+				modeUrl: "🌐 Modus: URL-Links einfügen",
+				modeUpload: "☁️ Modus: Über Freeimage hochladen",
+				btnBrowseBefore: "📁 Durchsuchen (VORHER)",
+				btnBrowseAfter: "📁 Durchsuchen (NACHHER)",
+				upLoading: "⏳ Hochladen...",
+				upDone: "✅ Bild geladen!",		
 				hostHelp: "Sie können Ihre Bildlinks von Google Drive oder einem kompatiblen Bildhosting-Dienst importieren. Einige Beispiele", 
 				placeholderBefore: "Bildlink - VORHER", 
 				placeholderAfter: "Bildlink - NACHHER", 
@@ -756,6 +856,12 @@
 				loading: "Caricamento...", 
 				error: "Errore: link non valido", 
 				errorEmpty: "Si prega di compilare prima i campi dei link alle immagini", 
+				modeUrl: "🌐 Modalità: Incolla link URL",
+				modeUpload: "☁️ Modalità: Carica tramite Freeimage",
+				btnBrowseBefore: "📁 Sfoglia (PRIMA)",
+				btnBrowseAfter: "📁 Sfoglia (DOPO)",
+				upLoading: "⏳ Caricamento...",
+				upDone: "✅ Immagine caricata!",
 				hostHelp: "Puoi importare i link delle tue immagini da Google Drive o da un servizio di hosting di immagini compatibile. Alcuni esempi", 
 				placeholderBefore: "Link dell'immagine - PRIMA", 
 				placeholderAfter: "Link dell'immagine - DOPO", 
@@ -783,6 +889,12 @@
 				loading: "Cargando...", 
 				error: "Error: enlace no válido", 
 				errorEmpty: "Por favor, rellene primero los campos de enlaces de imagen", 
+				modeUrl: "🌐 Modo: Pegar enlaces URL",
+				modeUpload: "☁️ Modo: Subir vía Freeimage",
+				btnBrowseBefore: "📁 Buscar (ANTES)",
+				btnBrowseAfter: "📁 Buscar (DESPUÉS)",
+				upLoading: "⏳ Subiendo...",
+				upDone: "✅ ¡Imagen cargada!",
 				hostHelp: "Puedes importar los enlaces de tus imágenes desde Google Drive o un servicio de alojamiento de imágenes compatible. Algunos ejemplos", 
 				placeholderBefore: "Enlace de la imagen - ANTES", 
 				placeholderAfter: "Enlace de la imagen - DESPUÉS", 
@@ -808,6 +920,9 @@
         function changeLang() {
             const l = document.getElementById('lang-selector').value;
             const t = translations[l];
+			const modeSel = document.getElementById('global-source-sel');
+			modeSel.options[0].text = t.modeUrl;
+			modeSel.options[1].text = t.modeUpload;
             document.getElementById('main-title-text').innerText = t.title;
             document.getElementById('label-before').innerText = t.before;
             document.getElementById('label-after').innerText = t.after;
@@ -825,6 +940,9 @@
             document.getElementById('host-help-text').innerText = t.hostHelp;
             document.getElementById('b-in').placeholder = t.placeholderBefore;
             document.getElementById('a-in').placeholder = t.placeholderAfter;
+			// Mise à jour des boutons Parcourir
+			document.getElementById('up-btn-b').innerText = t.btnBrowseBefore;
+			document.getElementById('up-btn-a').innerText = t.btnBrowseAfter;
             document.getElementById('direct-link-note').innerText = t.directLinkNote;
 			document.getElementById('credit-text').innerText = t.createdBy + " ";
 			
@@ -882,20 +1000,20 @@
 			// On retire la classe après l'animation (0.3s) pour pouvoir recommencer
 			setTimeout(() => el.classList.remove('flash-effect'), 300);
 		}
-		
+
 		function init() {
 			const beforeVal = document.getElementById('b-in').value.trim();
 			const afterVal = document.getElementById('a-in').value.trim();
 			const btn = document.getElementById('gen-btn');
 			const l = document.getElementById('lang-selector').value;
 			const t = translations[l];
-			
+
 			// --- ENVOI DE L'ÉVÉNEMENT GOOGLE ANALYTICS ---
-			// Utilise bien les accolades {} pour les détails de l'événement
+			// Utilise bien les accolades {} pour les détails de l'événement			
 			gtag('event', 'generate_view', {
 					'event_category': 'engagement',
 					'event_label': 'Bouton Générer cliqué'
-				});		
+				});
 			// --- 1. VÉRIFICATION DES CHAMPS ---
 			if (!beforeVal || !afterVal) {
 				btn.innerText = t.errorEmpty;
@@ -1042,6 +1160,97 @@
                 setTimeout(() => view.classList.remove('resetting'), 500);
             }
         };
+		
+		function toggleGlobalMode(mode) {
+			const bInput = document.getElementById('b-in');
+			const aInput = document.getElementById('a-in');
+			const bBtn = document.getElementById('up-btn-b');
+			const aBtn = document.getElementById('up-btn-a');
+
+			if (mode === 'upload') {
+				bInput.style.display = 'none';
+				aInput.style.display = 'none';
+				bBtn.style.display = 'block';
+				aBtn.style.display = 'block';
+			} else {
+				bInput.style.display = 'block';
+				aInput.style.display = 'block';
+				bBtn.style.display = 'none';
+				aBtn.style.display = 'none';
+			}
+		}
+
+		// La fonction d'upload reste la même, mais on met à jour le texte du bouton spécifique
+		async function triggerUpload(inputId) {
+			const fileInput = document.createElement('input');
+			fileInput.type = 'file';
+			fileInput.accept = 'image/*';
+
+			fileInput.onchange = async (e) => {
+				const file = e.target.files[0];
+				if (!file) return;
+
+				// Récupération de la langue et du bouton correspondant
+				const l = document.getElementById('lang-selector').value;
+				const t = translations[l];
+				const btnId = inputId === 'b-in' ? 'up-btn-b' : 'up-btn-a';
+				const btn = document.getElementById(btnId);
+				const originalText = btn.innerText;
+
+				// État de chargement visuel
+				btn.innerText = t.upLoading;
+				btn.disabled = true;
+
+				try {
+					// CORRECTION : L'API Chevereto/Freeimage.host attend du base64, pas un fichier brut
+					const base64 = await new Promise((resolve, reject) => {
+						const reader = new FileReader();
+						reader.onload = () => resolve(reader.result.split(',')[1]); // On retire le préfixe "data:image/...;base64,"
+						reader.onerror = reject;
+						reader.readAsDataURL(file);
+					});
+
+					const formData = new FormData();
+					formData.append('key', '6d207e02198a847aa98d0a2a901485a5');
+					formData.append('action', 'upload');
+					formData.append('source', base64); // ✅ On envoie le base64, pas le fichier brut
+					formData.append('format', 'json');
+
+					const response = await fetch('https://freeimage.host/api/1/upload', {
+						method: 'POST',
+						body: formData
+					});
+
+					const data = await response.json();
+
+					// Si l'upload réussit et qu'on obtient l'URL
+					if (data && data.image && data.image.url) {
+						// On injecte le lien direct dans l'input
+						document.getElementById(inputId).value = data.image.url;
+
+						// Feedback de succès
+						btn.innerText = t.upDone;
+						btn.style.background = "#27ae60"; // Vert succès temporaire
+
+						setTimeout(() => {
+							btn.innerText = inputId === 'b-in' ? t.btnBrowseBefore : t.btnBrowseAfter;
+							btn.style.background = "";
+						}, 2000);
+					} else {
+						// Si l'API renvoie une erreur interne
+						console.error("Erreur API:", data);
+						throw new Error("L'API n'a pas renvoyé le lien");
+					}
+				} catch (err) {
+					console.error("Erreur de connexion:", err);
+					alert(t.error);
+					btn.innerText = originalText;
+				} finally {
+					btn.disabled = false;
+				}
+			};
+			fileInput.click();
+		}
 
 		async function copyURL() {
 			try { // <-- Le filet de sécurité principal
