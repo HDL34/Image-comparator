@@ -1260,7 +1260,7 @@
 		}
 
 		async function copyURL() {
-			try { // <-- Le filet de sécurité principal
+			try {
 				// 1. GOOGLE ANALYTICS
 				if (typeof gtag === 'function') {
 					gtag('event', 'share_link_generated', {
@@ -1268,8 +1268,6 @@
 						'content_type': 'image_comparison'
 					});
 				}
-
-				// Sécurisation de la lecture des champs (évite les crashs si un champ est vide)
 				const beforeVal = document.getElementById('b-in')?.value.trim() || "";
 				const afterVal = document.getElementById('a-in')?.value.trim() || "";
 				const btn = document.getElementById('share-btn');
@@ -1278,29 +1276,24 @@
 
 				// 2. VÉRIFICATION DES ERREURS
 				if (!beforeVal || !afterVal) {
-					// On affiche le message d'erreur en rouge					
 					btn.innerText = t.errorEmpty;
-					btn.style.backgroundColor = "#e74c3c"; // Rouge
+					btn.style.backgroundColor = "#e74c3c";
 					btn.style.borderColor = "#c0392b";
-					
-					// On remet le bouton à la normale après 2 secondes					
 					setTimeout(() => {
 						btn.innerText = t.btnShare;
-						btn.style.backgroundColor = ""; 
+						btn.style.backgroundColor = "";
 						btn.style.borderColor = "";
 					}, 2000);
-					
-					return; // On arrête la fonction ici, le lien n'est PAS copié
+					return;
 				}
 
 				// --- SI TOUT EST OK, ON COPIE LE LIEN ---
 				if (typeof applyFlash === 'function') applyFlash('share-btn');
 
-				// --- 3. PRÉPARATION DU LIEN LONG OPTIMISÉ ---
+				// 3. PRÉPARATION DU LIEN LONG OPTIMISÉ
 				let baseURL = window.location.href.split('?')[0];
 				if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
 				const u = new URL(baseURL);
-
 				['fr', 'en', 'de', 'it', 'es'].forEach(lang => {
 					const el = document.getElementById('t-' + lang);
 					if (el && el.value.trim() !== "") {
@@ -1309,7 +1302,6 @@
 				});
 				u.searchParams.set('before', beforeVal);
 				u.searchParams.set('after', afterVal);
-
 				let finalLink = u.href;
 
 				// 4. RÉDUCTION VIA TINYURL
@@ -1327,7 +1319,6 @@
 				try {
 					await navigator.clipboard.writeText(finalLink);
 				} catch (clipboardError) {
-					// Plan B si le navigateur bloque le presse-papier après le délai de l'API
 					const textArea = document.createElement("textarea");
 					textArea.value = finalLink;
 					document.body.appendChild(textArea);
@@ -1336,17 +1327,17 @@
 					document.body.removeChild(textArea);
 				}
 
-				// 6. MESSAGE DE SUCCÈS 
+				// 6. MESSAGE DE SUCCÈS
 				btn.innerText = t.alertCopy;
 				setTimeout(() => {
 					btn.innerText = translations[document.getElementById('lang-selector').value].btnShare;
 				}, 1500);
 
 			} catch (globalError) {
-				// En cas de gros problème, on affiche quand même quelque chose dans la console
 				console.error("Erreur critique empêchant la copie :", globalError);
 			}
 		}
+
 
 		window.onload = () => {
 			const p = new URLSearchParams(window.location.search);
