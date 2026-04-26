@@ -4,7 +4,7 @@ Le Comparateur d'images est un outil web léger et intuitif conçu pour comparer
 
 <img width="1915" height="924" alt="image" src="https://github.com/user-attachments/assets/ee6e5937-518e-4e66-b504-3438e88425a1" />
 
-<div style="margin-top: 50px;"></div>
+<br>
 
 <img width="1913" height="924" alt="image" src="https://github.com/user-attachments/assets/4f57ab2b-6cca-4921-9ec1-fca47bb430df" />
 
