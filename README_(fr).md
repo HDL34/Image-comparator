@@ -1,8 +1,10 @@
 <h1 align="center"><b>Comparateur d'images simple</b></h1>
 
-Le Comparateur d'images est un outil web léger et intuitif conçu pour comparer deux images côte à côte via des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à ses fonctions de zoom et ses thèmes personnalisables.
+Le Comparateur d'images est un outil web léger et intuitif conçu pour comparer deux images côte à côte via des liens directs. Développé avec l'aide de Google Gemini, cet outil permet une analyse visuelle précise grâce à ses fonctions de zoom et ses thèmes personnalisables ainsi que son mode permettant d'alterner entre les champs liens et le mode parcourir pour uploader directement depuis l'interface.
 
-<img width="1920" height="925" alt="image" src="https://github.com/user-attachments/assets/50d2197f-97c6-4ed5-b2ee-bd464491dc2f" />
+<img width="1915" height="924" alt="image" src="https://github.com/user-attachments/assets/ee6e5937-518e-4e66-b504-3438e88425a1" />
+
+<img width="1913" height="924" alt="image" src="https://github.com/user-attachments/assets/4f57ab2b-6cca-4921-9ec1-fca47bb430df" />
 
 # ✨ **Fonctionnalités**
 
@@ -84,5 +86,4 @@ Apprenez à intégrer vos images et à générer un affichage comparatif en quel
 
 ## 🚀 Prochaines étapes (Roadmap)
 
-- [ ] **Intégration d'API d'Upload :** Téléversement direct des images via ImgBB sans quitter l'interface.
 - [ ] **Drag & Drop :** Support du glisser-déposer pour une expérience utilisateur plus fluide.
