@@ -634,8 +634,8 @@
 
 			<div style="margin-bottom: 10px; width: 100%; display: flex; justify-content: center;">
 				<select id="global-source-sel" class="source-sel-main" onchange="toggleGlobalMode(this.value)">
-					<option value="url">🌐 Mode : Coller des liens URL</option>
 					<option value="upload">☁️ Mode : Uploader via ImgBB</option>
+					<option value="url">🌐 Mode : Coller des liens URL</option>
 				</select>
 			</div>
 			
@@ -920,8 +920,8 @@
             const l = document.getElementById('lang-selector').value;
             const t = translations[l];
 			const modeSel = document.getElementById('global-source-sel');
-			modeSel.options[0].text = t.modeUrl;
-			modeSel.options[1].text = t.modeUpload;
+			modeSel.options[0].text = t.modeUpload;
+			modeSel.options[1].text = t.modeUrl;
             document.getElementById('main-title-text').innerText = t.title;
             document.getElementById('label-before').innerText = t.before;
             document.getElementById('label-after').innerText = t.after;
@@ -1324,7 +1324,10 @@
 			document.getElementById('home-btn').href = window.location.pathname;
 			
 			// TRÈS IMPORTANT : On traduit tout de suite, avant même de savoir si c'est un lien partagé
-			changeLang(); 
+			changeLang();
+			
+			// Initialise le mode par défaut (upload) au chargement
+			toggleGlobalMode('upload');
 
 			if(window.location.protocol === 'file:' || !p.has('before')) admin.style.display = 'flex';
 			
