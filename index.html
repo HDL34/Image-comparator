@@ -1259,64 +1259,93 @@
 			fileInput.click();
 		}
 
-		function copyURL() {
-			// 1. GOOGLE ANALYTICS
-			gtag('event', 'share_link_generated', {
-				'method': 'clipboard',
-				'content_type': 'image_comparison'
-			});        
+		async function copyURL() {
+			try { // <-- Le filet de sécurité principal
+				// 1. GOOGLE ANALYTICS
+				if (typeof gtag === 'function') {
+					gtag('event', 'share_link_generated', {
+						'method': 'clipboard',
+						'content_type': 'image_comparison'
+					});
+				}
 
-			const beforeVal = document.getElementById('b-in').value.trim();
-			const afterVal = document.getElementById('a-in').value.trim();
-			const btn = document.getElementById('share-btn');
-			const l = document.getElementById('lang-selector').value;
-			const t = translations[l];
+				// Sécurisation de la lecture des champs (évite les crashs si un champ est vide)
+				const beforeVal = document.getElementById('b-in')?.value.trim() || "";
+				const afterVal = document.getElementById('a-in')?.value.trim() || "";
+				const btn = document.getElementById('share-btn');
+				const l = document.getElementById('lang-selector')?.value || 'en';
+				const t = translations[l];
 
-			// --- VÉRIFICATION DES CHAMPS ---
-			if (!beforeVal || !afterVal) {
-				// On affiche le message d'erreur en rouge
-				btn.innerText = t.errorEmpty;
-				btn.style.backgroundColor = "#e74c3c"; // Rouge
-				btn.style.borderColor = "#c0392b";
-				
-				// On remet le bouton à la normale après 2 secondes
+				// 2. VÉRIFICATION DES ERREURS
+				if (!beforeVal || !afterVal) {
+					// On affiche le message d'erreur en rouge					
+					btn.innerText = t.errorEmpty;
+					btn.style.backgroundColor = "#e74c3c"; // Rouge
+					btn.style.borderColor = "#c0392b";
+					
+					// On remet le bouton à la normale après 2 secondes					
+					setTimeout(() => {
+						btn.innerText = t.btnShare;
+						btn.style.backgroundColor = ""; 
+						btn.style.borderColor = "";
+					}, 2000);
+					
+					return; // On arrête la fonction ici, le lien n'est PAS copié
+				}
+
+				// --- SI TOUT EST OK, ON COPIE LE LIEN ---
+				if (typeof applyFlash === 'function') applyFlash('share-btn');
+
+				// --- 3. PRÉPARATION DU LIEN LONG OPTIMISÉ ---
+				let baseURL = window.location.href.split('?')[0];
+				if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
+				const u = new URL(baseURL);
+
+				['fr', 'en', 'de', 'it', 'es'].forEach(lang => {
+					const el = document.getElementById('t-' + lang);
+					if (el && el.value.trim() !== "") {
+						u.searchParams.set('t-' + lang, el.value.trim());
+					}
+				});
+				u.searchParams.set('before', beforeVal);
+				u.searchParams.set('after', afterVal);
+
+				let finalLink = u.href;
+
+				// 4. RÉDUCTION VIA TINYURL
+				try {
+					const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(finalLink)}`);
+					if (response.ok) {
+						const shortUrl = await response.text();
+						if (shortUrl.startsWith("http")) finalLink = shortUrl;
+					}
+				} catch (apiError) {
+					console.warn("API de réduction bloquée, utilisation du lien long.");
+				}
+
+				// 5. COPIE SÉCURISÉE (Double méthode anti-bug)
+				try {
+					await navigator.clipboard.writeText(finalLink);
+				} catch (clipboardError) {
+					// Plan B si le navigateur bloque le presse-papier après le délai de l'API
+					const textArea = document.createElement("textarea");
+					textArea.value = finalLink;
+					document.body.appendChild(textArea);
+					textArea.select();
+					document.execCommand("copy");
+					document.body.removeChild(textArea);
+				}
+
+				// 6. MESSAGE DE SUCCÈS 
+				btn.innerText = t.alertCopy;
 				setTimeout(() => {
-					btn.innerText = t.btnShare;
-					btn.style.backgroundColor = ""; 
-					btn.style.borderColor = "";
-				}, 2000);
-				
-				return; // On arrête la fonction ici, le lien n'est PAS copié
+					btn.innerText = translations[document.getElementById('lang-selector').value].btnShare;
+				}, 1500);
+
+			} catch (globalError) {
+				// En cas de gros problème, on affiche quand même quelque chose dans la console
+				console.error("Erreur critique empêchant la copie :", globalError);
 			}
-
-			// --- SI TOUT EST OK, ON COPIE LE LIEN ---
-			applyFlash('share-btn');
-
-			// Détermination de l'URL de base (Gestion GitHub Pages vs local)
-			let baseURL = window.location.href.split('?')[0];
-			if (window.location.protocol === 'file:') baseURL = "https://hdl34.github.io/Image-comparator/";
-			
-			// Utilisation de URLSearchParams pour une URL "propre" (optimisée)
-			const u = new URL(baseURL);
-			
-			// --- OPTIMISATION : On n'ajoute que ce qui est rempli ---
-			['fr', 'en', 'de', 'it', 'es'].forEach(lang => {
-				const val = document.getElementById('t-'+lang).value.trim();
-				// Si le titre est vide, on ne l'ajoute pas du tout à l'URL (gain de place)
-				if(val !== "") u.searchParams.set('t-'+lang, val);
-			});
-			
-			u.searchParams.set('before', beforeVal);
-			u.searchParams.set('after', afterVal);
-			
-			// Copie du lien optimisé
-			navigator.clipboard.writeText(u.href);
-
-			// Message de succès
-			btn.innerText = t.alertCopy;
-			setTimeout(() => {
-				btn.innerText = translations[document.getElementById('lang-selector').value].btnShare;
-			}, 1500);
 		}
 
 		window.onload = () => {
