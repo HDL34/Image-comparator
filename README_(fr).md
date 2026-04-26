@@ -84,5 +84,5 @@ Apprenez à intégrer vos images et à générer un affichage comparatif en quel
 
 ## 🚀 Prochaines étapes (Roadmap)
 
-- [ ] **Intégration d'API d'Upload :** Téléversement direct des images via ImgBB ou Imgur sans quitter l'interface.
+- [ ] **Intégration d'API d'Upload :** Téléversement direct des images via ImgBB sans quitter l'interface.
 - [ ] **Drag & Drop :** Support du glisser-déposer pour une expérience utilisateur plus fluide.
